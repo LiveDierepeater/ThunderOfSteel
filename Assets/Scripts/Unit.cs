@@ -4,6 +4,8 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Unit : MonoBehaviour
 {
+    [SerializeField] private SpriteRenderer selectionSprite;
+    
     private NavMeshAgent agent;
     
     public float MaxSpeed;
@@ -12,7 +14,7 @@ public class Unit : MonoBehaviour
     public float TurnSpeed;
     public string UnitName;
     public float SpeedBonusOnRoad;
-    
+
     public enum States
     {
         Idle = 0,
@@ -23,5 +25,15 @@ public class Unit : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
+    }
+    
+    public void OnSelected()
+    {
+        selectionSprite.gameObject.SetActive(true);
+    }
+
+    public void OnDeselected()
+    {
+        selectionSprite.gameObject.SetActive(false);
     }
 }
