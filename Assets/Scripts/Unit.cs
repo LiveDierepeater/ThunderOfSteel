@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,24 +15,22 @@ public class Unit : MonoBehaviour
     public float TurnSpeed;
     public string UnitName;
     public float SpeedBonusOnRoad;
+    public float StoppingDistance;
 
-    public enum States
+    private enum States
     {
         Idle,
         MoveToDestination,
-        Flee
     }
+    [SerializeField] private States currentState = States.Idle;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         SelectionManager.Instance.AvailableUnits.Add(this);
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-    }
-
-    private void Start()
-    {
-        InitializeAgentValues();
+        
+        InitializeClassValues();
     }
 
     public void OnSelected()
@@ -46,19 +45,53 @@ public class Unit : MonoBehaviour
     
     public void MoveToDestination(Vector3 newDestination)
     {
+        if (IsUnitCloserThanStoppingDistance(newDestination))
+            agent.stoppingDistance = 0.5f;
+        
         agent.SetDestination(newDestination);
+        currentState = States.MoveToDestination;
+    }
+
+    private void FixedUpdate()
+    {
+        switch (currentState)
+        {
+            case States.Idle:
+                break;
+            
+            case States.MoveToDestination:
+                if (IsUnitCloserThanStoppingDistance(agent.pathEndPosition))
+                {
+                    agent.stoppingDistance = StoppingDistance;
+                    currentState = States.Idle;
+                }
+                break;
+        }
     }
 
     private void HandleTick()
     {
-        print("Tick in Unit");
+        // Here calculate on Tick-Event.
     }
-    
-    private void InitializeAgentValues()
+
+    private void InitializeClassValues()
     {
-        agent.speed = MaxSpeed;
-        agent.acceleration = MaxAcceleration;
-        agent.angularSpeed = TurnSpeed;
+        // Renaming Unit
         gameObject.name = UnitName + "_" + GetInstanceID();
+        
+        // Pasting Agent Values
+        agent.speed = MaxSpeed;
+        agent.angularSpeed = TurnSpeed;
+        agent.acceleration = MaxAcceleration;
+        agent.stoppingDistance = StoppingDistance;
+        agent.autoBraking = false;
+        
+        // Pasting Class Values
+        currentState = States.Idle;
+    }
+
+    private bool IsUnitCloserThanStoppingDistance(Vector3 targetPosition)
+    {
+        return Vector3.Distance(transform.position, targetPosition) < agent.stoppingDistance;
     }
 }
