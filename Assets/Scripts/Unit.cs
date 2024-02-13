@@ -16,6 +16,9 @@ public class Unit : MonoBehaviour
     public float SpeedBonusOnRoad;
     public float StoppingDistance;
 
+    public AnimationCurve movementCurve;
+    [SerializeField] private float time;
+
     private enum States
     {
         Idle,
@@ -23,13 +26,26 @@ public class Unit : MonoBehaviour
     }
     [SerializeField] private States currentState = States.Idle;
 
+    private enum MovementStates
+    {
+        Idle,
+        Accelerate,
+        Moving,
+        Decelerate
+    }
+    [SerializeField] private MovementStates currentMovementState = MovementStates.Idle;
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         SelectionManager.Instance.AvailableUnits.Add(this);
-        TickManager.Instance.TickSystem.OnTick += HandleTick;
         
         InitializeClassValues();
+    }
+
+    private void Start()
+    {
+        TickManager.Instance.TickSystem.OnTick += HandleTick;
     }
 
     public void OnSelected()
@@ -49,6 +65,9 @@ public class Unit : MonoBehaviour
         
         agent.SetDestination(newDestination);
         currentState = States.MoveToDestination;
+
+        currentMovementState = MovementStates.Accelerate;
+        time = 0;
     }
 
     private void FixedUpdate()
@@ -71,6 +90,7 @@ public class Unit : MonoBehaviour
     private void HandleTick()
     {
         // Here calculate on Tick-Event.
+        HandleMovementState();
     }
 
     private void InitializeClassValues()
@@ -83,14 +103,56 @@ public class Unit : MonoBehaviour
         agent.angularSpeed = TurnSpeed;
         agent.acceleration = MaxAcceleration;
         agent.stoppingDistance = StoppingDistance;
-        agent.autoBraking = false;
         
         // Pasting Class Values
         currentState = States.Idle;
+        currentMovementState = MovementStates.Idle;
     }
 
     private bool IsUnitCloserThanStoppingDistance(Vector3 targetPosition)
     {
         return Vector3.Distance(transform.position, targetPosition) < agent.stoppingDistance;
+    }
+
+    private void HandleMovementState()
+    {
+        switch (currentMovementState)
+        {
+            case MovementStates.Accelerate:
+                Accelerate();
+                break;
+            
+            case MovementStates.Decelerate:
+                Decelerate();
+                break;
+        }
+    }
+
+    public void Accelerate()
+    {
+        print("Accelerate!");
+        
+        agent.acceleration = movementCurve.Evaluate(time) * MaxAcceleration;
+        time += Time.deltaTime * 30;
+
+        if (time > 1)
+        {
+            agent.acceleration = MaxAcceleration;
+            currentMovementState = MovementStates.Moving;
+        }
+    }
+
+    public void Decelerate()
+    {
+        print("Decelerate!");
+        
+        agent.acceleration = movementCurve.Evaluate(time)  * MaxDeceleration;
+        time += Time.deltaTime;
+
+        if (time > 1)
+        {
+            agent.acceleration = MaxDeceleration;
+            currentMovementState = MovementStates.Moving;
+        }
     }
 }

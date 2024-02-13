@@ -153,12 +153,12 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 20
-  m_Acceleration: 8
+  m_Acceleration: 10
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 7
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 0
+  m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 0
@@ -183,6 +183,52 @@ MonoBehaviour:
   TurnSpeed: 400
   UnitName: Grenadier
   SpeedBonusOnRoad: 1.5
+  StoppingDistance: 0
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 9.622642
+      outSlope: 9.622642
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.0125
+    - serializedVersion: 3
+      time: 0.20745945
+      value: 0.51049465
+      inSlope: -5.4013586
+      outSlope: -5.4013586
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.26629356
+    - serializedVersion: 3
+      time: 0.5722313
+      value: 0.8472397
+      inSlope: -2.9589152
+      outSlope: -2.9589152
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.27569202
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0.83846444
+      outSlope: 0.83846444
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  time: 0
+  currentState: 0
+  currentMovementState: 0
 --- !u!1 &2845888706608597363
 GameObject:
   m_ObjectHideFlags: 0
