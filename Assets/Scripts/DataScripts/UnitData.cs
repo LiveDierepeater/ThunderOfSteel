@@ -3,9 +3,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Unit", menuName = "Data/Unit")]
 public class UnitData : ScriptableObject
 {
+    public string UnitName;
     public float MaxSpeed;
-    public float MaxAcceleration;
-    public float MaxDeceleration;
     public float TurnSpeed;
-    public IMovementBehavior MovementBehaviorPrefab;
+    public float MaxAcceleration;
+    public float StoppingDistance;
+    
+    public enum Type
+    {
+        Infantry,
+        Tank,
+        Truck
+    }
+    public Type UnitType;
 }

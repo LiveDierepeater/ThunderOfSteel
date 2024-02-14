@@ -88,7 +88,7 @@ public class PlayerInput : MonoBehaviour
             {
                 foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
                 {
-                    unit.MoveToDestination(hit.point);
+                    unit.CommandToDestination(hit.point);
                     //SpawnMoveToSprite(hit.point);
                 }
             }

@@ -176,14 +176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6761f4416d302994ea25382a1211720f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectionSprite: {fileID: 804835849124565450}
-  MaxSpeed: 20
-  MaxAcceleration: 40
-  MaxDeceleration: 20
-  TurnSpeed: 400
-  UnitName: Grenadier
-  SpeedBonusOnRoad: 1.5
-  StoppingDistance: 5
+  Data: {fileID: 11400000, guid: 4fbcad05a7064594d87b83c659dc35c7, type: 2}
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -197,14 +190,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.20280391
-      value: 0.70786023
-      inSlope: -4.428374
-      outSlope: -4.428374
+      time: 0.06648485
+      value: 0.75444424
+      inSlope: -3.2289224
+      outSlope: -3.2289224
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.20832331
-      outWeight: 0.04118009
+      inWeight: 0.33333334
+      outWeight: 0.043705057
     - serializedVersion: 3
       time: 1
       value: 1
@@ -223,36 +216,34 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: -2.676592
+      outSlope: -2.676592
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
+      outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.30975798
-      value: 0.4141659
-      inSlope: 5.5098963
-      outSlope: 5.5098963
+      time: 0.24898893
+      value: 0.33355823
+      inSlope: 5.2405443
+      outSlope: 5.2405443
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.17631641
-      outWeight: 0.054727808
+      inWeight: 0.33333334
+      outWeight: 0.07686676
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: -0.44414556
+      outSlope: -0.44414556
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  time: 0
-  currentState: 0
-  currentMovementState: 0
+  selectionSprite: {fileID: 804835849124565450}
 --- !u!1 &2845888706608597363
 GameObject:
   m_ObjectHideFlags: 0
