@@ -149,10 +149,8 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void Accelerate()
+    private void Accelerate()
     {
-        print("Accelerate!");
-
         agent.speed = MaxSpeed;
         agent.acceleration = accelerationCurve.Evaluate(time) * MaxAcceleration;
         time += Time.deltaTime * 30;
@@ -164,10 +162,8 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public void Decelerate()
+    private void Decelerate()
     {
-        print("Decelerate!");
-        
         agent.speed = decelerationCurve.Evaluate(time)  * MaxSpeed;
         time += Time.deltaTime;
 
