@@ -178,50 +178,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectionSprite: {fileID: 804835849124565450}
   MaxSpeed: 20
-  MaxAcceleration: 10
-  MaxDeceleration: 40
+  MaxAcceleration: 40
+  MaxDeceleration: 20
   TurnSpeed: 400
   UnitName: Grenadier
   SpeedBonusOnRoad: 1.5
-  StoppingDistance: 0
-  movementCurve:
+  StoppingDistance: 5
+  accelerationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 9.622642
-      outSlope: 9.622642
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.0125
+      outWeight: 0
     - serializedVersion: 3
-      time: 0.20745945
-      value: 0.51049465
-      inSlope: -5.4013586
-      outSlope: -5.4013586
+      time: 0.20280391
+      value: 0.70786023
+      inSlope: -4.428374
+      outSlope: -4.428374
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.26629356
-    - serializedVersion: 3
-      time: 0.5722313
-      value: 0.8472397
-      inSlope: -2.9589152
-      outSlope: -2.9589152
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.27569202
+      inWeight: 0.20832331
+      outWeight: 0.04118009
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.83846444
-      outSlope: 0.83846444
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 1
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  decelerationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.30975798
+      value: 0.4141659
+      inSlope: 5.5098963
+      outSlope: 5.5098963
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17631641
+      outWeight: 0.054727808
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

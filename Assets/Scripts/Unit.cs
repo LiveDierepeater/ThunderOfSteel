@@ -4,19 +4,27 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class Unit : MonoBehaviour
 {
+    [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
+    [Space(5)]
     
     private NavMeshAgent agent;
     
+    [Header("NavMeshAgent")]
     public float MaxSpeed;
-    public float MaxAcceleration;
-    public float MaxDeceleration;
     public float TurnSpeed;
+    public float MaxAcceleration;
+    public float StoppingDistance;
+    [Space(5)]
+    
+    [Header("Unit Description")]
     public string UnitName;
     public float SpeedBonusOnRoad;
-    public float StoppingDistance;
+    [Space(5)]
 
-    public AnimationCurve movementCurve;
+    [Header("Movement")]
+    public AnimationCurve accelerationCurve;
+    public AnimationCurve decelerationCurve;
     [SerializeField] private float time;
 
     private enum States
@@ -81,7 +89,15 @@ public class Unit : MonoBehaviour
                 if (IsUnitCloserThanStoppingDistance(agent.pathEndPosition))
                 {
                     agent.stoppingDistance = StoppingDistance;
-                    currentState = States.Idle;
+                    time = 0;
+                    currentMovementState = MovementStates.Decelerate;
+
+                    if (IsUnitStanding())
+                    {
+                        agent.speed = MaxSpeed;
+                        currentMovementState = MovementStates.Idle;
+                        currentState = States.Idle;
+                    }
                 }
                 break;
         }
@@ -114,6 +130,11 @@ public class Unit : MonoBehaviour
         return Vector3.Distance(transform.position, targetPosition) < agent.stoppingDistance;
     }
 
+    private bool IsUnitStanding()
+    {
+        return agent.velocity.normalized.magnitude < 0.5f;
+    }
+
     private void HandleMovementState()
     {
         switch (currentMovementState)
@@ -131,11 +152,12 @@ public class Unit : MonoBehaviour
     public void Accelerate()
     {
         print("Accelerate!");
-        
-        agent.acceleration = movementCurve.Evaluate(time) * MaxAcceleration;
+
+        agent.speed = MaxSpeed;
+        agent.acceleration = accelerationCurve.Evaluate(time) * MaxAcceleration;
         time += Time.deltaTime * 30;
 
-        if (time > 1)
+        if (time >= 1)
         {
             agent.acceleration = MaxAcceleration;
             currentMovementState = MovementStates.Moving;
@@ -146,13 +168,14 @@ public class Unit : MonoBehaviour
     {
         print("Decelerate!");
         
-        agent.acceleration = movementCurve.Evaluate(time)  * MaxDeceleration;
+        agent.speed = decelerationCurve.Evaluate(time)  * MaxSpeed;
         time += Time.deltaTime;
 
-        if (time > 1)
+        if (time >= 1)
         {
-            agent.acceleration = MaxDeceleration;
-            currentMovementState = MovementStates.Moving;
+            agent.speed = MaxSpeed;
+            currentMovementState = MovementStates.Idle;
+            currentState = States.Idle;
         }
     }
 }
