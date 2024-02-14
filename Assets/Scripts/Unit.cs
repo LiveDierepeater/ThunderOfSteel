@@ -6,6 +6,8 @@ public class Unit : MonoBehaviour
 {
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
+    
+    public UnitData Data;
     [Space(5)]
     
     private NavMeshAgent agent;
@@ -49,6 +51,13 @@ public class Unit : MonoBehaviour
         SelectionManager.Instance.AvailableUnits.Add(this);
         
         InitializeClassValues();
+        InitializeUnit();
+    }
+
+    private void InitializeUnit()
+    {
+        var movementBehaviorComponent =
+            gameObject.AddComponent(Data.MovementBehaviorPrefab.GetType()) as IMovementBehavior;
     }
 
     private void Start()

@@ -7,4 +7,5 @@ public class UnitData : ScriptableObject
     public float MaxAcceleration;
     public float MaxDeceleration;
     public float TurnSpeed;
+    public IMovementBehavior MovementBehaviorPrefab;
 }
