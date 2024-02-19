@@ -15,7 +15,7 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
         TickManager.Instance.TickSystem.OnTick += HandleTick;
     }
     
-    public void Initialize(UnitData data)
+    public void Initialize(UnitWeaponry data)
     {
         // Passing the UnitData in
         _unit = GetComponent<Unit>();

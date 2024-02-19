@@ -3,7 +3,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [Header("Data")]
-    public UnitData Data;
+    public UnitData DataUnit;
     [Space(5)]
     
     [Header("Movement")]
@@ -30,7 +30,7 @@ public class Unit : MonoBehaviour
     
     private void InitializeUnit()
     {
-        switch (Data.UnitType)
+        switch (DataUnit.UnitType)
         {
             case UnitData.Type.Infantry:
                 _movementBehavior = gameObject.AddComponent<InfantryMovement>();
@@ -44,12 +44,12 @@ public class Unit : MonoBehaviour
                 break;
             
             default:
-                Debug.LogWarning("Unknown Unit-Type: " + Data.UnitType);
+                Debug.LogWarning("Unknown Unit-Type: " + DataUnit.UnitType);
                 break;
         }
 
-        _movementBehavior.Initialize(Data, accelerationCurve, decelerationCurve);
-        _attackBehavior.Initialize(Data);
+        _movementBehavior.Initialize(DataUnit, accelerationCurve, decelerationCurve);
+        _attackBehavior.Initialize(DataUnit.UnitWeaponry);
     }
     
     public void OnSelected()

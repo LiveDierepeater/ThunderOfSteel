@@ -18,5 +18,5 @@ MonoBehaviour:
   MaxAcceleration: 20
   StoppingDistance: 10
   SpeedBonusOnRoad: 1.5
-  AttackRange: 2
+  UnitWeaponry: {fileID: 11400000, guid: f690f0b91d48485488756468845d053b, type: 2}
   UnitType: 0
