@@ -7,6 +7,7 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private RectTransform selectionBox;
     [SerializeField] private LayerMask unitsLayerMask;
     [SerializeField] private LayerMask terrainLayerMask;
+    [SerializeField] private LayerMask interactableLayerMask;
     [SerializeField] private float dragDelay = 0.1f;
 
     private float mouseDownTime;
@@ -84,17 +85,36 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Mouse1) && SelectionManager.Instance.SelectedUnits.Count > 0)
         {
-            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, terrainLayerMask))
+            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, interactableLayerMask))
             {
-                foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
+                // Überprüfe, ob auf eine Einheit geklickt wurde
+                if ((unitsLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
-                    unit.CommandToDestination(hit.point);
-                    //SpawnMoveToSprite(hit.point);
+                    Unit unitToAttack = hit.transform.GetComponent<Unit>();
+                    
+                    if (unitToAttack is not null)
+                    {
+                        foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
+                        {
+                            unit.CommandToAttack(unitToAttack);
+                        }
+                    }
+                }
+                // Überprüfe, ob auf das Terrain geklickt wurde
+                else if ((terrainLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
+                {
+                    foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
+                    {
+                        unit.RemoveTarget();
+                        unit.CommandToDestination(hit.point);
+                        //SpawnMoveToSprite(hit.point);
+                    }
                 }
             }
         }
-    }
 
+    }
+    
     private void ResizeSelectionBox()
     {
         float width = Input.mousePosition.x - startMousePosition.x;

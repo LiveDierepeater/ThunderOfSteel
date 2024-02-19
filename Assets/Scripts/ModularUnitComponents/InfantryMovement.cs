@@ -4,25 +4,29 @@ using UnityEngine.AI;
 [RequireComponent(typeof(NavMeshAgent))]
 public class InfantryMovement : MonoBehaviour, IMovementBehavior
 {
-    private NavMeshAgent agent;
+    [Header("DEBUG")]
+    [SerializeField] private float _time;
     
+    // Components
+    private NavMeshAgent _agent;
+    
+    // Private Fields
     private string _unitName;
     private float _maxSpeed;
     private float _turnSpeed;
     private float _maxAcceleration;
+    private float _speedBonusOnRoad;
+    
     private float _stoppingDistance;
-
-    [Header("Movement")]
-    private AnimationCurve accelerationCurve;
-    private AnimationCurve decelerationCurve;
-    [SerializeField] private float time;
+    private AnimationCurve _accelerationCurve;
+    private AnimationCurve _decelerationCurve;
 
     private enum States
     {
         Idle,
         MoveToDestination,
     }
-    [SerializeField] private States currentState = States.Idle;
+    [SerializeField] private States _currentState = States.Idle;
 
     private enum MovementStates
     {
@@ -31,11 +35,11 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         Moving,
         Decelerate
     }
-    [SerializeField] private MovementStates currentMovementState = MovementStates.Idle;
+    [SerializeField] private MovementStates _currentMovementState = MovementStates.Idle;
     
     private void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -50,87 +54,88 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _turnSpeed = data.TurnSpeed;
         _maxAcceleration = data.MaxAcceleration;
         _stoppingDistance = data.StoppingDistance;
+        _speedBonusOnRoad = data.SpeedBonusOnRoad;
 
         // Pasting Agent Values
-        agent.speed = _maxSpeed;
-        agent.angularSpeed = _turnSpeed;
-        agent.acceleration = _maxAcceleration;
-        agent.stoppingDistance = _stoppingDistance;
+        _agent.speed = _maxSpeed;
+        _agent.angularSpeed = _turnSpeed;
+        _agent.acceleration = _maxAcceleration;
+        _agent.stoppingDistance = _stoppingDistance;
         
         // Pasting Class Values
-        currentState = States.Idle;
-        currentMovementState = MovementStates.Idle;
-        this.accelerationCurve = accelerationCurve;
-        this.decelerationCurve = decelerationCurve;
+        _currentState = States.Idle;
+        _currentMovementState = MovementStates.Idle;
+        this._accelerationCurve = accelerationCurve;
+        this._decelerationCurve = decelerationCurve;
     }
 
     private bool IsUnitCloserThanStoppingDistance(Vector3 targetPosition)
     {
-        return Vector3.Distance(transform.position, targetPosition) < agent.stoppingDistance;
+        return Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance;
     }
 
     private bool IsUnitStanding()
     {
-        return agent.velocity.normalized.magnitude < 0.5f;
+        return _agent.velocity.normalized.magnitude < 0.5f;
     }
 
     private void Accelerate()
     {
-        agent.speed = _maxSpeed;
-        agent.acceleration = accelerationCurve.Evaluate(time) * _maxAcceleration;
-        time += Time.deltaTime * 30;
+        _agent.speed = _maxSpeed;
+        _agent.acceleration = _accelerationCurve.Evaluate(_time) * _maxAcceleration;
+        _time += Time.deltaTime * 30;
 
-        if (time >= 1)
+        if (_time >= 1)
         {
-            agent.acceleration = _maxAcceleration;
-            currentMovementState = MovementStates.Moving;
+            _agent.acceleration = _maxAcceleration;
+            _currentMovementState = MovementStates.Moving;
         }
     }
 
     private void Decelerate()
     {
-        agent.speed = decelerationCurve.Evaluate(time)  * _maxSpeed;
-        time += Time.deltaTime;
+        _agent.speed = _decelerationCurve.Evaluate(_time)  * _maxSpeed;
+        _time += Time.deltaTime;
 
-        if (time >= 1)
+        if (_time >= 1)
         {
-            agent.speed = _maxSpeed;
-            currentMovementState = MovementStates.Idle;
-            currentState = States.Idle;
+            _agent.speed = _maxSpeed;
+            _currentMovementState = MovementStates.Idle;
+            _currentState = States.Idle;
         }
     }
     
     public void MoveToDestination(Vector3 newDestination)
     {
         if (IsUnitCloserThanStoppingDistance(newDestination))
-            agent.stoppingDistance = 0.5f;
+            _agent.stoppingDistance = 0.5f;
         
-        agent.SetDestination(newDestination);
-        currentState = States.MoveToDestination;
+        _agent.SetDestination(newDestination);
+        _currentState = States.MoveToDestination;
 
-        currentMovementState = MovementStates.Accelerate;
-        time = 0;
+        _currentMovementState = MovementStates.Accelerate;
+        _time = 0;
     }
 
     private void FixedUpdate()
     {
-        switch (currentState)
+        switch (_currentState)
         {
             case States.Idle:
                 break;
             
             case States.MoveToDestination:
-                if (IsUnitCloserThanStoppingDistance(agent.pathEndPosition))
+                if (IsUnitCloserThanStoppingDistance(_agent.pathEndPosition))
                 {
-                    agent.stoppingDistance = _stoppingDistance;
-                    time = 0;
-                    currentMovementState = MovementStates.Decelerate;
+                    _agent.stoppingDistance = _stoppingDistance;
+                    _time = 0;
+                    _currentMovementState = MovementStates.Decelerate;
 
                     if (IsUnitStanding())
                     {
-                        agent.speed = _maxSpeed;
-                        currentMovementState = MovementStates.Idle;
-                        currentState = States.Idle;
+                        _agent.speed = _maxSpeed;
+                        _currentMovementState = MovementStates.Idle;
+                        _currentState = States.Idle;
                     }
                 }
                 break;
@@ -145,7 +150,7 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
 
     private void HandleMovementState()
     {
-        switch (currentMovementState)
+        switch (_currentMovementState)
         {
             case MovementStates.Accelerate:
                 Accelerate();

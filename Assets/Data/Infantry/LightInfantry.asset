@@ -17,5 +17,6 @@ MonoBehaviour:
   TurnSpeed: 200
   MaxAcceleration: 20
   StoppingDistance: 10
-  UnitType: 0
   SpeedBonusOnRoad: 1.5
+  AttackRange: 2
+  UnitType: 0
