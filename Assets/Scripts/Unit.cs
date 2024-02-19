@@ -3,6 +3,7 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     [Header("Data")]
+    [ExposedScriptableObject]
     public UnitData DataUnit;
     [Space(5)]
     
