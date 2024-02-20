@@ -87,7 +87,7 @@ public class PlayerInput : MonoBehaviour
         {
             if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, interactableLayerMask))
             {
-                // Überprüfe, ob auf eine Einheit geklickt wurde
+                // Check, if clicked on Unit
                 if ((unitsLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
                     Unit unitToAttack = hit.transform.GetComponent<Unit>();
@@ -100,7 +100,7 @@ public class PlayerInput : MonoBehaviour
                         }
                     }
                 }
-                // Überprüfe, ob auf das Terrain geklickt wurde
+                // Check, if clicked on Terrain
                 else if ((terrainLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
                     foreach (Unit unit in SelectionManager.Instance.SelectedUnits)

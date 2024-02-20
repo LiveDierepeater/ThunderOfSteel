@@ -83,8 +83,8 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     {
         _agent.speed = _maxSpeed;
         _agent.acceleration = _accelerationCurve.Evaluate(_time) * _maxAcceleration;
-        _time += Time.deltaTime * 30;
-
+        _time += TickSystem.TickRate;
+        
         if (_time >= 1)
         {
             _agent.acceleration = _maxAcceleration;
@@ -95,7 +95,7 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     private void Decelerate()
     {
         _agent.speed = _decelerationCurve.Evaluate(_time)  * _maxSpeed;
-        _time += Time.deltaTime;
+        _time += TickSystem.TickRate;
 
         if (_time >= 1)
         {

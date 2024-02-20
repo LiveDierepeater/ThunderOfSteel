@@ -4,8 +4,8 @@ public class TickSystem : MonoBehaviour
 {
     public delegate void TickDelegate();
     public TickDelegate OnTick;
-    
-    [SerializeField] private float tickRate = 0.2f;
+
+    public const float TickRate = 0.2f;
     private float nextTick;
 
     private void Awake()
@@ -25,7 +25,7 @@ public class TickSystem : MonoBehaviour
             // Calls Tick-Event here.
             OnTick?.Invoke();
             
-            nextTick = Time.time + tickRate;
+            nextTick = Time.time + TickRate;
         }
     }
 }

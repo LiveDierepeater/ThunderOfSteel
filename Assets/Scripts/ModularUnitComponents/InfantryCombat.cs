@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class InfantryCombat : MonoBehaviour, IAttackBehavior
 {
-    public bool CanAttack => true; // Logic for beeing ready to Attack
+    public bool CanAttack => true; // Logic for being ready to Attack
 
     public float AttackRange { get; private set; }
     
