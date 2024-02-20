@@ -14,21 +14,27 @@ public class Unit : MonoBehaviour
     
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
-    
+
+#region Private Fields
+
     // Interfaces
     private IMovementBehavior _movementBehavior;
     private IAttackBehavior _attackBehavior;
-    
+
     // Private Fields
     private Unit targetUnit;
-    
+
+#endregion
+
+#region Initializing
+
     private void Awake()
     {
         SelectionManager.Instance.AvailableUnits.Add(this);
-        
+
         InitializeUnit();
     }
-    
+
     private void InitializeUnit()
     {
         switch (DataUnit.UnitType)
@@ -37,13 +43,13 @@ public class Unit : MonoBehaviour
                 _movementBehavior = gameObject.AddComponent<InfantryMovement>();
                 _attackBehavior = gameObject.AddComponent<InfantryCombat>();
                 break;
-            
+
             case UnitData.Type.Tank:
                 break;
-            
+
             case UnitData.Type.Truck:
                 break;
-            
+
             default:
                 Debug.LogWarning("Unknown Unit-Type: " + DataUnit.UnitType);
                 break;
@@ -52,17 +58,21 @@ public class Unit : MonoBehaviour
         _movementBehavior.Initialize(DataUnit, accelerationCurve, decelerationCurve);
         _attackBehavior.Initialize(DataUnit.UnitWeaponry);
     }
-    
+
+#endregion
+
+#region External Called Logic
+
     public void OnSelected()
     {
         selectionSprite.gameObject.SetActive(true);
     }
-    
+
     public void OnDeselected()
     {
         selectionSprite.gameObject.SetActive(false);
     }
-    
+
     public void CommandToDestination(Vector3 newDestination)
     {
         _movementBehavior.MoveToDestination(newDestination);
@@ -77,4 +87,6 @@ public class Unit : MonoBehaviour
     {
         _attackBehavior.SetTarget(null);
     }
+
+#endregion
 }
