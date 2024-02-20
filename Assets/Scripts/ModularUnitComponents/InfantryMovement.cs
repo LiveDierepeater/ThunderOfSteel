@@ -6,7 +6,9 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
 {
     [Header("DEBUG")]
     [SerializeField] private float _time;
-    
+
+#region Internal Fields
+
     // Components
     private NavMeshAgent _agent;
     
@@ -32,13 +34,11 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         Decelerate
     }
     [SerializeField] private MovementStates _currentMovementState = MovementStates.Idle;
-    
-    //
-    //
-    // Initializing
-    //
-    //
-    
+
+#endregion
+
+#region Initializing
+
     private void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
@@ -70,29 +70,25 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         this._decelerationCurve = decelerationCurve;
     }
     
-    //
-    //
-    // UPDATES
-    //
-    //
+#endregion
 
-    private void FixedUpdate()
-    {
-        _currentAgentSpeed = _agent.velocity.magnitude;
-    }
+#region UPDATES
 
-    private void HandleTick()
-    {
-        // Here calculate on Tick-Event.
-        HandleMovementState();
-    }
-    
-    //
-    //
-    // External Called Logic
-    //
-    //
-    
+        private void FixedUpdate()
+        {
+            _currentAgentSpeed = _agent.velocity.magnitude;
+        }
+
+        private void HandleTick()
+        {
+            // Here calculate on Tick-Event.
+            HandleMovementState();
+        }
+
+#endregion
+
+#region External Called Logic
+
     public void MoveToDestination(Vector3 newDestination)
     {
         if (IsUnitCloserToDestinationThanStoppingDistance(newDestination))
@@ -101,12 +97,10 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _agent.SetDestination(newDestination);
         _currentMovementState = MovementStates.Accelerate;
     }
+
+#endregion
     
-    //
-    //
-    // Intern Logic
-    //
-    //
+#region Intern Logic
     
     private void HandleMovementState()
     {
@@ -155,12 +149,10 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
             ResetUnitMovementValuesToDefault();
     }
 
-    //
-    //
-    // Extracted Logic Methods
-    //
-    //
-    
+#endregion
+
+#region Extracted Logic Methods
+
     private void ResetUnitMovementValuesToDefault()
     {
         _agent.speed = _maxSpeed;
@@ -177,12 +169,10 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
             _currentMovementState = MovementStates.Decelerate;
     }
     
-    //
-    //
-    // Extracted Return Methods
-    //
-    //
-    
+#endregion
+
+#region Extracted Return Methods
+
     private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition)
     {
         return Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
@@ -192,4 +182,6 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     {
         return _currentAgentSpeed < 0.25f;
     }
+
+#endregion
 }
