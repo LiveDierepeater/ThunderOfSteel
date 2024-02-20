@@ -24,13 +24,6 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     private AnimationCurve _accelerationCurve;
     private AnimationCurve _decelerationCurve;
 
-    private enum States
-    {
-        Idle,
-        MoveToDestination,
-    }
-    [SerializeField] private States _currentState = States.Idle;
-
     private enum MovementStates
     {
         Idle,
@@ -39,6 +32,12 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         Decelerate
     }
     [SerializeField] private MovementStates _currentMovementState = MovementStates.Idle;
+    
+    //
+    //
+    // Initializing
+    //
+    //
     
     private void Awake()
     {
@@ -66,22 +65,67 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _agent.stoppingDistance = _stoppingDistance;
         
         // Pasting Class Values
-        _currentState = States.Idle;
         _currentMovementState = MovementStates.Idle;
         this._accelerationCurve = accelerationCurve;
         this._decelerationCurve = decelerationCurve;
     }
+    
+    //
+    //
+    // UPDATES
+    //
+    //
 
-    private bool IsUnitCloserThanStoppingDistance(Vector3 targetPosition)
+    private void FixedUpdate()
     {
-        return Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance;
+        _currentAgentSpeed = _agent.velocity.magnitude;
     }
 
-    private bool IsUnitStanding()
+    private void HandleTick()
     {
-        return _agent.velocity.normalized.magnitude < 0.5f;
+        // Here calculate on Tick-Event.
+        HandleMovementState();
     }
-
+    
+    //
+    //
+    // External Called Logic
+    //
+    //
+    
+    public void MoveToDestination(Vector3 newDestination)
+    {
+        if (IsUnitCloserToDestinationThanStoppingDistance(newDestination))
+            _agent.stoppingDistance = 0.5f;
+        
+        _agent.SetDestination(newDestination);
+        _currentMovementState = MovementStates.Accelerate;
+    }
+    
+    //
+    //
+    // Intern Logic
+    //
+    //
+    
+    private void HandleMovementState()
+    {
+        switch (_currentMovementState)
+        {
+            case MovementStates.Accelerate:
+                Accelerate();
+                break;
+            
+            case MovementStates.Moving:
+                Moving();
+                break;
+            
+            case MovementStates.Decelerate:
+                Decelerate();
+                break;
+        }
+    }
+    
     private void Accelerate()
     {
         _agent.speed = _maxSpeed;
@@ -96,68 +140,56 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         }
     }
 
+    private void Moving()
+    {
+        if (IsUnitCloserToDestinationThanStoppingDistance(_agent.pathEndPosition))
+            DecelerateNearStoppingDistance();
+    }
+
     private void Decelerate()
     {
         _agent.speed = _accelerationCurve.Evaluate(_time)  * _maxSpeed;
         _time -= TickSystem.TickRate;
+        
+        if (IsUnitStanding())
+            ResetUnitMovementValuesToDefault();
+    }
+
+    //
+    //
+    // Extracted Logic Methods
+    //
+    //
+    
+    private void ResetUnitMovementValuesToDefault()
+    {
+        _agent.speed = _maxSpeed;
+        _time = 0;
+        _agent.stoppingDistance = _stoppingDistance;
+        _currentMovementState = MovementStates.Idle;
+    }
+
+    private void DecelerateNearStoppingDistance()
+    {
+        // When the current speed of the '_agent' is >= than the distance to the final destination, decelerate Unit
+        
+        if (_currentAgentSpeed >= Vector3.Distance(transform.position, _agent.pathEndPosition))
+            _currentMovementState = MovementStates.Decelerate;
     }
     
-    public void MoveToDestination(Vector3 newDestination)
+    //
+    //
+    // Extracted Return Methods
+    //
+    //
+    
+    private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition)
     {
-        if (IsUnitCloserThanStoppingDistance(newDestination))
-            _agent.stoppingDistance = 0.5f;
-        
-        _agent.SetDestination(newDestination);
-        _currentState = States.MoveToDestination;
-
-        _currentMovementState = MovementStates.Accelerate;
+        return Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
     }
 
-    private void FixedUpdate()
+    private bool IsUnitStanding()
     {
-        _currentAgentSpeed = _agent.velocity.magnitude;
-        
-        switch (_currentState)
-        {
-            case States.Idle:
-                break;
-            
-            case States.MoveToDestination:
-                if (IsUnitCloserThanStoppingDistance(_agent.pathEndPosition))
-                {
-                    //_agent.stoppingDistance = _stoppingDistance;
-                    _currentMovementState = MovementStates.Decelerate;
-                    
-                    if (IsUnitStanding())
-                    {
-                        _agent.speed = _maxSpeed;
-                        _time = 0;
-                        _agent.stoppingDistance = _stoppingDistance;
-                        _currentMovementState = MovementStates.Idle;
-                        _currentState = States.Idle;
-                    }
-                }
-                break;
-        }
-    }
-
-    private void HandleTick()
-    {
-        // Here calculate on Tick-Event.
-        HandleMovementState();
-    }
-
-    private void HandleMovementState()
-    {
-        switch (_currentMovementState)
-        {
-            case MovementStates.Accelerate:
-                Accelerate();
-                break;
-            
-            case MovementStates.Decelerate:
-                Decelerate();
-                break;
-        }
+        return _currentAgentSpeed < 0.25f;
     }
 }
