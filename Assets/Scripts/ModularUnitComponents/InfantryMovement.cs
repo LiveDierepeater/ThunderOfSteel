@@ -10,7 +10,10 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     // Components
     private NavMeshAgent _agent;
     
-    // Private Fields
+    // Functionality Fields
+    private float _currentAgentSpeed;
+    
+    // Stats Fields
     private string _unitName;
     private float _maxSpeed;
     private float _turnSpeed;
@@ -89,20 +92,14 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         {
             _agent.acceleration = _maxAcceleration;
             _currentMovementState = MovementStates.Moving;
+            _time = 1;
         }
     }
 
     private void Decelerate()
     {
-        _agent.speed = _decelerationCurve.Evaluate(_time)  * _maxSpeed;
-        _time += TickSystem.TickRate;
-
-        if (_time >= 1)
-        {
-            _agent.speed = _maxSpeed;
-            _currentMovementState = MovementStates.Idle;
-            _currentState = States.Idle;
-        }
+        _agent.speed = _accelerationCurve.Evaluate(_time)  * _maxSpeed;
+        _time -= TickSystem.TickRate;
     }
     
     public void MoveToDestination(Vector3 newDestination)
@@ -114,11 +111,12 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _currentState = States.MoveToDestination;
 
         _currentMovementState = MovementStates.Accelerate;
-        _time = 0;
     }
 
     private void FixedUpdate()
     {
+        _currentAgentSpeed = _agent.velocity.magnitude;
+        
         switch (_currentState)
         {
             case States.Idle:
@@ -127,13 +125,14 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
             case States.MoveToDestination:
                 if (IsUnitCloserThanStoppingDistance(_agent.pathEndPosition))
                 {
-                    _agent.stoppingDistance = _stoppingDistance;
-                    _time = 0;
+                    //_agent.stoppingDistance = _stoppingDistance;
                     _currentMovementState = MovementStates.Decelerate;
-
+                    
                     if (IsUnitStanding())
                     {
                         _agent.speed = _maxSpeed;
+                        _time = 0;
+                        _agent.stoppingDistance = _stoppingDistance;
                         _currentMovementState = MovementStates.Idle;
                         _currentState = States.Idle;
                     }

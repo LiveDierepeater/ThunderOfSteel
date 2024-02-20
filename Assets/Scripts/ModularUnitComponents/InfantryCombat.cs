@@ -30,7 +30,6 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
     
     private void MoveInRange()
     {
-        print(_targetUnit);
         if (_targetUnit is not null && CanAttack)
         {
             float distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
