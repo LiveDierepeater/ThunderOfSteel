@@ -66,8 +66,8 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         
         // Pasting Class Values
         _currentMovementState = MovementStates.Idle;
-        this._accelerationCurve = accelerationCurve;
-        this._decelerationCurve = decelerationCurve;
+        _accelerationCurve = accelerationCurve;
+        _decelerationCurve = decelerationCurve;
     }
     
 #endregion
