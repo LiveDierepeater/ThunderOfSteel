@@ -53,6 +53,8 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
 
     private void MoveInRange()
     {
+        _unit.IsAttacking = false; // DEBUG
+        
         if (_targetUnit is not null && CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
@@ -66,7 +68,8 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
                 
                 Vector3 directionToTarget = (_targetUnit.transform.position - transform.position).normalized;
                 
-                //_unit.CommandToDestination(_targetUnit.transform.position);
+                _unit.CommandToDestination(_targetUnit.transform.position);
+                _unit.IsAttacking = false; // DEBUG
             }
         }
     }
@@ -78,6 +81,8 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
     public void Attack(Unit target)
     {
         // Implementiere den Nahkampfangriff hier
+        _unit.StopUnit(_targetUnit);
+        _unit.IsAttacking = true; // DEBUG
     }
 
 #endregion

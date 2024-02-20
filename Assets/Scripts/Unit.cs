@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
+    public bool IsAttacking;
 
 #region Private Fields
 
@@ -82,13 +83,18 @@ public class Unit : MonoBehaviour
     {
         _attackBehavior.SetTarget(newUnitTarget);
         
-        _movementBehavior.CalculateNewPath(newUnitTarget.transform.position);
-        _movementBehavior.CalculateNewDestinationToAttack(newUnitTarget, _attackBehavior.AttackRange);
+        //_movementBehavior.CalculateNewPath(newUnitTarget.transform.position);
+        //_movementBehavior.CalculateNewDestinationToAttack(newUnitTarget, _attackBehavior.AttackRange);
     }
 
     public void RemoveTarget()
     {
         _attackBehavior.SetTarget(null);
+    }
+
+    public void StopUnit(Unit targetUnit)
+    {
+        _movementBehavior.StopUnitAtPosition(targetUnit);
     }
 
 #endregion

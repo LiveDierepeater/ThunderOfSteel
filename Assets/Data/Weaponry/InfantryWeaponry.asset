@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4858fd69092b61b46b0b60d9f1942b12, type: 3}
   m_Name: InfantryWeaponry
   m_EditorClassIdentifier: 
-  AttackRange: 5
+  AttackRange: 20
   Damage: 5

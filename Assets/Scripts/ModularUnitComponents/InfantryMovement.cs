@@ -98,28 +98,10 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _currentMovementState = MovementStates.Accelerate;
     }
 
-    public void CalculateNewPath(Vector3 destination)
+    public void StopUnitAtPosition(Unit targetUnit)
     {
-        _agent.CalculatePath(destination, _agent.path);
-    }
-
-    public void CalculateNewDestinationToAttack(Unit targetUnit, float attackRange)
-    {
-        // TODO: Refine this Function!!!
-        print(_agent.path.corners.Length);
-        // Return, if the path to 'targetUnit' is a straight line
-        if (_agent.path.corners.Length <= 1) return;
-        
-        Vector3 penultimatePosition = _agent.path.corners[^2];
-        Vector3 directionToNewPosition = (_agent.pathEndPosition - penultimatePosition).normalized;
-
-        float distanceToPathEndPosition = Vector3.Distance(penultimatePosition, _agent.pathEndPosition);
-        float distanceToNewPosition = distanceToPathEndPosition - attackRange;
-
-        Vector3 newEndPosition = directionToNewPosition * distanceToNewPosition;
-        
-        _agent.SetDestination(newEndPosition);
-        print(newEndPosition);
+        _agent.SetDestination(_stoppingDistance/2 * _agent.velocity.normalized + transform.position);
+        DecelerateNearStoppingDistance();
     }
 
 #endregion
@@ -156,6 +138,9 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
             _currentMovementState = MovementStates.Moving;
             _time = 1;
         }
+        
+        if (IsUnitCloserToDestinationThanStoppingDistance(_agent.pathEndPosition))
+            DecelerateNearStoppingDistance();
     }
 
     private void Moving()
@@ -183,10 +168,14 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _time = 0;
         _agent.stoppingDistance = _stoppingDistance;
         _currentMovementState = MovementStates.Idle;
+        _agent.ResetPath();
     }
 
     private void DecelerateNearStoppingDistance()
     {
+        // Return, if unit already came to stop
+        if (IsUnitStanding()) return;
+        
         // When the current speed of the '_agent' is >= than the distance to the final destination, decelerate Unit
 
         if (_currentAgentSpeed >= Vector3.Distance(transform.position, _agent.pathEndPosition))
