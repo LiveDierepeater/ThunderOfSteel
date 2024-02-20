@@ -98,6 +98,30 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _currentMovementState = MovementStates.Accelerate;
     }
 
+    public void CalculateNewPath(Vector3 destination)
+    {
+        _agent.CalculatePath(destination, _agent.path);
+    }
+
+    public void CalculateNewDestinationToAttack(Unit targetUnit, float attackRange)
+    {
+        // TODO: Refine this Function!!!
+        print(_agent.path.corners.Length);
+        // Return, if the path to 'targetUnit' is a straight line
+        if (_agent.path.corners.Length <= 1) return;
+        
+        Vector3 penultimatePosition = _agent.path.corners[^2];
+        Vector3 directionToNewPosition = (_agent.pathEndPosition - penultimatePosition).normalized;
+
+        float distanceToPathEndPosition = Vector3.Distance(penultimatePosition, _agent.pathEndPosition);
+        float distanceToNewPosition = distanceToPathEndPosition - attackRange;
+
+        Vector3 newEndPosition = directionToNewPosition * distanceToNewPosition;
+        
+        _agent.SetDestination(newEndPosition);
+        print(newEndPosition);
+    }
+
 #endregion
 
 #region Intern Logic

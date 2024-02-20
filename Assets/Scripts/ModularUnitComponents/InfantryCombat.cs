@@ -56,12 +56,18 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
         if (_targetUnit is not null && CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
+            
             if (distanceToTarget <= AttackRange)
                 // Ziel ist in Angriffsreichweite
                 Attack(_targetUnit);
             else
+            {
                 // Bewege dich zum Ziel, bis du in Angriffsreichweite bist
-                _unit.CommandToDestination(_targetUnit.transform.position);
+                
+                Vector3 directionToTarget = (_targetUnit.transform.position - transform.position).normalized;
+                
+                //_unit.CommandToDestination(_targetUnit.transform.position);
+            }
         }
     }
 
@@ -72,7 +78,6 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
     public void Attack(Unit target)
     {
         // Implementiere den Nahkampfangriff hier
-        print("Attack");
     }
 
 #endregion

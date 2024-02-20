@@ -81,6 +81,9 @@ public class Unit : MonoBehaviour
     public void CommandToAttack(Unit newUnitTarget)
     {
         _attackBehavior.SetTarget(newUnitTarget);
+        
+        _movementBehavior.CalculateNewPath(newUnitTarget.transform.position);
+        _movementBehavior.CalculateNewDestinationToAttack(newUnitTarget, _attackBehavior.AttackRange);
     }
 
     public void RemoveTarget()
