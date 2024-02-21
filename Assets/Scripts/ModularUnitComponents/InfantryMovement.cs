@@ -11,7 +11,6 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     
     // Components
     private NavMeshAgent _agent;
-    private Unit _unit;
     
     // Functionality Fields
     private float _currentAgentSpeed;
@@ -45,17 +44,21 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
         base.Awake();
         _agent = GetComponent<NavMeshAgent>();
 
-        Initialize(_unit.DataUnit, _unit.accelerationCurve, _unit.decelerationCurve);
+        Initialize(Unit.DataUnit, Unit.accelerationCurve, Unit.decelerationCurve);
     }
 
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
+        Unit.DataUnit.Events.OnAttackUnit += MoveToDestination;
+        Unit.DataUnit.Events.OnStopUnit += StopUnitAtPosition;
     }
 
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.DataUnit.Events.OnAttackUnit -= MoveToDestination;
+        Unit.DataUnit.Events.OnStopUnit -= StopUnitAtPosition;
     }
 
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)

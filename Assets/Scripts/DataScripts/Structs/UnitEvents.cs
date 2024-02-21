@@ -1,10 +1,10 @@
 using System;
+using UnityEngine;
 
 public struct UnitEvents
 {
-    //public delegate void MoveUnitInRange();
-    public Action OnMoveUnitInRange;
+    //public delegate void UnitIsInRange(Vector3 newDestination);
+    public Action<Vector3> OnAttackUnit;
 
-    //public delegate void UnitIsInRange();
-    public Action OnUnitIsInRange;
+    public Action OnStopUnit;
 }

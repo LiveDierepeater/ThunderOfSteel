@@ -86,10 +86,5 @@ public class Unit : MonoBehaviour
         _attackBehavior.SetTarget(null);
     }
 
-    public void StopUnit()
-    {
-        _movementBehavior.StopUnitAtPosition();
-    }
-
 #endregion
 }
