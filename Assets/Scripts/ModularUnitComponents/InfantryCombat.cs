@@ -9,7 +9,6 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
 #region Internal Fields
 
     // Private Fields
-    private Unit _unit;
     private Unit _targetUnit;
 
 #endregion
@@ -19,9 +18,8 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
     protected override void Awake()
     {
         base.Awake();
-        _unit = Unit;
         
-        AttackRange = _unit.DataUnit.UnitWeaponry.AttackRange;
+        AttackRange = Unit.DataUnit.UnitWeaponry.AttackRange;
     }
 
     private void Start()
@@ -58,7 +56,7 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
 
     private void MoveInRange()
     {
-        _unit.IsAttacking = false; // DEBUG
+        Unit.IsAttacking = false; // DEBUG
         
         if (_targetUnit is not null && CanAttack)
         {
@@ -66,13 +64,15 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
             
             // Target is in 'AttackRange'
             if (distanceToTarget <= AttackRange)
+            {
                 Attack(_targetUnit);
+            }
             else
             {
                 // Move to target, till Unit is in 'AttackRange'
                 
-                _unit.CommandToDestination(_targetUnit.transform.position);
-                _unit.IsAttacking = false; // DEBUG
+                Unit.CommandToDestination(_targetUnit.transform.position);
+                Unit.IsAttacking = false; // DEBUG
             }
         }
     }
@@ -85,8 +85,8 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
     {
         // Here Attacking should be implemented
     
-        _unit.StopUnit();
-        _unit.IsAttacking = true; // DEBUG
+        Unit.StopUnit();
+        Unit.IsAttacking = true; // DEBUG
     }
 
 #endregion

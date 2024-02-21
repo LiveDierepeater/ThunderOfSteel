@@ -44,7 +44,6 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     {
         base.Awake();
         _agent = GetComponent<NavMeshAgent>();
-        _unit = Unit;
 
         Initialize(_unit.DataUnit, _unit.accelerationCurve, _unit.decelerationCurve);
     }

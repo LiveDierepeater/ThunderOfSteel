@@ -20,4 +20,6 @@ public class UnitData : ScriptableObject
         Truck
     }
     public Type UnitType;
+
+    public UnitEvents Events;
 }
