@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class InfantryCombat : UnitSystem, IAttackBehavior
@@ -25,7 +24,7 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
         AttackRange = _unit.DataUnit.UnitWeaponry.AttackRange;
     }
 
-    private void OnEnable()
+    private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
     }

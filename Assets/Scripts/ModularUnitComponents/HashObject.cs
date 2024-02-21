@@ -7,7 +7,7 @@ public class HashObject : MonoBehaviour
     // Debugging Fields:
     [SerializeField] private Vector2 _currentHashKey;
 
-    private void OnEnable()
+    private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         SpatialHashManager.Instance.SpatialHash.AddObject(gameObject);
