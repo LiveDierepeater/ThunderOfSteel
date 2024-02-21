@@ -5,12 +5,18 @@ public class HashObject : MonoBehaviour
     private Vector3 lastPosition;
 
     // Debugging Fields:
-    private Vector2 _currentHashKey;
-    
-    private void Start()
+    [SerializeField] private Vector2 _currentHashKey;
+
+    private void OnEnable()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         SpatialHashManager.Instance.SpatialHash.AddObject(gameObject);
+    }
+
+    private void OnDisable()
+    {
+        TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, lastPosition);
     }
 
     private void HandleTick()

@@ -49,9 +49,14 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
         Initialize(_unit.DataUnit, _unit.accelerationCurve, _unit.decelerationCurve);
     }
 
-    private void Start()
+    private void OnEnable()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
+    }
+
+    private void OnDisable()
+    {
+        TickManager.Instance.TickSystem.OnTick -= HandleTick;
     }
 
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
