@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InfantryCombat : MonoBehaviour, IAttackBehavior
+public class InfantryCombat : UnitSystem, IAttackBehavior
 {
     public bool CanAttack => true; // Logic for being ready to Attack
 
@@ -16,17 +16,17 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
 
 #region Initializing
 
+    protected override void Awake()
+    {
+        base.Awake();
+        _unit = Unit;
+        
+        AttackRange = _unit.DataUnit.UnitWeaponry.AttackRange;
+    }
+
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-    }
-
-    public void Initialize(UnitWeaponry data)
-    {
-        // Passing the UnitData in
-        _unit = GetComponent<Unit>();
-
-        AttackRange = data.AttackRange;
     }
 
 #endregion

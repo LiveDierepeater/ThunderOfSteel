@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class InfantryMovement : MonoBehaviour, IMovementBehavior
+public class InfantryMovement : UnitSystem, IMovementBehavior
 {
     [Header("DEBUG")]
     [SerializeField] private float _time;
@@ -11,6 +11,7 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     
     // Components
     private NavMeshAgent _agent;
+    private Unit _unit;
     
     // Functionality Fields
     private float _currentAgentSpeed;
@@ -39,9 +40,13 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
     
 #region Initializing
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         _agent = GetComponent<NavMeshAgent>();
+        _unit = Unit;
+
+        Initialize(_unit.DataUnit, _unit.accelerationCurve, _unit.decelerationCurve);
     }
 
     private void Start()
@@ -49,7 +54,7 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         TickManager.Instance.TickSystem.OnTick += HandleTick;
     }
 
-    public void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
+    private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
     {
         _unitName = data.UnitName;
         _maxSpeed = data.MaxSpeed;

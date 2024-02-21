@@ -55,9 +55,6 @@ public class Unit : MonoBehaviour
                 Debug.LogWarning("Unknown Unit-Type: " + DataUnit.UnitType);
                 break;
         }
-
-        _movementBehavior.Initialize(DataUnit, accelerationCurve, decelerationCurve);
-        _attackBehavior.Initialize(DataUnit.UnitWeaponry);
     }
 
 #endregion
