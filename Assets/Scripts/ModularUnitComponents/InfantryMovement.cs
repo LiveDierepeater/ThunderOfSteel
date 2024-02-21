@@ -98,7 +98,7 @@ public class InfantryMovement : MonoBehaviour, IMovementBehavior
         _currentMovementState = MovementStates.Accelerate;
     }
 
-    public void StopUnitAtPosition(Unit targetUnit)
+    public void StopUnitAtPosition()
     {
         _agent.SetDestination(_stoppingDistance/2 * _agent.velocity.normalized + transform.position);
         DecelerateNearStoppingDistance();

@@ -76,11 +76,11 @@ public class InfantryCombat : MonoBehaviour, IAttackBehavior
 
 #region Extracted Logic Methods
 
-    public void Attack(Unit target)
+    public void Attack(Unit targetUnit)
     {
         // Here Attacking should be implemented
     
-        _unit.StopUnit(_targetUnit);
+        _unit.StopUnit();
         _unit.IsAttacking = true; // DEBUG
     }
 

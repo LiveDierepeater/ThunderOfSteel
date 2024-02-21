@@ -6,5 +6,5 @@ public interface IMovementBehavior
     
     void MoveToDestination(Vector3 destination);
     
-    void StopUnitAtPosition(Unit targetUnit);
+    void StopUnitAtPosition();
 }
