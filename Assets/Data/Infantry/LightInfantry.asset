@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a204ef4e7e082342adcbad0af1f7bfd, type: 3}
   m_Name: LightInfantry
   m_EditorClassIdentifier: 
+  InstanceID: 0
   UnitName: Grenadiers
   MaxSpeed: 20
-  TurnSpeed: 200
+  TurnSpeed: 2000
   MaxAcceleration: 20
   StoppingDistance: 10
   SpeedBonusOnRoad: 1.5

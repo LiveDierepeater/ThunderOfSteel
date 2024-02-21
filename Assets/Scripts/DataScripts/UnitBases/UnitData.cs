@@ -3,6 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Unit", menuName = "Data/Unit")]
 public class UnitData : ScriptableObject
 {
+    public int InstanceID;
     public string UnitName;
     public float MaxSpeed;
     public float TurnSpeed;

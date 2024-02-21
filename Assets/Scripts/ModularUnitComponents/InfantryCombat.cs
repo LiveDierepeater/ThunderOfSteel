@@ -25,11 +25,13 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
+        Unit.DataUnit.Events.OnNewTargetUnit += SetTarget;
     }
 
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.DataUnit.Events.OnNewTargetUnit -= SetTarget;
     }
 
 #endregion
@@ -64,15 +66,12 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
             
             // Target is in 'AttackRange'
             if (distanceToTarget <= AttackRange)
-            {
                 Attack(_targetUnit);
-            }
             else
             {
                 // Move to target, till Unit is in 'AttackRange'
                 
                 Unit.DataUnit.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
-                //Unit.CommandToDestination(_targetUnit.transform.position);
                 Unit.IsAttacking = false; // DEBUG
             }
         }
@@ -85,14 +84,10 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
     public void Attack(Unit targetUnit)
     {
         // Here Attacking should be implemented
-
-        // DEBUG
-        Debug.DrawLine(transform.position, _targetUnit.transform.position, Color.magenta, 3f);
-        print(Vector3.Distance(transform.position, _targetUnit.transform.position) + " | ID: " + GetInstanceID());
         
         Unit.DataUnit.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
         Unit.DataUnit.Events.OnStopUnit?.Invoke();
-        //Unit.StopUnit();
+        
         Unit.IsAttacking = true; // DEBUG
     }
 

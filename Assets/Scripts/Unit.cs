@@ -16,17 +16,6 @@ public class Unit : MonoBehaviour
     [SerializeField] private SpriteRenderer selectionSprite;
     public bool IsAttacking;
 
-#region Private Fields
-
-    // Interfaces
-    private IMovementBehavior _movementBehavior;
-    private IAttackBehavior _attackBehavior;
-
-    // Private Fields
-    private Unit targetUnit;
-
-#endregion
-
 #region Initializing
 
     private void Awake()
@@ -38,11 +27,14 @@ public class Unit : MonoBehaviour
 
     private void InitializeUnit()
     {
+        DataUnit = Instantiate(DataUnit);
+        DataUnit.InstanceID = Mathf.Abs(GetInstanceID()) * 1000 + 1;
+        
         switch (DataUnit.UnitType)
         {
             case UnitData.Type.Infantry:
-                _movementBehavior = gameObject.AddComponent<InfantryMovement>();
-                _attackBehavior = gameObject.AddComponent<InfantryCombat>();
+                gameObject.AddComponent<InfantryMovement>();
+                gameObject.AddComponent<InfantryCombat>();
                 break;
 
             case UnitData.Type.Tank:
@@ -73,17 +65,17 @@ public class Unit : MonoBehaviour
 
     public void CommandToDestination(Vector3 newDestination)
     {
-        _movementBehavior.MoveToDestination(newDestination);
+        DataUnit.Events.OnAttackUnit?.Invoke(newDestination);
     }
 
     public void CommandToAttack(Unit newUnitTarget)
     {
-        _attackBehavior.SetTarget(newUnitTarget);
+        DataUnit.Events.OnNewTargetUnit?.Invoke(newUnitTarget);
     }
 
     public void RemoveTarget()
     {
-        _attackBehavior.SetTarget(null);
+        DataUnit.Events.OnNewTargetUnit?.Invoke(null);
     }
 
 #endregion
