@@ -65,6 +65,8 @@ public class InfantryCombat : UnitSystem, IAttackBehavior
             // Target is in 'AttackRange'
             if (distanceToTarget <= AttackRange)
             {
+                //TODO: Refine here!
+                //Unit.DataUnit.Events.OnUnitIsInRange?.Invoke();
                 Attack(_targetUnit);
             }
             else
