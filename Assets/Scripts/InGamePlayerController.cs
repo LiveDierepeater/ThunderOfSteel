@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class PlayerInput : MonoBehaviour
+public class InGamePlayerController : MonoBehaviour
 {
     private new Camera camera;
     
     [SerializeField] private RectTransform selectionBox;
-    [SerializeField] private LayerMask unitsLayerMask;
-    [SerializeField] private LayerMask terrainLayerMask;
-    [SerializeField] private LayerMask interactableLayerMask;
+    private LayerMask _unitsLayerMask;
+    private LayerMask _terrainLayerMask;
+    private LayerMask _interactableLayerMask;
     [SerializeField] private float dragDelay = 0.1f;
 
     private float mouseDownTime;
@@ -21,6 +21,7 @@ public class PlayerInput : MonoBehaviour
     private void Awake()
     {
         camera = GetComponentInChildren<Camera>();
+        selectionBox = GameObject.FindGameObjectWithTag("SelectionBox").GetComponent<RectTransform>();
     }
 
     private void Update()
@@ -52,7 +53,7 @@ public class PlayerInput : MonoBehaviour
             selectionBox.sizeDelta = Vector2.zero;
             selectionBox.gameObject.SetActive(false);
 
-            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, unitsLayerMask)
+            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, _unitsLayerMask)
                 && hit.collider.gameObject.TryGetComponent(out Unit unit))
             {
                 if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
@@ -85,10 +86,10 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Mouse1) && SelectionManager.Instance.SelectedUnits.Count > 0)
         {
-            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, interactableLayerMask))
+            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, _interactableLayerMask))
             {
                 // Check, if clicked on Unit
-                if ((unitsLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
+                if ((_unitsLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
                     Unit unitToAttack = hit.transform.GetComponent<Unit>();
                     
@@ -101,7 +102,7 @@ public class PlayerInput : MonoBehaviour
                     }
                 }
                 // Check, if clicked on Terrain
-                else if ((terrainLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
+                else if ((_terrainLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
                     foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
                     {
@@ -112,7 +113,13 @@ public class PlayerInput : MonoBehaviour
                 }
             }
         }
+    }
 
+    public void SetLayerMaskInfo(Player player)
+    {
+        _unitsLayerMask = player.unitsLayerMask;
+        _terrainLayerMask = player.terrainLayerMask;
+        _interactableLayerMask = player.interactableLayerMask;
     }
     
     private void ResizeSelectionBox()
