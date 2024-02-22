@@ -163,7 +163,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
 
     private void Decelerate()
     {
-        _agent.speed = _accelerationCurve.Evaluate(_time) * _maxSpeed;
+        _agent.speed = _decelerationCurve.Evaluate(_time) * _maxSpeed;
         _time -= TickSystem.TickRate;
 
         if (IsUnitStanding())
