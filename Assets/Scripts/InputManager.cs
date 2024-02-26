@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class InputManager : InputReader
 {
@@ -67,7 +68,7 @@ public class InputManager : InputReader
             _inGamePlayerController.SetLayerMaskInfo(Player);
             _inGamePlayerController.enabled = true;
 
-            throw new NotImplementedException(); // TODO: Deactivate all other PlayerController
+            // TODO: Deactivate all other PlayerController
         }
 
         _inGamePlayerController.enabled = false;
