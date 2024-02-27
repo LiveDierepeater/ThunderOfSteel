@@ -17,6 +17,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     private float _currentMaxSpeed;
     
     // Stats Fields
+    // ReSharper disable once NotAccessedField.Local
     private string _unitName;
     private float _standardSpeed;
     private float _turnSpeed;
