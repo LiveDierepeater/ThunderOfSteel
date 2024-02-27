@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class InGamePlayerController : MonoBehaviour
 {
+    public GameObject moveToSpritePrefab;
+    
     private new Camera camera;
     
     [SerializeField] private RectTransform selectionBox;
@@ -10,13 +12,17 @@ public class InGamePlayerController : MonoBehaviour
     private LayerMask _interactableLayerMask;
     [SerializeField] private float dragDelay = 0.1f;
 
+    #region Internal Fields
+
     private float mouseDownTime;
     private Vector2 startMousePosition;
     
-    public GameObject moveToSpritePrefab;
-    
     private KeyCode lastHitKey;
     private KeyCode currentHitKey;
+
+    #endregion
+
+    #region Initializing
 
     private void Awake()
     {
@@ -24,78 +30,40 @@ public class InGamePlayerController : MonoBehaviour
         selectionBox = GameObject.FindGameObjectWithTag("SelectionBox").GetComponent<RectTransform>();
     }
 
+    #endregion
+
+    #region UPDATES
+
     private void Update()
     {
         HandleSelectionInputs();
         HandleMovementInputs();
     }
 
+    #endregion
+
+    #region External Called Logic
+
+    public void SetLayerMaskInfo(Player player)
+    {
+        _unitsLayerMask = player.unitsLayerMask;
+        _terrainLayerMask = player.terrainLayerMask;
+        _interactableLayerMask = player.interactableLayerMask;
+    }
+
+    #endregion
+
+    #region Intern Logic
+
     private void HandleSelectionInputs()
     {
         HandleMouseInputs();
     }
 
-    public void ShowSelectionBox(bool _)
-    {
-        selectionBox.sizeDelta = Vector2.zero;
-        selectionBox.gameObject.SetActive(true);
-        startMousePosition = Input.mousePosition;
-        mouseDownTime = Time.time;
-    }
-
-    public void ResizingSelectionBox(bool _)
-    {
-        if (mouseDownTime + dragDelay < Time.deltaTime)
-        {
-            ResizeSelectionBox();
-        }
-    }
-
     private void HandleMouseInputs()
     {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            selectionBox.sizeDelta = Vector2.zero;
-            selectionBox.gameObject.SetActive(true);
-            startMousePosition = Input.mousePosition;
-            mouseDownTime = Time.time;
-        }
-        else if (Input.GetKey(KeyCode.Mouse0) && mouseDownTime + dragDelay < Time.time)
-        {
-            ResizeSelectionBox();
-        }
-        else if (Input.GetKeyUp(KeyCode.Mouse0))
-        {
-            selectionBox.sizeDelta = Vector2.zero;
-            selectionBox.gameObject.SetActive(false);
-
-            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, _unitsLayerMask)
-                && hit.collider.gameObject.TryGetComponent(out Unit unit))
-            {
-                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
-                {
-                    if (SelectionManager.Instance.IsSelected(unit))
-                    {
-                        SelectionManager.Instance.Deselect(unit);
-                    }
-                    else
-                    {
-                        SelectionManager.Instance.Select(unit);
-                    }
-                }
-                else
-                {
-                    SelectionManager.Instance.DeselectAll();
-                    SelectionManager.Instance.Select(unit);
-                }
-            }
-            else if (mouseDownTime + dragDelay > Time.time)
-            {
-                SelectionManager.Instance.DeselectAll();
-            }
-            
-            mouseDownTime = 0;
-        }
+        MakeSelectionBox();
+        MakeSelections();
     }
 
     private void HandleMovementInputs()
@@ -131,11 +99,59 @@ public class InGamePlayerController : MonoBehaviour
         }
     }
 
-    public void SetLayerMaskInfo(Player player)
+    #endregion
+
+    #region Extracted Logic Methods
+
+    private void MakeSelectionBox()
     {
-        _unitsLayerMask = player.unitsLayerMask;
-        _terrainLayerMask = player.terrainLayerMask;
-        _interactableLayerMask = player.interactableLayerMask;
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            selectionBox.sizeDelta = Vector2.zero;
+            selectionBox.gameObject.SetActive(true);
+            startMousePosition = Input.mousePosition;
+            mouseDownTime = Time.time;
+        }
+        else if (Input.GetKey(KeyCode.Mouse0) && mouseDownTime + dragDelay < Time.time)
+        {
+            ResizeSelectionBox();
+        }
+    }
+
+    private void MakeSelections()
+    {
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            selectionBox.sizeDelta = Vector2.zero;
+            selectionBox.gameObject.SetActive(false);
+
+            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, _unitsLayerMask)
+                && hit.collider.gameObject.TryGetComponent(out Unit unit))
+            {
+                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                {
+                    if (SelectionManager.Instance.IsSelected(unit))
+                    {
+                        SelectionManager.Instance.Deselect(unit);
+                    }
+                    else
+                    {
+                        SelectionManager.Instance.Select(unit);
+                    }
+                }
+                else
+                {
+                    SelectionManager.Instance.DeselectAll();
+                    SelectionManager.Instance.Select(unit);
+                }
+            }
+            else if (mouseDownTime + dragDelay > Time.time)
+            {
+                SelectionManager.Instance.DeselectAll();
+            }
+            
+            mouseDownTime = 0;
+        }
     }
     
     private void ResizeSelectionBox()
@@ -157,6 +173,10 @@ public class InGamePlayerController : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Extracted Return Methods
+
     private bool UnitIsInSelectionBox(Vector3 position, Bounds bounds)
     {
         return position.x > bounds.min.x
@@ -164,6 +184,8 @@ public class InGamePlayerController : MonoBehaviour
                && position.y > bounds.min.y
                && position.y < bounds.max.y;
     }
+
+    #endregion
 
     private void SpawnMoveToSprite(Vector3 destination)
     {

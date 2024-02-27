@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 
 public class InputManager : InputReader
 {
@@ -13,6 +12,8 @@ public class InputManager : InputReader
     public static InputManager Instance => _instance;
 
     public Player Player;
+
+    #region Initializing
 
     protected override void Awake()
     {
@@ -35,6 +36,10 @@ public class InputManager : InputReader
         _gameManager.OnChangedGameState += ChangePlayerController;
     }
 
+    #endregion
+
+    #region External Called Logic
+
     private void ChangePlayerController(GameManager.GameState newGameState)
     {
         _gameState = newGameState;
@@ -56,6 +61,16 @@ public class InputManager : InputReader
         }
     }
 
+    public void SetGameManager(GameManager newGameManager)
+    {
+        _gameManager = newGameManager;
+        _gameState = _gameManager.State;
+    }
+
+    #endregion
+
+    #region Extracted Logic Methods
+
     private void InitializeAllPlayerControllers()
     {
         _inGamePlayerController = Player.gameObject.AddComponent<InGamePlayerController>();
@@ -67,11 +82,6 @@ public class InputManager : InputReader
         {
             _inGamePlayerController.SetLayerMaskInfo(Player);
             _inGamePlayerController.enabled = true;
-            
-            // Subscribe InGamePlayerController to PlayerEvents
-            // PlayerEvents.OnLeftMouseButtonPressed += _inGamePlayerController.ShowSelectionBox;
-            // PlayerEvents.OnLeftMouseButton += _inGamePlayerController.ResizingSelectionBox;
-            
 
             // TODO: Deactivate all other PlayerController
         }
@@ -79,14 +89,10 @@ public class InputManager : InputReader
             _inGamePlayerController.enabled = false;
     }
 
+    #endregion
+
     private void OnDestroy()
     {
         if(_instance == this) _instance = null;
-    }
-
-    public void SetGameManager(GameManager newGameManager)
-    {
-        _gameManager = newGameManager;
-        _gameState = _gameManager.State;
     }
 }
