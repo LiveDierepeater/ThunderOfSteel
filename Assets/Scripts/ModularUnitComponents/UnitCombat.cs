@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class InfantryCombat : UnitSystem, IAttackBehavior
+public class UnitCombat : UnitSystem, IAttackBehavior
 {
     public bool CanAttack => true; // Logic for being ready to Attack
 

@@ -34,10 +34,12 @@ public class Unit : MonoBehaviour
         {
             case UnitData.Type.Infantry:
                 gameObject.AddComponent<InfantryMovement>();
-                gameObject.AddComponent<InfantryCombat>();
+                gameObject.AddComponent<UnitCombat>();
                 break;
 
             case UnitData.Type.Tank:
+                gameObject.AddComponent<TankMovement>();
+                gameObject.AddComponent<UnitCombat>();
                 break;
 
             case UnitData.Type.Truck:
