@@ -4,7 +4,7 @@ using UnityEngine;
 public class SpatialHash
 {
     private readonly Dictionary<Vector2Int, List<GameObject>> _grid = new();
-    public const float CellSize = 10f;
+    public const float CellSize = 500f;
 
     // Calculates the Hash-Key based of the position
     public Vector2Int CalculateHashKey(Vector3 position)
