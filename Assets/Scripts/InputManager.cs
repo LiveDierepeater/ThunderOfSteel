@@ -67,11 +67,16 @@ public class InputManager : InputReader
         {
             _inGamePlayerController.SetLayerMaskInfo(Player);
             _inGamePlayerController.enabled = true;
+            
+            // Subscribe InGamePlayerController to PlayerEvents
+            // PlayerEvents.OnLeftMouseButtonPressed += _inGamePlayerController.ShowSelectionBox;
+            // PlayerEvents.OnLeftMouseButton += _inGamePlayerController.ResizingSelectionBox;
+            
 
             // TODO: Deactivate all other PlayerController
         }
-
-        _inGamePlayerController.enabled = false;
+        else
+            _inGamePlayerController.enabled = false;
     }
 
     private void OnDestroy()

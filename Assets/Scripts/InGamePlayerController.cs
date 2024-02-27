@@ -35,6 +35,22 @@ public class InGamePlayerController : MonoBehaviour
         HandleMouseInputs();
     }
 
+    public void ShowSelectionBox(bool _)
+    {
+        selectionBox.sizeDelta = Vector2.zero;
+        selectionBox.gameObject.SetActive(true);
+        startMousePosition = Input.mousePosition;
+        mouseDownTime = Time.time;
+    }
+
+    public void ResizingSelectionBox(bool _)
+    {
+        if (mouseDownTime + dragDelay < Time.deltaTime)
+        {
+            ResizeSelectionBox();
+        }
+    }
+
     private void HandleMouseInputs()
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
