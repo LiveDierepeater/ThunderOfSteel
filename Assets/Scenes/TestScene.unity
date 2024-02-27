@@ -1114,7 +1114,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1361310959908048649, guid: ae47677855ab8b54f8f22dcae0b97736, type: 3}
       propertyPath: m_Name
-      value: Unit (1)
+      value: Tank
       objectReference: {fileID: 0}
     - target: {fileID: 5442004313004225068, guid: ae47677855ab8b54f8f22dcae0b97736, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1156,6 +1156,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8227400474469140127, guid: ae47677855ab8b54f8f22dcae0b97736, type: 3}
+      propertyPath: DataUnit
+      value: 
+      objectReference: {fileID: 11400000, guid: fbdb3499c9aa1cd44b1679696a40bf79, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
