@@ -14,13 +14,15 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     
     // Functionality Fields
     private float _currentAgentSpeed;
+    private float _currentMaxSpeed;
     
     // Stats Fields
     private string _unitName;
-    private float _maxSpeed;
+    private float _standardSpeed;
     private float _turnSpeed;
     private float _maxAcceleration;
     private float _speedBonusOnRoad;
+    private float _speedOnRoad;
     
     private float _stoppingDistance;
     private AnimationCurve _accelerationCurve;
@@ -34,6 +36,8 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
         Decelerate
     }
     [SerializeField] private MovementStates _currentMovementState = MovementStates.Idle;
+
+    private int _currentAreaIndex;
 
 #endregion
     
@@ -64,14 +68,24 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
     {
         _unitName = data.UnitName;
-        _maxSpeed = data.MaxSpeed;
+        _standardSpeed = data.StandardSpeed;
         _turnSpeed = data.TurnSpeed;
         _maxAcceleration = data.MaxAcceleration;
         _stoppingDistance = data.StoppingDistance;
         _speedBonusOnRoad = data.SpeedBonusOnRoad;
+        _speedOnRoad = _standardSpeed * _speedBonusOnRoad;
+        
+        // Functionality Values
+        _currentMaxSpeed = _standardSpeed;
+        
+        // DrivingOnStreets Setup
+        if (Unit.DataUnit.UnitType == UnitData.Type.Infantry)
+            _agent.SetAreaCost(3, 1);
+        else
+            _agent.SetAreaCost(3, 50);
 
         // Pasting Agent Values
-        _agent.speed = _maxSpeed;
+        _agent.speed = _standardSpeed;
         _agent.angularSpeed = _turnSpeed;
         _agent.acceleration = _maxAcceleration;
         _agent.stoppingDistance = _stoppingDistance;
@@ -95,6 +109,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     {
         // Here calculate on Tick-Event.
         HandleMovementState();
+        HandleMovementSpeedOnAreas();
     }
 
 #endregion
@@ -120,6 +135,8 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
 
 #region Intern Logic
 
+    #region Movement: Base Logic
+
     private void HandleMovementState()
     {
         switch (_currentMovementState)
@@ -140,7 +157,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
 
     private void Accelerate()
     {
-        _agent.speed = _maxSpeed;
+        _agent.speed = _currentMaxSpeed;
         _agent.acceleration = _accelerationCurve.Evaluate(_time) * _maxAcceleration;
         _time += TickSystem.TickRate;
 
@@ -150,25 +167,51 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
             _currentMovementState = MovementStates.Moving;
             _time = 1;
         }
-        
+            
         if (IsUnitCloserToDestinationThanStoppingDistance(_agent.pathEndPosition))
             DecelerateNearStoppingDistance();
     }
 
     private void Moving()
     {
+        _agent.speed = _currentMaxSpeed;
         if (IsUnitCloserToDestinationThanStoppingDistance(_agent.pathEndPosition))
             DecelerateNearStoppingDistance();
     }
 
     private void Decelerate()
     {
-        _agent.speed = _decelerationCurve.Evaluate(_time) * _maxSpeed;
+        _agent.speed = _decelerationCurve.Evaluate(_time) * _currentMaxSpeed;
         _time -= TickSystem.TickRate;
 
         if (IsUnitStanding())
             ResetUnitMovementValuesToDefault();
     }
+
+    #endregion
+
+    #region Movement: Area-Based Logic
+
+    private void HandleMovementSpeedOnAreas()
+    {
+        var newUnitArea = GetUnitsCurrentArea();
+        
+        if (newUnitArea != _currentAreaIndex)
+            ChangeUnitsSpeedBasedOnArea(newUnitArea);
+    }
+
+    private void ChangeUnitsSpeedBasedOnArea(int newUnitArea)
+    {
+        // Apply Speed-Changes
+        if (newUnitArea - 5 == NavMesh.GetAreaFromName("Road"))
+            _currentMaxSpeed = _speedOnRoad;
+        else
+            _currentMaxSpeed = _standardSpeed;
+        
+        _currentAreaIndex = newUnitArea;
+    }
+
+    #endregion
 
 #endregion
 
@@ -176,7 +219,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
 
     private void ResetUnitMovementValuesToDefault()
     {
-        _agent.speed = _maxSpeed;
+        _agent.speed = _currentMaxSpeed;
         _time = 0;
         _agent.stoppingDistance = _stoppingDistance;
         _currentMovementState = MovementStates.Idle;
@@ -206,6 +249,12 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     private bool IsUnitStanding()
     {
         return _currentAgentSpeed < 0.25f;
+    }
+
+    private int GetUnitsCurrentArea()
+    {
+        _agent.SamplePathPosition(NavMesh.AllAreas, 1.0f, out var hit);
+        return hit.mask;
     }
 
 #endregion

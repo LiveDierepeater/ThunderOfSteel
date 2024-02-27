@@ -177,6 +177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6bcbc4e8a996764bafd82f3570a27be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentHashKey: {x: 0, y: 0}
 --- !u!114 &8227400474469140127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,8 +204,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.06648485
-      value: 0.75444424
+      time: 0.48731846
+      value: 0.19311917
       inSlope: -3.2289224
       outSlope: -3.2289224
       tangentMode: 0
@@ -229,26 +230,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 1
-      inSlope: -2.676592
-      outSlope: -2.676592
+      inSlope: -4.601791
+      outSlope: -4.601791
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.24898893
+      time: 0.14482227
       value: 0.33355823
-      inSlope: 5.2405443
-      outSlope: 5.2405443
+      inSlope: 1.1904054
+      outSlope: 1.1904054
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.07686676
+      outWeight: 0.09862792
     - serializedVersion: 3
       time: 1
       value: 0
-      inSlope: -0.44414556
-      outSlope: -0.44414556
+      inSlope: -0.3900455
+      outSlope: -0.3900455
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -257,6 +258,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   selectionSprite: {fileID: 804835849124565450}
+  IsAttacking: 0
 --- !u!1 &2845888706608597363
 GameObject:
   m_ObjectHideFlags: 0

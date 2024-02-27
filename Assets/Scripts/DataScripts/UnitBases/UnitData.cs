@@ -5,7 +5,7 @@ public class UnitData : ScriptableObject
 {
     public int InstanceID;
     public string UnitName;
-    public float MaxSpeed;
+    public float StandardSpeed;
     public float TurnSpeed;
     public float MaxAcceleration;
     public float StoppingDistance;
