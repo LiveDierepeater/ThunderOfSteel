@@ -47,4 +47,37 @@ public class SpatialHash
         }
         return new List<GameObject>();
     }
+    
+    public List<GameObject> GetNearbyUnitObjectsInNearbyHashKeys(Vector3 position)
+    {
+        var nearbyUnitObjects = new List<GameObject>();
+
+        // Calculate the main-HashKey for the current position
+        var mainKey = CalculateHashKey(position);
+
+        // Consider all nearby Grids, the current Grid inclusive
+        var offsets = new List<Vector2>
+        {
+            new Vector2(0, 0), // current Grid
+            new Vector2(-1, 1), new Vector2(0, 1), new Vector2(1, 1),
+            new Vector2(1, 0), new Vector2(1, -1), new Vector2(0, -1),
+            new Vector2(-1, -1), new Vector2(-1, 0)
+        };
+
+        foreach (var offset in offsets)
+        {
+            // Calculate the HashKey for the current nearby Grid
+            var key = CalculateHashKey(new Vector3
+                (position.x + offset.x * CellSize, position.y, position.z + offset.y * CellSize));
+        
+            // If the current grid contains units, add them to the 'nearbyObjects' list
+            if (_grid.TryGetValue(key, out var unitsInCurrentGrid))
+            {
+                nearbyUnitObjects.AddRange(unitsInCurrentGrid);
+            }
+        }
+
+        return nearbyUnitObjects;
+    }
+    
 }

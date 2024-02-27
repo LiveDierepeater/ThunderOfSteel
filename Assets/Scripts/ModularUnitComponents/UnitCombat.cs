@@ -41,6 +41,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     private void HandleTick()
     {
         MoveInRange();
+        CheckForNewTargetInRange();
     }
 
 #endregion
@@ -75,6 +76,31 @@ public class UnitCombat : UnitSystem, IAttackBehavior
                 Unit.IsAttacking = false; // DEBUG
             }
         }
+    }
+
+    private void CheckForNewTargetInRange()
+    {
+        if (_targetUnit is not null) return;
+
+        var nearbyObjects = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
+        GameObject closestEnemy = null;
+        var closestDistance = 1000f;
+
+        foreach (var nearbyObject in nearbyObjects)
+        {
+            var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
+
+            if ( ! (distance < closestDistance)) continue;
+            
+            closestDistance = distance;
+            closestEnemy = nearbyObject;
+        }
+
+        if (closestEnemy is null) return;
+        
+        if (AttackRange < closestDistance) return;
+        
+        _targetUnit = closestEnemy.GetComponent<Unit>();
     }
 
 #endregion
