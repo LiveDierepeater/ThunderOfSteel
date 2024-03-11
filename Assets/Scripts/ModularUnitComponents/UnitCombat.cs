@@ -10,17 +10,21 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
     // Private Fields
     private Unit _targetUnit;
+    private UnitWeaponry _weaponryData;
+    
+    private int _damage_Infantry;
+    private int _damage_Truck;
+    private int _damage_Building;
+    private int _damage_Armor_Level_01;
+    private int _damage_Armor_Level_02;
+    private int _damage_Armor_Level_03;
+    private int _damage_Armor_Level_04;
+    private int _damage_Armor_Level_05;
+    private int _damage_Air;
 
 #endregion
 
 #region Initializing
-
-    protected override void Awake()
-    {
-        base.Awake();
-
-        MaxAttackRange = GetMaxAttackRange();
-    }
 
     private void Start()
     {
@@ -32,6 +36,20 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnNewTargetUnit -= SetTarget;
+    }
+
+    private void InitializeWeaponry()
+    {
+        _damage_Infantry = _weaponryData.Damage_Infantry;
+        _damage_Truck = _weaponryData.Damage_Truck;
+        _damage_Building = _weaponryData.Damage_Building;
+        _damage_Armor_Level_01 = _weaponryData.Damage_Armor_Level_01;
+        _damage_Armor_Level_02 = _weaponryData.Damage_Armor_Level_02;
+        _damage_Armor_Level_03 = _weaponryData.Damage_Armor_Level_03;
+        _damage_Armor_Level_04 = _weaponryData.Damage_Armor_Level_04;
+        _damage_Armor_Level_05 = _weaponryData.Damage_Armor_Level_05;
+        _damage_Air = _weaponryData.Damage_Air;
+        MaxAttackRange = _weaponryData.AttackRange;
     }
 
 #endregion
@@ -59,6 +77,12 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     public void SetTarget(Unit target)
     {
         _targetUnit = target;
+    }
+
+    public void SetWeaponryData(UnitWeaponry weaponryData)
+    {
+        _weaponryData = weaponryData;
+        InitializeWeaponry();
     }
 
 #endregion
@@ -100,7 +124,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         {
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
             
-            if (nearbyObject == gameObject) continue; // Continue, when nearby Object is 'this.gameObject'
+            if (nearbyObject == transform.root.gameObject) continue; // Continue, when nearby Object is 'this.gameObject'
             
             if ( ! (distance < closestDistance)) continue;
             
@@ -133,18 +157,18 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
 #region Extracted Return Methods
 
-private float GetMaxAttackRange()   // Returns the maximal 'attackRange' out of the multiple weapons an Unit can have
-{
-    float currentAttackRange = 0;
-        
-    foreach (var weaponry in Unit.UnitData.UnitWeaponry)
+    private float GetMaxAttackRange()   // Returns the maximal 'attackRange' out of the multiple weapons an Unit can have
     {
-        if (weaponry.AttackRange > currentAttackRange)
-            currentAttackRange = weaponry.AttackRange;
-    }
+        float currentAttackRange = 0;
+            
+        foreach (var weaponry in Unit.UnitData.UnitWeaponry)
+        {
+            if (weaponry.AttackRange > currentAttackRange)
+                currentAttackRange = weaponry.AttackRange;
+        }
 
-    return currentAttackRange;
-}
+        return currentAttackRange;
+    }
 
 #endregion
 }

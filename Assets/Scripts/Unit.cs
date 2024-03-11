@@ -34,13 +34,13 @@ public class Unit : MonoBehaviour
         {
             case UnitData.Type.Infantry:
                 gameObject.AddComponent<InfantryMovement>();
-                gameObject.AddComponent<UnitCombat>();
+                CreateWeaponry();
                 gameObject.AddComponent<UnitHealth>();
                 break;
 
             case UnitData.Type.Tank:
                 gameObject.AddComponent<TankMovement>();
-                gameObject.AddComponent<UnitCombat>();
+                CreateWeaponry();
                 gameObject.AddComponent<UnitHealth>();
                 break;
 
@@ -54,6 +54,15 @@ public class Unit : MonoBehaviour
     }
 
 #endregion
+
+    private void CreateWeaponry()
+    {
+        foreach (var weaponryData in UnitData.UnitWeaponry)
+        {
+            UnitCombat newWeaponry = Instantiate(UnitData.UnitCombatPrefab, transform);
+            newWeaponry.SetWeaponryData(weaponryData);
+        }
+    }
 
 #region External Called Logic
 

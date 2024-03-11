@@ -75,9 +75,9 @@ public class UnitData : ScriptableObject
     [Header("Resistance")]
     public Armors Armor;
     public int MaxHealth;
-    
+
     [Header("Combat")]
-    
+    public UnitCombat UnitCombatPrefab;
     [ExposedScriptableObject]
     public UnitWeaponry[] UnitWeaponry;
     
