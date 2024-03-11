@@ -8,13 +8,10 @@ public class ExposedScriptableObjectAttributeDrawer : PropertyDrawer
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Draw label
-        EditorGUI.PropertyField(position, property, label, true);
-        
         // Draw foldout arrow
         if (property.objectReferenceValue != null)
         {
-            property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, GUIContent.none);
+            property.isExpanded = EditorGUI.Foldout(position, property.isExpanded, label);
         }
         
         // Draw foldout properties
