@@ -118,6 +118,12 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         
         if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
         
+        if ( ! CanWeaponryAttackTarget(_targetUnit))
+        {
+            SetTarget(null);
+            return;
+        }
+        
         if (_targetUnit is not null && CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
@@ -148,6 +154,8 @@ public class UnitCombat : UnitSystem, IAttackBehavior
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
             
             if (nearbyObject == transform.root.gameObject) continue; // Continue, when nearby Object is 'this.gameObject'
+            
+            if ( ! CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>())) continue; // Continue, when nearby Object cannot be attacked by weaponry
             
             if ( ! (distance < closestDistance)) continue;
             
