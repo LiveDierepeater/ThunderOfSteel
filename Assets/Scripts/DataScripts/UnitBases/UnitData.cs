@@ -21,6 +21,14 @@ public class UnitData : ScriptableObject
         Truck
     }
     public Type UnitType;
+    
+    public enum UnitCommands
+    {
+        Idle,
+        Move,
+        Attack
+    }
+    public UnitCommands CurrentUnitCommand;
 
     public UnitEvents Events;
 }

@@ -68,16 +68,19 @@ public class Unit : MonoBehaviour
     public void CommandToDestination(Vector3 newDestination)
     {
         DataUnit.Events.OnAttackUnit?.Invoke(newDestination);
+        DataUnit.CurrentUnitCommand = UnitData.UnitCommands.Move;
     }
 
     public void CommandToAttack(Unit newUnitTarget)
     {
         DataUnit.Events.OnNewTargetUnit?.Invoke(newUnitTarget);
+        DataUnit.CurrentUnitCommand = UnitData.UnitCommands.Attack;
     }
 
     public void RemoveTarget()
     {
         DataUnit.Events.OnNewTargetUnit?.Invoke(null);
+        DataUnit.CurrentUnitCommand = UnitData.UnitCommands.Idle;
     }
 
 #endregion

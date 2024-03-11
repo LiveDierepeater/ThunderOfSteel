@@ -40,8 +40,16 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
     private void HandleTick()
     {
-        MoveInRange();
-        CheckForNewTargetInRange();
+        switch (_targetUnit)
+        {
+            case not null:  // Unit has target
+                MoveInRange();
+                break;
+            
+            case null:      // Unit has NO target
+                CheckForNewTargetInRange();
+                break;
+        }
     }
 
 #endregion
@@ -60,6 +68,8 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     private void MoveInRange()
     {
         Unit.IsAttacking = false; // DEBUG
+        
+        if (Unit.DataUnit.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
         
         if (_targetUnit is not null && CanAttack)
         {
@@ -89,7 +99,9 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         foreach (var nearbyObject in nearbyObjects)
         {
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
-
+            
+            if (nearbyObject == gameObject) continue; // Continue, when nearby Object is 'this.gameObject'
+            
             if ( ! (distance < closestDistance)) continue;
             
             closestDistance = distance;
