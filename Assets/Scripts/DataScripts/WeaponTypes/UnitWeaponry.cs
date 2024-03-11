@@ -5,7 +5,7 @@ public class UnitWeaponry : ScriptableObject
 {
     public string WeaponName;
 
-    [Header("Damage Amounts")]
+    [Header("Armor Damage")]
     
     public int Damage_Infantry;
     public int Damage_Truck;

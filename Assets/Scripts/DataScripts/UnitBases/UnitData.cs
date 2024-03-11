@@ -12,8 +12,22 @@ public class UnitData : ScriptableObject
     
     public float SpeedBonusOnRoad;
 
+    public enum Armors
+    {
+        Infantry,
+        Truck,
+        Building,
+        Level_01,
+        Level_02,
+        Level_03,
+        Level_04,
+        Level_05,
+        Air
+    }
+    public Armors Armor;
     public int MaxHealth;
     
+    [ExposedScriptableObject]
     public UnitWeaponry[] UnitWeaponry;
     
     public enum Type

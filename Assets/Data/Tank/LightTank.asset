@@ -19,6 +19,7 @@ MonoBehaviour:
   MaxAcceleration: 172
   StoppingDistance: 10
   SpeedBonusOnRoad: 1
+  Armor: 3
   MaxHealth: 400
   UnitWeaponry:
   - {fileID: 11400000, guid: 390966b2563f3974398cc31b231ff468, type: 2}
