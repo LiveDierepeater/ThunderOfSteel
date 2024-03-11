@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UnitCombat : UnitSystem, IAttackBehavior
@@ -21,6 +22,8 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     private int _damage_Armor_Level_04;
     private int _damage_Armor_Level_05;
     private int _damage_Air;
+
+    private readonly int[] _armorDamage = new int[9];
 
 #endregion
 
@@ -50,9 +53,29 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         _damage_Armor_Level_05 = _weaponryData.Damage_Armor_Level_05;
         _damage_Air = _weaponryData.Damage_Air;
         MaxAttackRange = _weaponryData.AttackRange;
+        
+        // Set '_armorDamage'
+        _armorDamage[0] = _damage_Infantry;
+        _armorDamage[1] = _damage_Truck;
+        _armorDamage[2] = _damage_Building;
+        _armorDamage[3] = _damage_Armor_Level_01;
+        _armorDamage[4] = _damage_Armor_Level_02;
+        _armorDamage[5] = _damage_Armor_Level_03;
+        _armorDamage[6] = _damage_Armor_Level_04;
+        _armorDamage[7] = _damage_Armor_Level_05;
+        _armorDamage[8] = _damage_Air;
     }
 
-#endregion
+    private void OnValidate()
+    {
+        // Checks if there are enough armor types
+        var armorTypeMemberCount = Enum.GetNames(typeof(UnitData.Armors)).Length;
+        
+        if (_armorDamage.Length != armorTypeMemberCount)
+            throw new NotImplementedException("The '_armorDamage.Length' doesn't match the 'UnitData.Armors.Length' anymore!");
+    }
+
+    #endregion
 
 #region UPDATES
 
@@ -168,6 +191,11 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         }
 
         return currentAttackRange;
+    }
+
+    private bool CanWeaponryAttackTarget(Unit targetUnit)
+    {
+        return _armorDamage[(int)targetUnit.UnitData.Armor] >= 0;
     }
 
 #endregion

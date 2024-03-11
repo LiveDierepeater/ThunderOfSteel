@@ -58,7 +58,6 @@ public class UnitData : ScriptableObject
     public float StoppingDistance;
     
     public float SpeedBonusOnRoad;
-
     
     public enum Armors
     {
