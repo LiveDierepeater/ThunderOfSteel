@@ -14,13 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InstanceID: 0
   UnitName: Grenadiers
-  StandardSpeed: 20
+  Faction: 1
+  Class: Light Infantry
+  WarMode: 0
+  UnitType: 0
+  Cost: 5
+  ProducedBy: 1
+  StandardSpeed: 24
   TurnSpeed: 2000
   MaxAcceleration: 80
   StoppingDistance: 10
   SpeedBonusOnRoad: 1.5
+  Armor: 0
   MaxHealth: 400
   UnitWeaponry:
   - {fileID: 11400000, guid: f690f0b91d48485488756468845d053b, type: 2}
-  UnitType: 0
   CurrentUnitCommand: 0

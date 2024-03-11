@@ -14,6 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InstanceID: 0
   UnitName: Stuart
+  Faction: 0
+  Class: Light Tank
+  WarMode: 0
+  UnitType: 1
+  Cost: 15
+  ProducedBy: 3
   StandardSpeed: 43
   TurnSpeed: 2000
   MaxAcceleration: 172
@@ -23,5 +29,4 @@ MonoBehaviour:
   MaxHealth: 400
   UnitWeaponry:
   - {fileID: 11400000, guid: 390966b2563f3974398cc31b231ff468, type: 2}
-  UnitType: 1
   CurrentUnitCommand: 0

@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour
     public UnitData UnitData;
     [Space(5)]
     
-    [Header("Movement")]
+    [Header("Movement Curves")]
     public AnimationCurve accelerationCurve;
     public AnimationCurve decelerationCurve;
     [Space(5)]
