@@ -10,7 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4858fd69092b61b46b0b60d9f1942b12, type: 3}
-  m_Name: InfantryWeaponry
+  m_Name: MediumWeapons
   m_EditorClassIdentifier: 
-  AttackRange: 20
-  Damage: 5
+  WeaponName: Med. Weapons
+  Damage_Infantry: 40
+  Damage_Truck: 40
+  Damage_Building: -1
+  Damage_Armor_Level_01: -1
+  Damage_Armor_Level_02: -1
+  Damage_Armor_Level_03: -1
+  Damage_Armor_Level_04: -1
+  Damage_Armor_Level_05: -1
+  Damage_Air: -1
+  AttackRange: 15

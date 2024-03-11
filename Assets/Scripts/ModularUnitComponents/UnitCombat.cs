@@ -4,7 +4,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 {
     public bool CanAttack => true; // Logic for being ready to Attack
 
-    public float AttackRange { get; private set; }
+    public float MaxAttackRange { get; private set; }
 
 #region Internal Fields
 
@@ -18,20 +18,20 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     protected override void Awake()
     {
         base.Awake();
-        
-        AttackRange = Unit.DataUnit.UnitWeaponry.AttackRange;
+
+        MaxAttackRange = GetMaxAttackRange();
     }
 
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.DataUnit.Events.OnNewTargetUnit += SetTarget;
+        Unit.UnitData.Events.OnNewTargetUnit += SetTarget;
     }
 
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.DataUnit.Events.OnNewTargetUnit -= SetTarget;
+        Unit.UnitData.Events.OnNewTargetUnit -= SetTarget;
     }
 
 #endregion
@@ -69,20 +69,20 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         Unit.IsAttacking = false; // DEBUG
         
-        if (Unit.DataUnit.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
+        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
         
         if (_targetUnit is not null && CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
             
             // Target is in 'AttackRange'
-            if (distanceToTarget <= AttackRange)
+            if (distanceToTarget <= MaxAttackRange)
                 Attack(_targetUnit);
             else
             {
                 // Move to target, till Unit is in 'AttackRange'
                 
-                Unit.DataUnit.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
+                Unit.UnitData.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
                 Unit.IsAttacking = false; // DEBUG
             }
         }
@@ -110,7 +110,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
         if (closestEnemy is null) return;
         
-        if (AttackRange < closestDistance) return;
+        if (MaxAttackRange < closestDistance) return;
         
         _targetUnit = closestEnemy.GetComponent<Unit>();
     }
@@ -123,11 +123,28 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         // Here Attacking should be implemented
         
-        Unit.DataUnit.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
-        Unit.DataUnit.Events.OnStopUnit?.Invoke();
+        Unit.UnitData.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
+        Unit.UnitData.Events.OnStopUnit?.Invoke();
         
         Unit.IsAttacking = true; // DEBUG
     }
+
+#endregion
+
+#region Extracted Return Methods
+
+private float GetMaxAttackRange()   // Returns the maximal 'attackRange' out of the multiple weapons an Unit can have
+{
+    float currentAttackRange = 0;
+        
+    foreach (var weaponry in Unit.UnitData.UnitWeaponry)
+    {
+        if (weaponry.AttackRange > currentAttackRange)
+            currentAttackRange = weaponry.AttackRange;
+    }
+
+    return currentAttackRange;
+}
 
 #endregion
 }

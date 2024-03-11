@@ -4,7 +4,7 @@ public class Unit : MonoBehaviour
 {
     [Header("Data")]
     [ExposedScriptableObject]
-    public UnitData DataUnit;
+    public UnitData UnitData;
     [Space(5)]
     
     [Header("Movement")]
@@ -27,26 +27,28 @@ public class Unit : MonoBehaviour
 
     private void InitializeUnit()
     {
-        DataUnit = Instantiate(DataUnit);
-        DataUnit.InstanceID = Mathf.Abs(GetInstanceID()) * 1000 + 1;
+        UnitData = Instantiate(UnitData);
+        UnitData.InstanceID = Mathf.Abs(GetInstanceID()) * 1000 + 1;
         
-        switch (DataUnit.UnitType)
+        switch (UnitData.UnitType)
         {
             case UnitData.Type.Infantry:
                 gameObject.AddComponent<InfantryMovement>();
                 gameObject.AddComponent<UnitCombat>();
+                gameObject.AddComponent<UnitHealth>();
                 break;
 
             case UnitData.Type.Tank:
                 gameObject.AddComponent<TankMovement>();
                 gameObject.AddComponent<UnitCombat>();
+                gameObject.AddComponent<UnitHealth>();
                 break;
 
             case UnitData.Type.Truck:
                 break;
 
             default:
-                Debug.LogWarning("Unknown Unit-Type: " + DataUnit.UnitType);
+                Debug.LogWarning("Unknown Unit-Type: " + UnitData.UnitType);
                 break;
         }
     }
@@ -67,20 +69,20 @@ public class Unit : MonoBehaviour
 
     public void CommandToDestination(Vector3 newDestination)
     {
-        DataUnit.Events.OnAttackUnit?.Invoke(newDestination);
-        DataUnit.CurrentUnitCommand = UnitData.UnitCommands.Move;
+        UnitData.Events.OnAttackUnit?.Invoke(newDestination);
+        UnitData.CurrentUnitCommand = UnitData.UnitCommands.Move;
     }
 
     public void CommandToAttack(Unit newUnitTarget)
     {
-        DataUnit.Events.OnNewTargetUnit?.Invoke(newUnitTarget);
-        DataUnit.CurrentUnitCommand = UnitData.UnitCommands.Attack;
+        UnitData.Events.OnNewTargetUnit?.Invoke(newUnitTarget);
+        UnitData.CurrentUnitCommand = UnitData.UnitCommands.Attack;
     }
 
     public void RemoveTarget()
     {
-        DataUnit.Events.OnNewTargetUnit?.Invoke(null);
-        DataUnit.CurrentUnitCommand = UnitData.UnitCommands.Idle;
+        UnitData.Events.OnNewTargetUnit?.Invoke(null);
+        UnitData.CurrentUnitCommand = UnitData.UnitCommands.Idle;
     }
 
 #endregion

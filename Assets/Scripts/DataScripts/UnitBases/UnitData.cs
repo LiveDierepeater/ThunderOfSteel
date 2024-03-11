@@ -11,8 +11,10 @@ public class UnitData : ScriptableObject
     public float StoppingDistance;
     
     public float SpeedBonusOnRoad;
+
+    public int MaxHealth;
     
-    public UnitWeaponry UnitWeaponry;
+    public UnitWeaponry[] UnitWeaponry;
     
     public enum Type
     {

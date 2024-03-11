@@ -49,21 +49,21 @@ public class TankMovement : UnitSystem, IMovementBehavior
         base.Awake();
         _agent = GetComponent<NavMeshAgent>();
 
-        Initialize(Unit.DataUnit, Unit.accelerationCurve, Unit.decelerationCurve);
+        Initialize(Unit.UnitData, Unit.accelerationCurve, Unit.decelerationCurve);
     }
 
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.DataUnit.Events.OnAttackUnit += MoveToDestination;
-        Unit.DataUnit.Events.OnStopUnit += StopUnitAtPosition;
+        Unit.UnitData.Events.OnAttackUnit += MoveToDestination;
+        Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
     }
 
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.DataUnit.Events.OnAttackUnit -= MoveToDestination;
-        Unit.DataUnit.Events.OnStopUnit -= StopUnitAtPosition;
+        Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
+        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
     }
 
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
@@ -80,7 +80,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _currentMaxSpeed = _standardSpeed;
         
         // DrivingOnStreets Setup
-        if (Unit.DataUnit.UnitType == UnitData.Type.Infantry)
+        if (Unit.UnitData.UnitType == UnitData.Type.Infantry)
             _agent.SetAreaCost(3, 1);
         else
             _agent.SetAreaCost(3, 50);

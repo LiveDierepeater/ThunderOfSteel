@@ -278,7 +278,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7760641383010511543}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.5, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6761f4416d302994ea25382a1211720f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DataUnit: {fileID: 11400000, guid: fbdb3499c9aa1cd44b1679696a40bf79, type: 2}
+  UnitData: {fileID: 11400000, guid: fbdb3499c9aa1cd44b1679696a40bf79, type: 2}
   accelerationCurve:
     serializedVersion: 2
     m_Curve:

@@ -19,5 +19,8 @@ MonoBehaviour:
   MaxAcceleration: 80
   StoppingDistance: 10
   SpeedBonusOnRoad: 1.5
-  UnitWeaponry: {fileID: 11400000, guid: f690f0b91d48485488756468845d053b, type: 2}
+  MaxHealth: 400
+  UnitWeaponry:
+  - {fileID: 11400000, guid: f690f0b91d48485488756468845d053b, type: 2}
   UnitType: 0
+  CurrentUnitCommand: 0

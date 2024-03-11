@@ -12,5 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4858fd69092b61b46b0b60d9f1942b12, type: 3}
   m_Name: SmallCalibreHE
   m_EditorClassIdentifier: 
-  AttackRange: 250
-  Damage: 30
+  WeaponName: Small cal. HE shell
+  Damage_Infantry: 30
+  Damage_Truck: 30
+  Damage_Building: 30
+  Damage_Armor_Level_01: 6
+  Damage_Armor_Level_02: 3
+  Damage_Armor_Level_03: 2
+  Damage_Armor_Level_04: 1
+  Damage_Armor_Level_05: 0
+  Damage_Air: -1
+  AttackRange: 25
