@@ -177,7 +177,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
             if (nearbyObject == transform.root.gameObject)
                 continue; // Continue, when this 'nearbyObject' is 'this.gameObject'
             
-            if (!CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>()))
+            if ( ! CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>()))
                 continue; // Continue, when this 'nearbyObject' cannot be attacked by weaponry
 
             if ( ! (distance < closestDistance))
@@ -253,9 +253,17 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         return currentAttackRange;
     }
 
+    /// <summary>
+    /// <para>Returns false, when this weaponry cannot attack the armor of the 'targetUnit'</para>
+    /// <para>Returns false, when 'targetUnit' is an ally</para>
+    /// </summary>
+    /// <param name="targetUnit"></param>
+    /// <returns></returns>
     private bool CanWeaponryAttackTarget(Unit targetUnit)
     {
-        return _armorDamage[(int)targetUnit.UnitData.Armor] >= 0;
+        if (targetUnit.UnitData.PlayerID != Unit.UnitData.PlayerID)
+            return _armorDamage[(int)targetUnit.UnitData.Armor] >= 0;
+        return false;
     }
 
     private bool IsWeaponsCoolDownActive()

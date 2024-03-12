@@ -4,8 +4,8 @@ using UnityEngine;
 public class UnitData : ScriptableObject
 {
     [Header("Base")]
-    
     public int InstanceID;
+    public int PlayerID;
     public string UnitName;
     
     public enum Factions

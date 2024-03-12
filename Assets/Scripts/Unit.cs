@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
     public bool IsAttacking;
+    public bool RandomizeUnitPlayerID;
 
 #region Initializing
 
@@ -52,7 +53,12 @@ public class Unit : MonoBehaviour
                 break;
         }
     }
-    
+
+    private void Start()
+    {
+        UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
+    }
+
     private void CreateWeaponry()
     {
         foreach (var weaponryData in UnitData.UnitWeaponry)
@@ -92,6 +98,19 @@ public class Unit : MonoBehaviour
     {
         UnitData.Events.OnNewTargetUnit?.Invoke(null);
         UnitData.CurrentUnitCommand = UnitData.UnitCommands.Idle;
+    }
+
+#endregion
+
+#region Debug
+
+    private void Update()
+    {
+        if (RandomizeUnitPlayerID)
+        {
+            UnitData.PlayerID = Random.Range(0, 999999);
+            RandomizeUnitPlayerID = false;
+        }
     }
 
 #endregion
