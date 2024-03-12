@@ -20,4 +20,5 @@ public class UnitWeaponry : ScriptableObject
     [Space(10)]
     
     public float AttackRange;
+    public float CoolDown;
 }

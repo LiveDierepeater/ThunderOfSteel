@@ -23,3 +23,4 @@ MonoBehaviour:
   Damage_Armor_Level_05: 20
   Damage_Air: -1
   AttackRange: 15
+  CoolDown: 5

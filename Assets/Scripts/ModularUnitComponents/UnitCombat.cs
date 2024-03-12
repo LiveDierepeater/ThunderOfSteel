@@ -25,6 +25,9 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
     private readonly int[] _armorDamage = new int[9];
 
+    private float _coolDown;
+    public float CurrentCoolDownTime { get; private set; }
+
 #endregion
 
 #region Initializing
@@ -53,6 +56,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         _damage_Armor_Level_05 = _weaponryData.Damage_Armor_Level_05;
         _damage_Air = _weaponryData.Damage_Air;
         MaxAttackRange = _weaponryData.AttackRange;
+        _coolDown = _weaponryData.CoolDown;
         
         // Set '_armorDamage'
         _armorDamage[0] = _damage_Infantry;
@@ -106,6 +110,11 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         _weaponryData = weaponryData;
         InitializeWeaponry();
+    }
+
+    public void RemoveCooldownTime(float amount)
+    {
+        CurrentCoolDownTime -= amount;
     }
 
 #endregion
@@ -185,13 +194,36 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
     public void Attack(Unit targetUnit)
     {
-        // Here Attacking should be implemented
+        if (IsWeaponsCoolDownActive()) return;
         
-        Unit.UnitData.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
-        Unit.UnitData.Events.OnStopUnit?.Invoke();
+        // DEBUG:
+        print(_weaponryData.name + " Attacks");
+        Unit.IsAttacking = true;
+
+        NewCoolDown();
         
-        Unit.IsAttacking = true; // DEBUG
+        //Unit.UnitData.Events.OnStopUnit?.Invoke();
     }
+
+#region Cooldown Management
+
+    private void NewCoolDown()
+    {
+        ResetCoolDownTime();
+        StartCoolDown();
+    }
+
+    private void ResetCoolDownTime()
+    {
+        CurrentCoolDownTime = _coolDown;
+    }
+
+    private void StartCoolDown()
+    {
+        CooldownManager.Instance.StartCooldown(GetInstanceID(), this);
+    }
+
+#endregion
 
 #endregion
 
@@ -213,6 +245,11 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     private bool CanWeaponryAttackTarget(Unit targetUnit)
     {
         return _armorDamage[(int)targetUnit.UnitData.Armor] >= 0;
+    }
+
+    private bool IsWeaponsCoolDownActive()
+    {
+        return CooldownManager.Instance.IsCooldownActive(GetInstanceID());
     }
 
 #endregion
