@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LightInfantry
   m_EditorClassIdentifier: 
   InstanceID: 0
+  PlayerID: 0
   UnitName: Grenadiers
   Faction: 1
   Class: Light Infantry
@@ -27,7 +28,7 @@ MonoBehaviour:
   SpeedBonusOnRoad: 1.5
   Armor: 0
   MaxHealth: 400
-  UnitCombatPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
+  weaponryPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
   UnitWeaponry:
   - {fileID: 11400000, guid: f690f0b91d48485488756468845d053b, type: 2}
   - {fileID: 11400000, guid: 4adc5cca0b3563e4f8eb318c9f9653d0, type: 2}

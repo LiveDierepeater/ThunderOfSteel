@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class UnitCombat : UnitSystem, IAttackBehavior
+public class Weaponry : UnitSystem, IAttackBehavior
 {
     public bool CanAttack => true; // Logic for being ready to Attack
 

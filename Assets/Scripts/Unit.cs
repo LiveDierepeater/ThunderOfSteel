@@ -63,7 +63,7 @@ public class Unit : MonoBehaviour
     {
         foreach (var weaponryData in UnitData.UnitWeaponry)
         {
-            UnitCombat newWeaponry = Instantiate(UnitData.UnitCombatPrefab, transform);
+            Weaponry newWeaponry = Instantiate(UnitData.weaponryPrefab, transform);
             newWeaponry.SetWeaponryData(weaponryData);
         }
     }

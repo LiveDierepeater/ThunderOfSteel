@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LightTank
   m_EditorClassIdentifier: 
   InstanceID: 0
+  PlayerID: 0
   UnitName: Stuart
   Faction: 0
   Class: Light Tank
@@ -27,7 +28,7 @@ MonoBehaviour:
   SpeedBonusOnRoad: 1
   Armor: 3
   MaxHealth: 400
-  UnitCombatPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
+  weaponryPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
   UnitWeaponry:
   - {fileID: 11400000, guid: 390966b2563f3974398cc31b231ff468, type: 2}
   - {fileID: 11400000, guid: 7ebeb08da9bd2a24bbe748dd8c01361d, type: 2}

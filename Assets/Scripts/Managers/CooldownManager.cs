@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class CooldownManager : MonoBehaviour
 {
-    private readonly Dictionary<int, UnitCombat> _coolDowns = new Dictionary<int, UnitCombat>();
+    private readonly Dictionary<int, Weaponry> _coolDowns = new Dictionary<int, Weaponry>();
 
     public static CooldownManager Instance { get; private set; }
 
-    private Queue<int> _keysToRemove = new Queue<int>();
+    private readonly Queue<int> _keysToRemove = new Queue<int>();
     
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class CooldownManager : MonoBehaviour
         }
     }
 
-    public void StartCooldown(int identifier, UnitCombat weaponry)
+    public void StartCooldown(int identifier, Weaponry weaponry)
     {
         _coolDowns.TryAdd(identifier, weaponry);
     }
