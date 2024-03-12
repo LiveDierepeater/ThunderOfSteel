@@ -240,19 +240,6 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
 #region Extracted Return Methods
 
-    private float GetMaxAttackRange() // Returns the maximal 'attackRange' out of the multiple weapons an Unit can have
-    {
-        float currentAttackRange = 0;
-
-        foreach (var weaponry in Unit.UnitData.UnitWeaponry)
-        {
-            if (weaponry.AttackRange > currentAttackRange)
-                currentAttackRange = weaponry.AttackRange;
-        }
-
-        return currentAttackRange;
-    }
-
     /// <summary>
     /// <para>Returns false, when this weaponry cannot attack the armor of the 'targetUnit'</para>
     /// <para>Returns false, when 'targetUnit' is an ally</para>
