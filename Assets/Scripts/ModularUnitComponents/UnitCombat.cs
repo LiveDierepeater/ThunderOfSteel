@@ -89,6 +89,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         switch (_targetUnit)
         {
             case not null: // Unit has target
+                // TODO: Here has to be a switch-case for the UnitData.UnitCommands
                 MoveInRange();
                 break;
 
@@ -126,7 +127,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         Unit.IsAttacking = false; // DEBUG
 
-        if (!CanWeaponryAttackTarget(_targetUnit))
+        if ( ! CanWeaponryAttackTarget(_targetUnit))
         {
             SetTarget(null);
             return;
@@ -141,16 +142,16 @@ public class UnitCombat : UnitSystem, IAttackBehavior
             }
         }
 
-        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
-
         if (_targetUnit is not null && CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
 
             // Target is in 'AttackRange'
             if (distanceToTarget <= MaxAttackRange)
+            {
                 Attack(_targetUnit);
-            else
+            }
+            else if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack)
             {
                 // Move to target, till Unit is in 'AttackRange'
 
@@ -174,20 +175,22 @@ public class UnitCombat : UnitSystem, IAttackBehavior
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
 
             if (nearbyObject == transform.root.gameObject)
-                continue; // Continue, when nearby Object is 'this.gameObject'
-
+                continue; // Continue, when this 'nearbyObject' is 'this.gameObject'
+            
             if (!CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>()))
-                continue; // Continue, when nearby Object cannot be attacked by weaponry
+                continue; // Continue, when this 'nearbyObject' cannot be attacked by weaponry
 
-            if (!(distance < closestDistance)) continue;
+            if ( ! (distance < closestDistance))
+                continue; // Continue, when this 'nearbyObject' is not closer than the closest 'nearbyObject'
+            
+            if (MaxAttackRange < distance)
+                continue; // Continue, when this 'nearbyObject' is not close enough to get attacked
 
             closestDistance = distance;
             closestEnemy = nearbyObject;
         }
 
         if (closestEnemy is null) return;
-
-        if (MaxAttackRange < closestDistance) return;
 
         _targetUnit = closestEnemy.GetComponent<Unit>();
     }
