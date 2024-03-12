@@ -16,25 +16,35 @@ public class UnitHealth : UnitSystem
     {
         _maxHealth = Unit.UnitData.MaxHealth;
         _currentHealth = Unit.UnitData.MaxHealth;
+
+        Unit.UnitData.Events.OnAttack += TakeDamage;
     }
 
-    #endregion
+    private void OnDisable()
+    {
+        Unit.UnitData.Events.OnAttack -= TakeDamage;
+    }
 
-    public void TakeDamage(int amount)
+#endregion
+
+    private void TakeDamage(int amount)
     {
         _currentHealth -= amount;
-
+        
         if (_currentHealth <= 0)
         {
             DestroyUnit();
         }
+        
+        print(Unit.UnitData.UnitName + " took " + amount + " damage!");
     }
 
     private void DestroyUnit()
     {
         print(Unit.UnitData.UnitName + " is Destroyed");
         
-        // TODO: Unsubscribe multiple Events.
+        // TODO: Unit and it's components have to unsubscribe from multiple Events here.
+        Unit.UnitData.Events.OnAttack -= TakeDamage;
         
         Destroy(gameObject);
     }

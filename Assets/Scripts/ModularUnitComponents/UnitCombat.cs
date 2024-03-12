@@ -12,7 +12,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     // Private Fields
     private Unit _targetUnit;
     private UnitWeaponry _weaponryData;
-    
+
     private int _damage_Infantry;
     private int _damage_Truck;
     private int _damage_Building;
@@ -57,7 +57,7 @@ public class UnitCombat : UnitSystem, IAttackBehavior
         _damage_Air = _weaponryData.Damage_Air;
         MaxAttackRange = _weaponryData.AttackRange;
         _coolDown = _weaponryData.CoolDown;
-        
+
         // Set '_armorDamage'
         _armorDamage[0] = _damage_Infantry;
         _armorDamage[1] = _damage_Truck;
@@ -74,12 +74,13 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         // Checks if there are enough armor types
         var armorTypeMemberCount = Enum.GetNames(typeof(UnitData.Armors)).Length;
-        
+
         if (_armorDamage.Length != armorTypeMemberCount)
-            throw new NotImplementedException("The '_armorDamage.Length' doesn't match the 'UnitData.Armors.Length' anymore!");
+            throw new NotImplementedException(
+                "The '_armorDamage.Length' doesn't match the 'UnitData.Armors.Length' anymore!");
     }
 
-    #endregion
+#endregion
 
 #region UPDATES
 
@@ -87,11 +88,11 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         switch (_targetUnit)
         {
-            case not null:  // Unit has target
+            case not null: // Unit has target
                 MoveInRange();
                 break;
-            
-            case null:      // Unit has NO target
+
+            case null: // Unit has NO target
                 CheckForNewTargetInRange();
                 break;
         }
@@ -124,8 +125,8 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     private void MoveInRange()
     {
         Unit.IsAttacking = false; // DEBUG
-        
-        if ( ! CanWeaponryAttackTarget(_targetUnit))
+
+        if (!CanWeaponryAttackTarget(_targetUnit))
         {
             SetTarget(null);
             return;
@@ -139,20 +140,20 @@ public class UnitCombat : UnitSystem, IAttackBehavior
                 return;
             }
         }
-        
+
         if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
-        
+
         if (_targetUnit is not null && CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
-            
+
             // Target is in 'AttackRange'
             if (distanceToTarget <= MaxAttackRange)
                 Attack(_targetUnit);
             else
             {
                 // Move to target, till Unit is in 'AttackRange'
-                
+
                 Unit.UnitData.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
                 Unit.IsAttacking = false; // DEBUG
             }
@@ -163,28 +164,31 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         if (_targetUnit is not null) return;
 
-        var nearbyObjects = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
+        var nearbyObjects =
+            SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
         GameObject closestEnemy = null;
         var closestDistance = 1000f;
 
         foreach (var nearbyObject in nearbyObjects)
         {
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
-            
-            if (nearbyObject == transform.root.gameObject) continue; // Continue, when nearby Object is 'this.gameObject'
-            
-            if ( ! CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>())) continue; // Continue, when nearby Object cannot be attacked by weaponry
-            
-            if ( ! (distance < closestDistance)) continue;
-            
+
+            if (nearbyObject == transform.root.gameObject)
+                continue; // Continue, when nearby Object is 'this.gameObject'
+
+            if (!CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>()))
+                continue; // Continue, when nearby Object cannot be attacked by weaponry
+
+            if (!(distance < closestDistance)) continue;
+
             closestDistance = distance;
             closestEnemy = nearbyObject;
         }
 
         if (closestEnemy is null) return;
-        
+
         if (MaxAttackRange < closestDistance) return;
-        
+
         _targetUnit = closestEnemy.GetComponent<Unit>();
     }
 
@@ -196,13 +200,17 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         if (IsWeaponsCoolDownActive()) return;
         
-        // DEBUG:
-        print(_weaponryData.name + " Attacks");
-        Unit.IsAttacking = true;
-
+        ApplyDamageToTarget();
         NewCoolDown();
         
         //Unit.UnitData.Events.OnStopUnit?.Invoke();
+        // DEBUG
+        Unit.IsAttacking = true;
+    }
+
+    private void ApplyDamageToTarget()
+    {
+        _targetUnit.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)_targetUnit.UnitData.Armor]);
     }
 
 #region Cooldown Management
@@ -229,10 +237,10 @@ public class UnitCombat : UnitSystem, IAttackBehavior
 
 #region Extracted Return Methods
 
-    private float GetMaxAttackRange()   // Returns the maximal 'attackRange' out of the multiple weapons an Unit can have
+    private float GetMaxAttackRange() // Returns the maximal 'attackRange' out of the multiple weapons an Unit can have
     {
         float currentAttackRange = 0;
-            
+
         foreach (var weaponry in Unit.UnitData.UnitWeaponry)
         {
             if (weaponry.AttackRange > currentAttackRange)

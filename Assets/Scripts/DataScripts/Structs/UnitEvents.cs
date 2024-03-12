@@ -7,4 +7,5 @@ public struct UnitEvents
     public Action<Vector3> OnAttackUnit;
     public Action<Unit> OnNewTargetUnit;
     public Action OnStopUnit;
+    public Action<int> OnAttack;
 }
