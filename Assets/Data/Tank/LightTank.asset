@@ -30,5 +30,6 @@ MonoBehaviour:
   UnitCombatPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
   UnitWeaponry:
   - {fileID: 11400000, guid: 390966b2563f3974398cc31b231ff468, type: 2}
-  - {fileID: 11400000, guid: f690f0b91d48485488756468845d053b, type: 2}
+  - {fileID: 11400000, guid: 7ebeb08da9bd2a24bbe748dd8c01361d, type: 2}
+  - {fileID: 11400000, guid: 00ee208a97ef26b44ab51021b10fc8af, type: 2}
   CurrentUnitCommand: 0

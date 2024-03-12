@@ -52,9 +52,7 @@ public class Unit : MonoBehaviour
                 break;
         }
     }
-
-#endregion
-
+    
     private void CreateWeaponry()
     {
         foreach (var weaponryData in UnitData.UnitWeaponry)
@@ -63,6 +61,8 @@ public class Unit : MonoBehaviour
             newWeaponry.SetWeaponryData(weaponryData);
         }
     }
+
+#endregion
 
 #region External Called Logic
 

@@ -116,13 +116,22 @@ public class UnitCombat : UnitSystem, IAttackBehavior
     {
         Unit.IsAttacking = false; // DEBUG
         
-        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
-        
         if ( ! CanWeaponryAttackTarget(_targetUnit))
         {
             SetTarget(null);
             return;
         }
+
+        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack)
+        {
+            if (_weaponryData.AttackRange < Vector3.Distance(transform.position, _targetUnit.transform.position))
+            {
+                SetTarget(null);
+                return;
+            }
+        }
+        
+        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
         
         if (_targetUnit is not null && CanAttack)
         {
