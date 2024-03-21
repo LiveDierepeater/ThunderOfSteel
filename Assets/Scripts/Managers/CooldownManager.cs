@@ -21,7 +21,7 @@ public class CooldownManager : MonoBehaviour
         }
     }
     
-    private void Update()
+    private void FixedUpdate()
     {
         foreach (var key in _coolDowns.Keys)
         {
