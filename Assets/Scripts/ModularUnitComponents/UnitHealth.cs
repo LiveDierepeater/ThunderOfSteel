@@ -41,6 +41,13 @@ public class UnitHealth : UnitSystem
 
     private void DestroyUnit()
     {
+        // Notifying BattleManager about the Death of this.Unit
+        BattleManager.Instance.NotifyDeath(Unit);
+        
+        // Removing this.Unit from SelectionManager
+        SelectionManager.Instance.Deselect(Unit);
+        SelectionManager.Instance.RemoveAvailableUnit(Unit);
+        
         print(Unit.UnitData.UnitName + " is Destroyed");
         
         // TODO: Unit and it's components have to unsubscribe from multiple Events here.

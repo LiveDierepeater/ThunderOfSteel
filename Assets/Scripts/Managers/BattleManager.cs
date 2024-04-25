@@ -6,11 +6,11 @@ public class BattleManager : MonoBehaviour
 {
     public static BattleManager Instance { get; private set; }
 
-    public event Action<Weaponry, UnitHealth> OnAttackStarted;
-    public event Action<Weaponry, UnitHealth> OnAttackStopped;
-    public event Action<UnitHealth> OnUnitDied;
+    public event Action<Weaponry, Unit> OnAttackStarted;
+    public event Action<Weaponry, Unit> OnAttackStopped;
+    public event Action<Unit> OnUnitDied;
     
-    private Dictionary<Weaponry, UnitHealth> activeWeapons = new Dictionary<Weaponry, UnitHealth>();
+    private Dictionary<Weaponry, Unit> activeWeapons = new Dictionary<Weaponry, Unit>();
 
     private void Awake()
     {
@@ -25,19 +25,19 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void StartAttack(Weaponry attacker, UnitHealth target)
+    public void StartAttack(Weaponry attacker, Unit target)
     {
         OnAttackStarted?.Invoke(attacker, target);
         RegisterAttack(attacker, target);
     }
 
-    public void StopAttack(Weaponry attacker, UnitHealth target)
+    public void StopAttack(Weaponry attacker, Unit target)
     {
         OnAttackStopped?.Invoke(attacker, target);
         UnregisterAttack(attacker);
     }
 
-    public void NotifyDeath(UnitHealth target)
+    public void NotifyDeath(Unit target)
     {
         OnUnitDied?.Invoke(target);
         UnregisterByKill(target);
@@ -48,7 +48,7 @@ public class BattleManager : MonoBehaviour
     /// </summary>
     /// <param name="attacker"></param>
     /// <param name="target"></param>
-    private void RegisterAttack(Weaponry attacker, UnitHealth target)
+    private void RegisterAttack(Weaponry attacker, Unit target)
     {
         if ( ! activeWeapons.TryGetValue(attacker, out var targetsHealth))
             activeWeapons.Add(attacker, target);
@@ -70,7 +70,7 @@ public class BattleManager : MonoBehaviour
     /// Removes each attacker 'Weaponry' when a target 'UnitHealth' got killed
     /// </summary>
     /// <param name="killedTarget"></param>
-    private void UnregisterByKill(UnitHealth killedTarget)
+    private void UnregisterByKill(Unit killedTarget)
     {
         // This List will store the attackers 'Weaponry' who will be removed from activeWeapons 'Dictionary'
         var keysToRemove = new List<Weaponry>();
@@ -86,8 +86,12 @@ public class BattleManager : MonoBehaviour
         else return;
         
         // Removes all killing attackers
+        // Sets the _targetUnit in Weaponry.cs to null
         foreach (var weaponry in keysToRemove)
+        {
             activeWeapons.Remove(weaponry);
+            weaponry.SetTarget(null);
+        }
         
         keysToRemove.Clear();
     }

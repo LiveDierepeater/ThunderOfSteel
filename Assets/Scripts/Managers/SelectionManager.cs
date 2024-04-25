@@ -22,6 +22,8 @@ public class SelectionManager
 
     private SelectionManager() { }
 
+#region Selected Units Logic
+
     public void Select(Unit unit)
     {
         unit.OnSelected();
@@ -48,4 +50,15 @@ public class SelectionManager
     {
         return SelectedUnits.Contains(unit);
     }
+
+#endregion
+
+#region Available Units Logic
+
+    public void RemoveAvailableUnit(Unit unitToRemove)
+    {
+        AvailableUnits.Remove(unitToRemove);
+    }
+
+#endregion
 }

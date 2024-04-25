@@ -193,6 +193,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (closestEnemy is null) return;
 
         _targetUnit = closestEnemy.GetComponent<Unit>();
+        AddWeaponryToBattleManager(_targetUnit);
     }
 
 #endregion
@@ -214,6 +215,11 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private void ApplyDamageToTarget()
     {
         _targetUnit.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)_targetUnit.UnitData.Armor]);
+    }
+
+    private void AddWeaponryToBattleManager(Unit target)
+    {
+        BattleManager.Instance.StartAttack(this, target);
     }
 
 #region Cooldown Management
