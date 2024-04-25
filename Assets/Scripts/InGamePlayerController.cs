@@ -14,6 +14,7 @@ public class InGamePlayerController : MonoBehaviour
 
     #region Internal Fields
 
+    private bool isDragging;
     private float mouseDownTime;
     private Vector2 startMousePosition;
     
@@ -107,14 +108,24 @@ public class InGamePlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            selectionBox.sizeDelta = Vector2.zero;
             selectionBox.gameObject.SetActive(true);
             startMousePosition = Input.mousePosition;
             mouseDownTime = Time.time;
+            isDragging = false;
         }
-        else if (Input.GetKey(KeyCode.Mouse0) && mouseDownTime + dragDelay < Time.time)
+        else if (Input.GetKey(KeyCode.Mouse0))
         {
-            ResizeSelectionBox();
+            Vector2 currentMousePosition = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+            
+            if ((currentMousePosition - startMousePosition).magnitude > 5)
+            {
+                isDragging = true;
+            }
+        
+            if (isDragging && mouseDownTime + dragDelay < Time.time)
+            {
+                ResizeSelectionBox();
+            }
         }
     }
 
@@ -122,35 +133,78 @@ public class InGamePlayerController : MonoBehaviour
     {
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
-            selectionBox.sizeDelta = Vector2.zero;
             selectionBox.gameObject.SetActive(false);
+            selectionBox.sizeDelta = Vector2.zero;
 
-            if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, _unitsLayerMask)
-                && hit.collider.gameObject.TryGetComponent(out Unit unit))
+            if (isDragging)
             {
-                if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+                SelectUnitsInBox();
+            }
+            else
+            {
+                // Handle simple clicking
+                if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, _unitsLayerMask))
                 {
-                    if (SelectionManager.Instance.IsSelected(unit))
+                    if (hit.collider.gameObject.TryGetComponent(out Unit unit))
                     {
-                        SelectionManager.Instance.Deselect(unit);
-                    }
-                    else
-                    {
-                        SelectionManager.Instance.Select(unit);
+                        HandleUnitSelection(unit);
                     }
                 }
                 else
                 {
                     SelectionManager.Instance.DeselectAll();
-                    SelectionManager.Instance.Select(unit);
                 }
             }
-            else if (mouseDownTime + dragDelay > Time.time)
-            {
-                SelectionManager.Instance.DeselectAll();
-            }
-            
+
+            isDragging = false;
             mouseDownTime = 0;
+        }
+    }
+    
+    
+    private void HandleUnitSelection(Unit unit)
+    {
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+        {
+            if (SelectionManager.Instance.IsSelected(unit))
+            {
+                SelectionManager.Instance.Deselect(unit);
+            }
+            else
+            {
+                SelectionManager.Instance.Select(unit);
+            }
+        }
+        else
+        {
+            SelectionManager.Instance.DeselectAll();
+            SelectionManager.Instance.Select(unit);
+        }
+    }
+    
+    private void SelectUnitsInBox()
+    {
+        // The rectangle is created from the current position and size of the selectionBox on the screen
+        Rect selectionRect = new Rect(
+            Mathf.Min(startMousePosition.x, Input.mousePosition.x),
+            Mathf.Min(startMousePosition.y, Input.mousePosition.y),
+            Mathf.Abs(startMousePosition.x - Input.mousePosition.x),
+            Mathf.Abs(startMousePosition.y - Input.mousePosition.y));
+
+        foreach (var unit in SelectionManager.Instance.AvailableUnits)
+        {
+            // Transforms the unit's world coordinates to screen coordinates
+            Vector3 unitScreenPosition = camera.WorldToScreenPoint(unit.transform.position);
+
+            // Ignore Z coordinate because ScreenPoint Z is always positive
+            if (selectionRect.Contains(new Vector2(unitScreenPosition.x, unitScreenPosition.y)))
+            {
+                SelectionManager.Instance.Select(unit);
+            }
+            else
+            {
+                SelectionManager.Instance.Deselect(unit);
+            }
         }
     }
     
