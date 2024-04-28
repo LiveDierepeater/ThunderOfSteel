@@ -7,6 +7,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     public float MaxAttackRange { get; private set; }
 
+    public ArtilleryShell artilleryShellPrefab;
+    public Bullet bulletPrefab;
+
 #region Internal Fields
 
     // Private Fields
@@ -203,13 +206,36 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public void Attack(Unit targetUnit)
     {
         if (IsWeaponsCoolDownActive()) return;
-        
+
+        FireWeaponry(targetUnit);
         ApplyDamageToTarget();
         NewCoolDown();
         
         //Unit.UnitData.Events.OnStopUnit?.Invoke();
         // DEBUG
         Unit.IsAttacking = true;
+    }
+
+    private void FireWeaponry(Unit target)
+    {
+        Projectile projectileInstance;
+
+        if (_weaponryData.ShellType == UnitWeaponry.Shells.Artillery)
+        {
+            projectileInstance = Instantiate(artilleryShellPrefab, transform.position, Quaternion.identity);
+            
+            if (projectileInstance is ArtilleryShell artilleryShell)
+            {
+                artilleryShell.arcHeight = 15.0f;  // Safely accessing the specific property
+            }
+        }
+        else
+        {
+            projectileInstance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        }
+
+        projectileInstance.speed = _weaponryData.ProjectileSpeed;
+        projectileInstance.target = target;
     }
 
     private void ApplyDamageToTarget()

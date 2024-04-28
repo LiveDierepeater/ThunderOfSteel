@@ -4,6 +4,12 @@ using UnityEngine;
 public class UnitWeaponry : ScriptableObject
 {
     public string WeaponName;
+    public enum Shells
+    {
+        Artillery,
+        APShell,
+        HEShell
+    }
 
     [Header("Armor Damage")]
     
@@ -19,6 +25,11 @@ public class UnitWeaponry : ScriptableObject
     
     [Space(10)]
     
+    public Shells ShellType;
     public float AttackRange;
     public float CoolDown;
+
+    [Space(10)]
+    
+    public float ProjectileSpeed;
 }
