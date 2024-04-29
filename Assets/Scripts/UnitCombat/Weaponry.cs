@@ -220,22 +220,23 @@ public class Weaponry : UnitSystem, IAttackBehavior
     {
         Projectile projectileInstance;
 
-        if (_weaponryData.ShellType == UnitWeaponry.Shells.Artillery)
+        switch (_weaponryData.ShellType)
         {
-            projectileInstance = Instantiate(artilleryShellPrefab, transform.position, Quaternion.identity);
-            
-            if (projectileInstance is ArtilleryShell artilleryShell)
+            case UnitWeaponry.Shells.Artillery:
             {
-                artilleryShell.arcHeight = 15.0f;  // Safely accessing the specific property
+                projectileInstance = Instantiate(artilleryShellPrefab, transform.position, Quaternion.identity);
+                if (projectileInstance is ArtilleryShell artilleryShell)
+                {
+                    artilleryShell.arcHeight = 15.0f;  // Safely accessing the specific property
+                }
+                InitializeProjectile(projectileInstance, target);
+                break;
             }
+            case UnitWeaponry.Shells.APShell or UnitWeaponry.Shells.HEShell:
+                projectileInstance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                InitializeProjectile(projectileInstance, target);
+                break;
         }
-        else
-        {
-            projectileInstance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        }
-
-        projectileInstance.speed = _weaponryData.ProjectileSpeed;
-        projectileInstance.target = target;
     }
 
     private void ApplyDamageToTarget()
@@ -246,6 +247,12 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private void AddWeaponryToBattleManager(Unit target)
     {
         BattleManager.Instance.StartAttack(this, target);
+    }
+
+    private void InitializeProjectile(Projectile projectileInstance, Unit target)
+    {
+        projectileInstance.speed = _weaponryData.ProjectileSpeed;
+        projectileInstance.target = target;
     }
 
 #region Cooldown Management
