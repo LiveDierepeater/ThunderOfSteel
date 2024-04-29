@@ -117,6 +117,7 @@ Transform:
   m_Children:
   - {fileID: 5605255956538167360}
   - {fileID: 771121102969332315}
+  - {fileID: 3791596673371533652}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &2327645549985342943
@@ -236,6 +237,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   selectionSprite: {fileID: 804835849124565450}
   IsAttacking: 0
+  RandomizeUnitPlayerID: 0
 --- !u!1 &2845888706608597363
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,6 +322,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &5051591366427295563
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3791596673371533652}
+  m_Layer: 6
+  m_Name: ShellSpawnLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3791596673371533652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5051591366427295563}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5442004313004225068}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6548636575653184667
 GameObject:
   m_ObjectHideFlags: 0

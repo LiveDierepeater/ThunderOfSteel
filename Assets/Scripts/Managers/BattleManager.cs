@@ -10,7 +10,7 @@ public class BattleManager : MonoBehaviour
     public event Action<Weaponry, Unit> OnAttackStopped;
     public event Action<Unit> OnUnitDied;
     
-    private Dictionary<Weaponry, Unit> activeWeapons = new Dictionary<Weaponry, Unit>();
+    private readonly Dictionary<Weaponry, Unit> activeWeapons = new Dictionary<Weaponry, Unit>();
 
     private void Awake()
     {

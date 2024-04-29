@@ -14,6 +14,7 @@ public class Unit : MonoBehaviour
     
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
+    public Transform ShellSpawnLocation;
     public bool IsAttacking;
     public bool RandomizeUnitPlayerID;
 
@@ -52,6 +53,8 @@ public class Unit : MonoBehaviour
                 Debug.LogWarning("Unknown Unit-Type: " + UnitData.UnitType);
                 break;
         }
+
+        ShellSpawnLocation = transform.Find("ShellSpawnLocation");
     }
 
     private void Start()

@@ -44,3 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0317bbb1079bbb84396ac2ee2fbc3390, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  artilleryShellPrefab: {fileID: -4829047449102880535, guid: 3c828c15562f3c4489a83d6d71f843b7, type: 3}
+  tankShellPrefab: {fileID: 5478952423164300184, guid: 0f287b1bdcae6fb40b360d3cf2f5215f, type: 3}

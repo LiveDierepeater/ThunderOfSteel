@@ -2,7 +2,7 @@
 
 public abstract class Projectile : MonoBehaviour
 {
-    public float speed;
+    public float initialSpeed;
     public Unit target;
     public Vector3 targetPosition;
 
@@ -17,22 +17,24 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void HitTarget()
     {
-        // Füge dem Ziel Schaden zu
-        if (target is not null)
-            print("Hit!");
-            //target.ReceiveDamage(damage);
-        Destroy(gameObject);  // Zerstöre das Projektil nach dem Treffer
+        Destroy(gameObject);
     }
 
     private void UpdateTargetPosition()
     {
-        if (target is not null)
+        try
+        {
             targetPosition = target.transform.position;
+        }
+        catch (MissingReferenceException e)
+        {
+            
+        }
     }
 
-    private void UpdateProjectilePosition()
+    protected virtual void UpdateProjectilePosition()
     {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, initialSpeed * Time.deltaTime);
     }
 
     private bool DoesProjectileReachTargetPosition()

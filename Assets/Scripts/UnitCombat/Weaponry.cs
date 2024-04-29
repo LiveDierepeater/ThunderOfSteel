@@ -8,7 +8,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public float MaxAttackRange { get; private set; }
 
     public ArtilleryShell artilleryShellPrefab;
-    public Bullet bulletPrefab;
+    public TankShell tankShellPrefab;
 
 #region Internal Fields
 
@@ -224,16 +224,16 @@ public class Weaponry : UnitSystem, IAttackBehavior
         {
             case UnitWeaponry.Shells.Artillery:
             {
-                projectileInstance = Instantiate(artilleryShellPrefab, transform.position, Quaternion.identity);
+                projectileInstance = Instantiate(artilleryShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
                 if (projectileInstance is ArtilleryShell artilleryShell)
                 {
-                    artilleryShell.arcHeight = 15.0f;  // Safely accessing the specific property
+                    artilleryShell.maxArcHeight = 15.0f;  // Safely accessing the specific property
                 }
                 InitializeProjectile(projectileInstance, target);
                 break;
             }
             case UnitWeaponry.Shells.APShell or UnitWeaponry.Shells.HEShell:
-                projectileInstance = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+                projectileInstance = Instantiate(tankShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
                 InitializeProjectile(projectileInstance, target);
                 break;
         }
@@ -251,7 +251,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private void InitializeProjectile(Projectile projectileInstance, Unit target)
     {
-        projectileInstance.speed = _weaponryData.ProjectileSpeed;
+        projectileInstance.initialSpeed = _weaponryData.ProjectileSpeed;
         projectileInstance.target = target;
     }
 
