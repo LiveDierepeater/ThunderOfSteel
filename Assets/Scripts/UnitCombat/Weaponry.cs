@@ -176,7 +176,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         foreach (var nearbyObject in nearbyObjects)
         {
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
-
+            
             if (nearbyObject == transform.root.gameObject)
                 continue; // Continue, when this 'nearbyObject' is 'this.gameObject'
             
@@ -227,7 +227,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 projectileInstance = Instantiate(artilleryShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
                 if (projectileInstance is ArtilleryShell artilleryShell)
                 {
-                    artilleryShell.maxArcHeight = 15.0f;  // Safely accessing the specific property
+                    artilleryShell.MaxArcHeight = 15.0f;  // Safely accessing the specific property
                 }
                 InitializeProjectile(projectileInstance, target);
                 break;

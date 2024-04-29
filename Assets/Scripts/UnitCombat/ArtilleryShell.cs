@@ -2,21 +2,19 @@
 
 public class ArtilleryShell : Projectile
 {
-    public AnimationCurve heightCurve;
-    public float maxArcHeight = 50f;
+    public float MaxArcHeight = 50f;
     
     private Vector3 initialPosition;
-    private float totalTime;
-    private float elapsedTime;
+    private Vector3 velocity;
+    private float launchTime;
+    private const float _GroundLevel = 0f;
+    private const float _Gravity = 9.81f;
 
     protected void Start()
     {
         initialPosition = transform.position;
-        
-        if (target is not null)
-        {
-            CalculateTrajectory();
-        }
+        launchTime = Time.time;
+        CalculateInitialVelocity();
     }
     
     protected override void Update()
@@ -27,49 +25,42 @@ public class ArtilleryShell : Projectile
 
     protected override void UpdateProjectilePosition()
     {
-        if (elapsedTime < totalTime)
+        float timeSinceLaunch = Time.time - launchTime;
+        // Calculate current Position
+        Vector3 position = initialPosition + velocity * timeSinceLaunch + Vector3.up * (0.5f * (-_Gravity * timeSinceLaunch * timeSinceLaunch));
+        
+        // Destroys Projectile when ground is hit
+        if (position.y < _GroundLevel)
         {
-            elapsedTime += Time.deltaTime;
-            float normalizedTime = elapsedTime / totalTime; // Normalisierte Zeit für die Animationskurve
-
-            // Berechnung der neuen Position
-            Vector3 newPosition = Vector3.Lerp(initialPosition, new Vector3(target.transform.position.x, initialPosition.y, target.transform.position.z), normalizedTime);
-            float heightFactor = heightCurve.Evaluate(normalizedTime); // Wert der Animationskurve an der aktuellen Zeitposition
-            newPosition.y += heightFactor * maxArcHeight; // Anwendung der Höhenmodulation
-
-            transform.position = newPosition;
-
-            // Zerstören des Projektils, wenn es den Boden oder das Ziel erreicht
-            if (newPosition.y < 0 || normalizedTime >= 1.0f)
-            {
-                Destroy(gameObject);
-            }
+            position.y = _GroundLevel;
+            Destroy(gameObject);
+        }
+        else
+        {
+            transform.position = position;
         }
     }
     
-    private void CalculateTrajectory()
+    private void CalculateInitialVelocity()
     {
-        Vector3 targetPosition = target.transform.position;
-        Vector3 displacement = targetPosition - transform.position;
+        Vector3 displacement = target.transform.position - initialPosition;
         Vector3 displacementXZ = new Vector3(displacement.x, 0, displacement.z);
         float horizontalDistance = displacementXZ.magnitude;
+        float maxHeight = CalculateMaxHeightBasedOnDistance(horizontalDistance, MaxArcHeight, 5f, 50f);
 
-        // Rufe die Methode auf, um die maximale Höhe basierend auf der Distanz zu bestimmen
-        float dynamicMaxHeight = CalculateMaxHeightBasedOnDistance(horizontalDistance, maxArcHeight, 5f, 50f); // Beispielswerte
+        // Calculate flight time based on maximum altitude (time to reach maximum altitude, then double for return)
+        float timeToApex = Mathf.Sqrt(2 * maxHeight / _Gravity);
+        float totalFlightTime = 2 * timeToApex; // Total flight time is round trip to the Apex
 
-        totalTime = horizontalDistance / initialSpeed;
-        float normalizedTime = elapsedTime / totalTime;
-        float heightFactor = heightCurve.Evaluate(normalizedTime);
-        newPosition.y += heightFactor * dynamicMaxHeight; // Verwende die dynamische Maximalhöhe
+        float initialVerticalVelocity = _Gravity * timeToApex; // Speed needed to reach the apex
+        float initialHorizontalSpeed = horizontalDistance / totalFlightTime; // Horizontal speed adjustment
+
+        // Set the initial speed
+        velocity = new Vector3(displacementXZ.normalized.x * initialHorizontalSpeed, initialVerticalVelocity, displacementXZ.normalized.z * initialHorizontalSpeed);
     }
     
     private float CalculateMaxHeightBasedOnDistance(float distance, float maxPossibleHeight, float minHeight, float minDistanceForMaxHeight)
     {
-        if (distance < minDistanceForMaxHeight)
-        {
-            // Skaliere die maximale Höhe linear basierend auf der Distanz
-            return Mathf.Lerp(minHeight, maxPossibleHeight, distance / minDistanceForMaxHeight);
-        }
-        return maxPossibleHeight; // Verwende die maximale Höhe, wenn der Mindestabstand erreicht oder überschritten wird
+        return distance < minDistanceForMaxHeight ? Mathf.Lerp(minHeight, maxPossibleHeight, distance / minDistanceForMaxHeight) : maxPossibleHeight;
     }
 }
