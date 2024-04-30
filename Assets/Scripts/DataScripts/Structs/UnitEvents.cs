@@ -8,4 +8,5 @@ public struct UnitEvents
     public Action<Unit> OnNewTargetUnit;
     public Action OnStopUnit;
     public Action<int> OnAttack;
+    public Action OnUnitDeath;
 }

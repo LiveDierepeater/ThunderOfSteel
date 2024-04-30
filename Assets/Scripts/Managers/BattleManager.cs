@@ -74,7 +74,7 @@ public class BattleManager : MonoBehaviour
     {
         // This List will store the attackers 'Weaponry' who will be removed from activeWeapons 'Dictionary'
         var keysToRemove = new List<Weaponry>();
-        
+        print("UnregisterByKill");
         // Returns if activeWeapons does not even have the killedTarget registered under an attacker
         // Adds every attacker/'Weaponry'/key-from-activeWeapons to keysToRemove<List>
         if (activeWeapons.ContainsValue(killedTarget))
@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
             activeWeapons.Remove(weaponry);
             weaponry.SetTarget(null);
         }
-        
+        print(activeWeapons.Count);
         keysToRemove.Clear();
     }
 }

@@ -30,16 +30,15 @@ public class UnitHealth : UnitSystem
     private void TakeDamage(int amount)
     {
         _currentHealth -= amount;
+        print(Unit.UnitData.UnitName + " took " + amount + " damage!");
         
         if (_currentHealth <= 0)
         {
-            DestroyUnit();
+            UnsubscribeUnit();
         }
-        
-        print(Unit.UnitData.UnitName + " took " + amount + " damage!");
     }
 
-    private void DestroyUnit()
+    private void UnsubscribeUnit()
     {
         // Notifying BattleManager about the Death of this.Unit
         BattleManager.Instance.NotifyDeath(Unit);
@@ -48,11 +47,14 @@ public class UnitHealth : UnitSystem
         SelectionManager.Instance.Deselect(Unit);
         SelectionManager.Instance.RemoveAvailableUnit(Unit);
         
+        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, transform.position);
+        
+        // Calls Event to Unit-Instance
+        Unit.UnitData.Events.OnUnitDeath?.Invoke();
+        
         print(Unit.UnitData.UnitName + " is Destroyed");
         
         // TODO: Unit and it's components have to unsubscribe from multiple Events here.
         Unit.UnitData.Events.OnAttack -= TakeDamage;
-        
-        Destroy(gameObject);
     }
 }

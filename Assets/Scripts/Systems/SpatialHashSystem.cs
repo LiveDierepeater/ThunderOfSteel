@@ -27,6 +27,11 @@ public class SpatialHash
     public void RemoveObject(GameObject obj, Vector3 oldPosition)
     {
         Vector2Int hashKey = CalculateHashKey(oldPosition);
+        RemoveObjectWithHashKey(obj, hashKey);
+    }
+
+    public void RemoveObjectWithHashKey(GameObject obj, Vector2Int hashKey)
+    {
         if (_grid.ContainsKey(hashKey))
         {
             _grid[hashKey].Remove(obj);
@@ -79,5 +84,4 @@ public class SpatialHash
 
         return nearbyUnitObjects;
     }
-    
 }

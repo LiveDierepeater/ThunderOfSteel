@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -57,9 +58,17 @@ public class TankMovement : UnitSystem, IMovementBehavior
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.UnitData.Events.OnAttackUnit += MoveToDestination;
         Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
+        Unit.UnitData.Events.OnUnitDeath += HandleDeath;
     }
 
     private void OnDisable()
+    {
+        TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
+        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
+    }
+
+    private void OnDestroy()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
@@ -130,6 +139,15 @@ public class TankMovement : UnitSystem, IMovementBehavior
     {
         _agent.SetDestination(_stoppingDistance/2 * _agent.velocity.normalized + transform.position);
         DecelerateNearStoppingDistance();
+    }
+
+    private void HandleDeath()
+    {
+        TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
+        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
+        
+        Destroy(this);
     }
 
 #endregion

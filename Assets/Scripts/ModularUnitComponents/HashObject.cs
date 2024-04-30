@@ -5,7 +5,7 @@ public class HashObject : MonoBehaviour
     private Vector3 lastPosition;
 
     // Debugging Fields:
-    [SerializeField] private Vector2 _currentHashKey;
+    [SerializeField] private Vector2Int _currentHashKey;
 
     private void Start()
     {
@@ -26,8 +26,7 @@ public class HashObject : MonoBehaviour
     
     private void OnUnitMoveHashUpdate()
     {
-        // Updates the Hash when Unit moves from one into another.
-        
+        /*
         if (Vector3.Distance(lastPosition, transform.position) > SpatialHash.CellSize * 0.5f)
         {
             SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, lastPosition);
@@ -36,7 +35,12 @@ public class HashObject : MonoBehaviour
             
             // DEBUGGING
             _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(lastPosition);
-        }
+        }*/
+        
+        // Updates the Hash when Unit moves from one into another.
+        _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(gameObject, _currentHashKey);
+        SpatialHashManager.Instance.SpatialHash.AddObject(gameObject);
     }
 
     private void OnDestroy()

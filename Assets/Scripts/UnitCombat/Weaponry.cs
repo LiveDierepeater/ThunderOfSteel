@@ -10,6 +10,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public ArtilleryShell artilleryShellPrefab;
     public TankShell tankShellPrefab;
 
+    private int i = 0;
+    private int o = 0;
+    
 #region Internal Fields
 
     // Private Fields
@@ -93,10 +96,14 @@ public class Weaponry : UnitSystem, IAttackBehavior
         {
             case not null: // Unit has target
                 // TODO: Here has to be a switch-case for the UnitData.UnitCommands
+                i++;
+                //print("i: " + i);
                 MoveInRange();
                 break;
 
             case null: // Unit has NO target
+                o++;
+                //print("o: " + o);
                 CheckForNewTargetInRange();
                 break;
         }
@@ -172,9 +179,10 @@ public class Weaponry : UnitSystem, IAttackBehavior
             SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
         GameObject closestEnemy = null;
         var closestDistance = 1000f;
-
+        print("nearbyObjects: " + nearbyObjects.Count);
         foreach (var nearbyObject in nearbyObjects)
         {
+            print(nearbyObject);
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
             
             if (nearbyObject == transform.root.gameObject)

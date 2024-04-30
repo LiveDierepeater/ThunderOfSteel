@@ -26,7 +26,7 @@ public abstract class Projectile : MonoBehaviour
         {
             targetPosition = target.transform.position;
         }
-        catch (MissingReferenceException e)
+        catch (MissingReferenceException _)
         {
             
         }

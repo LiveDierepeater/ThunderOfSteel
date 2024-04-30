@@ -2,6 +2,7 @@
 
 public class ArtilleryShell : Projectile
 {
+    public float MinArcHeight = 3f;
     public float MaxArcHeight = 50f;
     
     private Vector3 initialPosition;
@@ -46,7 +47,7 @@ public class ArtilleryShell : Projectile
         Vector3 displacement = target.transform.position - initialPosition;
         Vector3 displacementXZ = new Vector3(displacement.x, 0, displacement.z);
         float horizontalDistance = displacementXZ.magnitude;
-        float maxHeight = CalculateMaxHeightBasedOnDistance(horizontalDistance, MaxArcHeight, 5f, 50f);
+        float maxHeight = CalculateMaxHeightBasedOnDistance(horizontalDistance, MaxArcHeight, MinArcHeight, MaxArcHeight * 2);
 
         // Calculate flight time based on maximum altitude (time to reach maximum altitude, then double for return)
         float timeToApex = Mathf.Sqrt(2 * maxHeight / _Gravity);

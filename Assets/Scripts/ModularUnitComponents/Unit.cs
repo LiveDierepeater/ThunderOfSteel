@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    private bool IsUnitDead;
+    
     [Header("Data")]
     [ExposedScriptableObject]
     public UnitData UnitData;
@@ -60,6 +62,7 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
+        UnitDeathInitialization();
     }
 
     private void CreateWeaponry()
@@ -69,6 +72,14 @@ public class Unit : MonoBehaviour
             Weaponry newWeaponry = Instantiate(UnitData.weaponryPrefab, transform);
             newWeaponry.SetWeaponryData(weaponryData);
         }
+    }
+
+    private void UnitDeathInitialization()
+    {
+        // Unit Death Setup
+        UnitData.Events.OnUnitDeath += SetUnitDead;
+        TickManager.Instance.TickSystem.OnTickEnd += DestroyUnit;
+        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, transform.position);
     }
 
 #endregion
@@ -101,6 +112,17 @@ public class Unit : MonoBehaviour
     {
         UnitData.Events.OnNewTargetUnit?.Invoke(null);
         UnitData.CurrentUnitCommand = UnitData.UnitCommands.Idle;
+    }
+    
+    private void SetUnitDead()
+    {
+        IsUnitDead = true;
+    }
+
+    private void DestroyUnit()
+    {
+        if (IsUnitDead)
+            Destroy(gameObject);
     }
 
 #endregion
