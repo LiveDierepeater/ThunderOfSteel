@@ -127,7 +127,7 @@ public class Unit : MonoBehaviour
     private void DestroyUnit()
     {
         if (IsUnitDead)
-            Destroy(gameObject);
+            transform.gameObject.SetActive(false);
     }
 
 #endregion

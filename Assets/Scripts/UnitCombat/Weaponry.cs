@@ -9,9 +9,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     public ArtilleryShell artilleryShellPrefab;
     public TankShell tankShellPrefab;
-
-    private int i = 0;
-    private int o = 0;
     
 #region Internal Fields
 
@@ -92,21 +89,15 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private void HandleTick()
     {
-        switch (_targetUnit)
-        {
-            case not null: // Unit has target
-                // TODO: Here has to be a switch-case for the UnitData.UnitCommands
-                i++;
-                //print("i: " + i);
-                MoveInRange();
-                break;
+        if (_targetUnit is not null && _targetUnit.transform.gameObject.activeSelf) // Unit has target
+            // TODO: Here has to be a switch-case for the UnitData.UnitCommands
+            MoveInRange();
 
-            case null: // Unit has NO target
-                o++;
-                //print("o: " + o);
-                CheckForNewTargetInRange();
-                break;
-        }
+        else if (_targetUnit is null) // Unit has NO target
+            CheckForNewTargetInRange();
+
+        else if ( ! _targetUnit.transform.gameObject.activeSelf) // SAFEGUARD: Unit has a _targetUnit which is not active!
+            SetTarget(null);
     }
 
 #endregion
@@ -186,6 +177,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
             
             if (nearbyObject == transform.root.gameObject)
                 continue; // Continue, when this 'nearbyObject' is 'this.gameObject'
+            
+            if ( ! nearbyObject.activeSelf)
+                continue; // Continue, when this 'nearbyObject' is not active
             
             if ( ! CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>()))
                 continue; // Continue, when this 'nearbyObject' cannot be attacked by weaponry
@@ -287,8 +281,8 @@ public class Weaponry : UnitSystem, IAttackBehavior
 #region Extracted Return Methods
 
     /// <summary>
-    /// <para>Returns false, when this weaponry cannot attack the armor of the 'targetUnit'</para>
     /// <para>Returns false, when 'targetUnit' is an ally</para>
+    /// <para>Returns false, when this weaponry cannot attack the armor of the 'targetUnit'</para>
     /// </summary>
     /// <param name="targetUnit"></param>
     /// <returns></returns>
@@ -302,6 +296,21 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private bool IsWeaponsCoolDownActive()
     {
         return CooldownManager.Instance.IsCooldownActive(GetInstanceID());
+    }
+
+    public string GetWeaponryName()
+    {
+        return _weaponryData.WeaponName;
+    }
+
+    public Unit GetWeaponryUnit()
+    {
+        return Unit;
+    }
+
+    public Unit GetWeaponryTarget()
+    {
+        return _targetUnit;
     }
 
 #endregion

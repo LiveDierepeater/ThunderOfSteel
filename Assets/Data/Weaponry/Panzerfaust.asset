@@ -22,7 +22,7 @@ MonoBehaviour:
   Damage_Armor_Level_04: 30
   Damage_Armor_Level_05: 20
   Damage_Air: -1
-  ShellType: 0
-  AttackRange: 100
+  ShellType: 1
+  AttackRange: 15
   CoolDown: 5
   ProjectileSpeed: 40
