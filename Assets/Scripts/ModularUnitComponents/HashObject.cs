@@ -20,14 +20,14 @@ public class HashObject : MonoBehaviour
     private void InitializeHashKey()
     {
         _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
-        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(gameObject, _currentHashKey);
+        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(_unit, _currentHashKey);
         _lastHashKey = _currentHashKey;
     }
 
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, lastPosition);
+        SpatialHashManager.Instance.SpatialHash.RemoveObject(_unit, lastPosition);
     }
 
     private void HandleTick()
@@ -41,14 +41,14 @@ public class HashObject : MonoBehaviour
         _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
         
         if (_currentHashKey == _lastHashKey) return;
-        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(gameObject, _lastHashKey);
-        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(gameObject, _currentHashKey);
+        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(_unit, _lastHashKey);
+        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(_unit, _currentHashKey);
         
         _lastHashKey = _currentHashKey;
     }
 
     private void OnDestroy()
     {
-        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, transform.position);
+        SpatialHashManager.Instance.SpatialHash.RemoveObject(_unit, transform.position);
     }
 }

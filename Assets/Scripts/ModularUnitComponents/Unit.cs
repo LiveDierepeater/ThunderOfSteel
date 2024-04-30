@@ -20,7 +20,7 @@ public class Unit : MonoBehaviour
     public bool IsAttacking;
     public bool RandomizeUnitPlayerID;
 
-#region Initializing
+    #region Initializing
 
     private void Awake()
     {

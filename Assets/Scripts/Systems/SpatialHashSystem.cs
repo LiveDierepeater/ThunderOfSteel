@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpatialHash
 {
-    private readonly Dictionary<Vector2Int, List<GameObject>> _grid = new();
+    private readonly Dictionary<Vector2Int, List<Unit>> _grid = new();
     private const float CellSize = 500f;
 
     // Calculates the Hash-Key based of the position
@@ -14,17 +14,17 @@ public class SpatialHash
     }
 
     // Adds an Object to the Hash
-    public void AddObject(GameObject obj)
+    public void AddObject(Unit obj)
     {
         Vector2Int hashKey = CalculateHashKey(obj.transform.position);
         AddObjectWithHashKey(obj, hashKey);
     }
 
-    public void AddObjectWithHashKey(GameObject obj, Vector2Int hashKey)
+    public void AddObjectWithHashKey(Unit obj, Vector2Int hashKey)
     {
         if (!_grid.ContainsKey(hashKey))
         {
-            _grid[hashKey] = new List<GameObject>();
+            _grid[hashKey] = new List<Unit>();
         }
 
         if (_grid[hashKey].Contains(obj))
@@ -35,13 +35,13 @@ public class SpatialHash
     }
 
     // Removes an Object from the Hash
-    public void RemoveObject(GameObject obj, Vector3 oldPosition)
+    public void RemoveObject(Unit obj, Vector3 oldPosition)
     {
         Vector2Int hashKey = CalculateHashKey(oldPosition);
         RemoveObjectWithHashKey(obj, hashKey);
     }
 
-    public void RemoveObjectWithHashKey(GameObject obj, Vector2Int hashKey)
+    public void RemoveObjectWithHashKey(Unit obj, Vector2Int hashKey)
     {
         if (_grid.ContainsKey(hashKey))
         {
@@ -54,19 +54,19 @@ public class SpatialHash
     }
 
     // Find all Objects close to the 'position'
-    public List<GameObject> GetNearbyObjects(Vector3 position)
+    public List<Unit> GetNearbyObjects(Vector3 position)
     {
         Vector2Int hashKey = CalculateHashKey(position);
         if (_grid.TryGetValue(hashKey, out var nearbyObjects))
         {
             return nearbyObjects;
         }
-        return new List<GameObject>();
+        return new List<Unit>();
     }
     
-    public List<GameObject> GetNearbyUnitObjectsInNearbyHashKeys(Vector3 position)
+    public List<Unit> GetNearbyUnitObjectsInNearbyHashKeys(Vector3 position)
     {
-        var nearbyUnitObjects = new List<GameObject>();
+        var nearbyUnitObjects = new List<Unit>();
         
         // Calculate the main-HashKey for the current position
         var mainKey = CalculateHashKey(position);

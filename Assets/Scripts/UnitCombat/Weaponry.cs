@@ -168,21 +168,21 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
         var nearbyObjects =
             SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
-        GameObject closestEnemy = null;
+        Unit closestEnemy = null;
         var closestDistance = 1000f;
         
         foreach (var nearbyObject in nearbyObjects)
         {
-            var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
-            
-            if (nearbyObject == transform.root.gameObject)
+            if (nearbyObject == Unit)
                 continue; // Continue, when this 'nearbyObject' is 'this.gameObject'
             
-            if ( ! nearbyObject.activeSelf)
+            if ( ! nearbyObject.gameObject.activeSelf)
                 continue; // Continue, when this 'nearbyObject' is not active
             
-            if ( ! CanWeaponryAttackTarget(nearbyObject.GetComponent<Unit>()))
+            if ( ! CanWeaponryAttackTarget(nearbyObject))
                 continue; // Continue, when this 'nearbyObject' cannot be attacked by weaponry
+            
+            var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
 
             if ( ! (distance < closestDistance))
                 continue; // Continue, when this 'nearbyObject' is not closer than the closest 'nearbyObject'
@@ -196,7 +196,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
         if (closestEnemy is null) return;
 
-        _targetUnit = closestEnemy.GetComponent<Unit>();
+        _targetUnit = closestEnemy;
         AddWeaponryToBattleManager(_targetUnit);
     }
 
