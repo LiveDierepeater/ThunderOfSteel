@@ -79,10 +79,15 @@ public class Unit : MonoBehaviour
         // Unit Death Setup
         UnitData.Events.OnUnitDeath += SetUnitDead;
         TickManager.Instance.TickSystem.OnTickEnd += DestroyUnit;
-        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, transform.position);
     }
 
-#endregion
+    private void OnDestroy()
+    {
+        UnitData.Events.OnUnitDeath -= SetUnitDead;
+        TickManager.Instance.TickSystem.OnTickEnd -= DestroyUnit;
+    }
+
+    #endregion
 
 #region External Called Logic
 

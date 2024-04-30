@@ -47,8 +47,6 @@ public class UnitHealth : UnitSystem
         SelectionManager.Instance.Deselect(Unit);
         SelectionManager.Instance.RemoveAvailableUnit(Unit);
         
-        SpatialHashManager.Instance.SpatialHash.RemoveObject(gameObject, transform.position);
-        
         // Calls Event to Unit-Instance
         Unit.UnitData.Events.OnUnitDeath?.Invoke();
         

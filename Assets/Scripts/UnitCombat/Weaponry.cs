@@ -179,10 +179,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
             SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
         GameObject closestEnemy = null;
         var closestDistance = 1000f;
-        print("nearbyObjects: " + nearbyObjects.Count);
+        
         foreach (var nearbyObject in nearbyObjects)
         {
-            print(nearbyObject);
             var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
             
             if (nearbyObject == transform.root.gameObject)

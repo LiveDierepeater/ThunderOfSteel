@@ -9,7 +9,7 @@ public class TickSystem : MonoBehaviour
     public TickEndDelegate OnTickEnd;
 
     public const float TickRate = 0.2f;
-
+    
     public int elapsedTicks { get; private set; }
     private float nextTick;
 
@@ -33,7 +33,6 @@ public class TickSystem : MonoBehaviour
             
             nextTick = Time.time + TickRate;
             elapsedTicks++;
-            print("Tick: " + elapsedTicks);
         }
     }
 }

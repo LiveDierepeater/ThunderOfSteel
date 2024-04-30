@@ -50,7 +50,7 @@ public class BattleManager : MonoBehaviour
     /// <param name="target"></param>
     private void RegisterAttack(Weaponry attacker, Unit target)
     {
-        if ( ! activeWeapons.TryGetValue(attacker, out var targetsHealth))
+        if ( ! activeWeapons.TryGetValue(attacker, out _))
             activeWeapons.Add(attacker, target);
         else
             activeWeapons[attacker] = target;
@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour
     /// <param name="attacker"></param>
     private void UnregisterAttack(Weaponry attacker)
     {
-        if (activeWeapons.TryGetValue(attacker, out var targetsHealth))
+        if (activeWeapons.TryGetValue(attacker, out _))
             activeWeapons.Remove(attacker);
     }
 
@@ -74,13 +74,13 @@ public class BattleManager : MonoBehaviour
     {
         // This List will store the attackers 'Weaponry' who will be removed from activeWeapons 'Dictionary'
         var keysToRemove = new List<Weaponry>();
-        print("UnregisterByKill");
+        
         // Returns if activeWeapons does not even have the killedTarget registered under an attacker
         // Adds every attacker/'Weaponry'/key-from-activeWeapons to keysToRemove<List>
         if (activeWeapons.ContainsValue(killedTarget))
         {
             foreach (var activeWeapon in activeWeapons.Keys)
-                if (activeWeapons.TryGetValue(activeWeapon, out var target) == killedTarget)
+                if (activeWeapons.TryGetValue(activeWeapon, out _) == killedTarget)
                     keysToRemove.Add(activeWeapon);
         }
         else return;
@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
             activeWeapons.Remove(weaponry);
             weaponry.SetTarget(null);
         }
-        print(activeWeapons.Count);
+        
         keysToRemove.Clear();
     }
 }

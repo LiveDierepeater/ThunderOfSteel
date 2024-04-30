@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -146,8 +145,6 @@ public class TankMovement : UnitSystem, IMovementBehavior
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
-        
-        Destroy(this);
     }
 
 #endregion

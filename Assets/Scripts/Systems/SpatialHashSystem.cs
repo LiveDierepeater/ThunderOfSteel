@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SpatialHash
 {
     private readonly Dictionary<Vector2Int, List<GameObject>> _grid = new();
-    public const float CellSize = 500f;
+    private const float CellSize = 500f;
 
     // Calculates the Hash-Key based of the position
     public Vector2Int CalculateHashKey(Vector3 position)
@@ -16,9 +17,19 @@ public class SpatialHash
     public void AddObject(GameObject obj)
     {
         Vector2Int hashKey = CalculateHashKey(obj.transform.position);
+        AddObjectWithHashKey(obj, hashKey);
+    }
+
+    public void AddObjectWithHashKey(GameObject obj, Vector2Int hashKey)
+    {
         if (!_grid.ContainsKey(hashKey))
         {
             _grid[hashKey] = new List<GameObject>();
+        }
+
+        if (_grid[hashKey].Contains(obj))
+        {
+            throw new Exception("Already Exists");
         }
         _grid[hashKey].Add(obj);
     }
@@ -56,10 +67,10 @@ public class SpatialHash
     public List<GameObject> GetNearbyUnitObjectsInNearbyHashKeys(Vector3 position)
     {
         var nearbyUnitObjects = new List<GameObject>();
-
+        
         // Calculate the main-HashKey for the current position
         var mainKey = CalculateHashKey(position);
-
+        
         // Consider all nearby Grids, the current Grid inclusive
         var offsets = new List<Vector2>
         {
@@ -68,7 +79,7 @@ public class SpatialHash
             new Vector2(1, 0), new Vector2(1, -1), new Vector2(0, -1),
             new Vector2(-1, -1), new Vector2(-1, 0)
         };
-
+        
         foreach (var offset in offsets)
         {
             // Calculate the HashKey for the current nearby Grid
@@ -81,7 +92,7 @@ public class SpatialHash
                 nearbyUnitObjects.AddRange(unitsInCurrentGrid);
             }
         }
-
+        
         return nearbyUnitObjects;
     }
 }

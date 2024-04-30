@@ -6,11 +6,19 @@ public class HashObject : MonoBehaviour
 
     // Debugging Fields:
     [SerializeField] private Vector2Int _currentHashKey;
+    [SerializeField] private Vector2Int _lastHashKey;
 
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        SpatialHashManager.Instance.SpatialHash.AddObject(gameObject);
+        InitializeHashKey();
+    }
+    
+    private void InitializeHashKey()
+    {
+        _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(gameObject, _currentHashKey);
+        _lastHashKey = _currentHashKey;
     }
 
     private void OnDisable()
@@ -39,8 +47,12 @@ public class HashObject : MonoBehaviour
         
         // Updates the Hash when Unit moves from one into another.
         _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
-        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(gameObject, _currentHashKey);
-        SpatialHashManager.Instance.SpatialHash.AddObject(gameObject);
+        
+        if (_currentHashKey == _lastHashKey) return;
+        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(gameObject, _lastHashKey);
+        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(gameObject, _currentHashKey);
+        
+        _lastHashKey = _currentHashKey;
     }
 
     private void OnDestroy()
