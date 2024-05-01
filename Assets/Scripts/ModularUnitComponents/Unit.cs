@@ -65,6 +65,7 @@ public class Unit : MonoBehaviour
     {
         UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
         UnitPlayerID = UnitData.PlayerID;
+        UnitManager.Instance.AddUnit(this, UnitPlayerID);
         UnitDeathInitialization();
     }
 
@@ -130,7 +131,10 @@ public class Unit : MonoBehaviour
     private void DestroyUnit()
     {
         if (IsUnitDead)
+        {
+            UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
             transform.gameObject.SetActive(false);
+        }
     }
 
 #endregion

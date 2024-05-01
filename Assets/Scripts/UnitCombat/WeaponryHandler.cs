@@ -24,6 +24,7 @@ public class WeaponryHandler : MonoBehaviour
     private void UpdateTargets()
     {
         // Find inactive Weapons which can search for a new target
+        // Cashes 'inactiveWeapons.Count'
         inactiveWeapons = WeaponsSearchingForTarget();
         int inactiveWeaponsCount = inactiveWeapons.Count;
         
