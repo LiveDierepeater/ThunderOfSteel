@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    private bool IsUnitDead;
+    public bool IsUnitDead { get; private set; }
     
     [Header("Data")]
     [ExposedScriptableObject]
@@ -19,6 +19,8 @@ public class Unit : MonoBehaviour
     public Transform ShellSpawnLocation;
     public bool IsAttacking;
     public bool RandomizeUnitPlayerID;
+
+    public int UnitPlayerID;
 
     #region Initializing
 
@@ -62,6 +64,7 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
+        UnitPlayerID = UnitData.PlayerID;
         UnitDeathInitialization();
     }
 
@@ -139,6 +142,7 @@ public class Unit : MonoBehaviour
         if (RandomizeUnitPlayerID)
         {
             UnitData.PlayerID = Random.Range(0, 999999);
+            UnitPlayerID = UnitData.PlayerID;
             RandomizeUnitPlayerID = false;
         }
     }

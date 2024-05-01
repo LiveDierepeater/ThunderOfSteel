@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 2327645549985342943}
   - component: {fileID: 1769650115145506136}
   - component: {fileID: 8227400474469140127}
+  - component: {fileID: 5316016410058570438}
   m_Layer: 6
   m_Name: Unit
   m_TagString: Untagged
@@ -156,6 +157,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHashKey: {x: 0, y: 0}
+  _lastHashKey: {x: 0, y: 0}
+  _unit: {fileID: 0}
 --- !u!114 &8227400474469140127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,8 +239,21 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   selectionSprite: {fileID: 804835849124565450}
+  ShellSpawnLocation: {fileID: 0}
   IsAttacking: 0
   RandomizeUnitPlayerID: 0
+--- !u!114 &5316016410058570438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361310959908048649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adf60e76b4a64675952283542c06156b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2845888706608597363
 GameObject:
   m_ObjectHideFlags: 0

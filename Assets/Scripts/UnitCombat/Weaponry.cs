@@ -30,6 +30,10 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private float _coolDown;
     public float CurrentCoolDownTime { get; private set; }
+    
+    // Cashing Fields
+    public int localPlayerID;
+    private int[] localArmorDamage;
 
 #endregion
 
@@ -39,6 +43,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.UnitData.Events.OnNewTargetUnit += SetTarget;
+
+        localPlayerID = Unit.UnitData.PlayerID;
+        localArmorDamage = _armorDamage;
     }
 
     private void OnDisable()
@@ -92,12 +99,13 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (_targetUnit is not null && _targetUnit.transform.gameObject.activeSelf) // Unit has target
             // TODO: Here has to be a switch-case for the UnitData.UnitCommands
             MoveInRange();
-
+/*
         else if (_targetUnit is null) // Unit has NO target
             CheckForNewTargetInRange();
 
         else if ( ! _targetUnit.transform.gameObject.activeSelf) // SAFEGUARD: Unit has a _targetUnit which is not active!
             SetTarget(null);
+*/
     }
 
 #endregion
@@ -167,35 +175,54 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (_targetUnit is not null) return;
 
         var nearbyObjects =
-            SpatialHashManager.Instance.SpatialHash.GetNearbyUnitObjectsInNearbyHashKeys(transform.position);
+            SpatialHashManager.Instance.SpatialHash.GetNearbyUnits(transform.position, true);
         Unit closestEnemy = null;
-        var closestDistance = 1000f;
+        var closestDistanceSqrt = 1000000f;
+        //bool foundItself = false;
         
+        // First iteration of nearbyObjects in own HashKey
         foreach (var nearbyObject in nearbyObjects)
         {
-            if (nearbyObject == Unit)
-                continue; // Continue, when this 'nearbyObject' is 'this.gameObject'
-            
-            if ( ! nearbyObject.gameObject.activeSelf)
-                continue; // Continue, when this 'nearbyObject' is not active
-            
-            if ( ! CanWeaponryAttackTarget(nearbyObject))
-                continue; // Continue, when this 'nearbyObject' cannot be attacked by weaponry
-            
-            var distance = Vector3.Distance(transform.position, nearbyObject.transform.position);
-
-            if ( ! (distance < closestDistance))
-                continue; // Continue, when this 'nearbyObject' is not closer than the closest 'nearbyObject'
-            
-            if (MaxAttackRange < distance)
-                continue; // Continue, when this 'nearbyObject' is not close enough to get attacked
-
-            closestDistance = distance;
-            closestEnemy = nearbyObject;
+            if (CanWeaponryAttackTarget(nearbyObject))
+            {
+                var distanceSqrt = Vector3.SqrMagnitude(nearbyObject.transform.position - transform.position);
+                
+                if (distanceSqrt <= .2) continue; // Skip itself
+        
+                if (distanceSqrt < closestDistanceSqrt && distanceSqrt <= MaxAttackRange * MaxAttackRange)
+                {
+                    closestDistanceSqrt = distanceSqrt;
+                    closestEnemy = nearbyObject;
+                }
+            }
         }
-
+        
+        // When no enemy got found second iteration starts
+        // Second Iteration of nearbyObjects in nearby HashKeys except own HashKey
+        if (closestEnemy is null)
+        {
+            nearbyObjects = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsInNearbyHashKeys(transform.position);
+            closestDistanceSqrt = 1000000f;
+        
+            foreach (var nearbyObject in nearbyObjects)
+            {
+                if (CanWeaponryAttackTarget(nearbyObject))
+                {
+                    var distanceSqrt = Vector3.SqrMagnitude(nearbyObject.transform.position - transform.position);
+                    
+                    if (distanceSqrt <= .2) continue; // Skip itself
+            
+                    if (distanceSqrt < closestDistanceSqrt && distanceSqrt <= MaxAttackRange * MaxAttackRange)
+                    {
+                        closestDistanceSqrt = distanceSqrt;
+                        closestEnemy = nearbyObject;
+                    }
+                }
+            }
+        }
+        
         if (closestEnemy is null) return;
-
+        
         _targetUnit = closestEnemy;
         AddWeaponryToBattleManager(_targetUnit);
     }
@@ -245,7 +272,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         _targetUnit.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)_targetUnit.UnitData.Armor]);
     }
 
-    private void AddWeaponryToBattleManager(Unit target)
+    public void AddWeaponryToBattleManager(Unit target)
     {
         BattleManager.Instance.StartAttack(this, target);
     }
@@ -286,11 +313,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
     /// </summary>
     /// <param name="targetUnit"></param>
     /// <returns></returns>
-    private bool CanWeaponryAttackTarget(Unit targetUnit)
-    {
-        if (targetUnit.UnitData.PlayerID != Unit.UnitData.PlayerID)
-            return _armorDamage[(int)targetUnit.UnitData.Armor] >= 0;
-        return false;
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    private bool CanWeaponryAttackTarget(Unit targetUnit) {
+        return targetUnit.UnitData.PlayerID != localPlayerID && localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
     }
 
     private bool IsWeaponsCoolDownActive()
@@ -298,19 +323,19 @@ public class Weaponry : UnitSystem, IAttackBehavior
         return CooldownManager.Instance.IsCooldownActive(GetInstanceID());
     }
 
-    public string GetWeaponryName()
-    {
-        return _weaponryData.WeaponName;
-    }
-
-    public Unit GetWeaponryUnit()
-    {
-        return Unit;
-    }
-
-    public Unit GetWeaponryTarget()
+    public Unit GetTargetUnit()
     {
         return _targetUnit;
+    }
+
+    public bool IsTargetUnitInSameTeam(int playerID)
+    {
+        return playerID == localPlayerID;
+    }
+
+    public bool CanWeaponryDamageTargetUnit(Unit targetUnit)
+    {
+        return localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
     }
 
 #endregion

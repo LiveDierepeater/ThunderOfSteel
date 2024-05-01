@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class SpatialHashManager : MonoBehaviour
@@ -15,6 +16,11 @@ public class SpatialHashManager : MonoBehaviour
         {
             Instance = this;
         }
+    }
+
+    private void Start()
+    {
+        SpatialHash.InitializeCellOffsetsForDistanceCalculation();
     }
 
     // Optional Methods for Adding/Removing of Objects could get added here as Wrapper.
