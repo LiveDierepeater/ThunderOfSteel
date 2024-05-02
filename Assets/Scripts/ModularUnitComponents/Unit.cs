@@ -132,7 +132,7 @@ public class Unit : MonoBehaviour
     {
         if (IsUnitDead)
         {
-            UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
+            //UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
             transform.gameObject.SetActive(false);
         }
     }
@@ -145,8 +145,11 @@ public class Unit : MonoBehaviour
     {
         if (RandomizeUnitPlayerID)
         {
+            Vector2Int currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+            SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(this, currentHashKey);
             UnitData.PlayerID = Random.Range(0, 999999);
             UnitPlayerID = UnitData.PlayerID;
+            SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
             RandomizeUnitPlayerID = false;
         }
     }
