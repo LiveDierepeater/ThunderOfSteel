@@ -32,7 +32,7 @@ public class WeaponryHandler : MonoBehaviour
         if (inactiveWeaponsCount == 0) return;
         
         // Cashes nearbyEnemies
-        var nearbyUnits = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsInNearbyHashKeys(transform.position);
+        var nearbyUnits = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsFromDifferentTeams(transform.position, inactiveWeapons[0].localPlayerID);
         var closestEnemies = new Unit[inactiveWeaponsCount];
         var closestDistanceSqrt = new float[inactiveWeaponsCount];
         
@@ -43,7 +43,7 @@ public class WeaponryHandler : MonoBehaviour
         foreach (var nearbyUnit in nearbyUnits)
         {
             // Continues foreach, if nearbyUnit is in same Team
-            if (inactiveWeapons[0].IsTargetUnitInSameTeam(nearbyUnit.UnitPlayerID)) continue;
+            //if (inactiveWeapons[0].IsTargetUnitInSameTeam(nearbyUnit.UnitPlayerID)) continue;
             
             // Goes through every weapon in 'inactiveWeapons'
             for (var index = 0; index < inactiveWeapons.Count; index++)

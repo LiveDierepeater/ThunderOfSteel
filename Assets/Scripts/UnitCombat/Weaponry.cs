@@ -170,6 +170,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         }
     }
 
+    /*
     private void CheckForNewTargetInRange()
     {
         if (_targetUnit is not null) return;
@@ -226,6 +227,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         _targetUnit = closestEnemy;
         AddWeaponryToBattleManager(_targetUnit);
     }
+    */
 
 #endregion
 

@@ -7,7 +7,7 @@ public class SpatialHash
     public int RegisteredUnits { get; private set; }
     private List<Unit> nearbyUnits = new();
     
-    private readonly Dictionary<Vector2Int, List<Unit>> _grid = new();
+    private Dictionary<Vector2Int, Dictionary<int, List<Unit>>> _grid = new Dictionary<Vector2Int, Dictionary<int, List<Unit>>>();
     private const float CellSize = 500f;
     
     /// <summary>
@@ -30,40 +30,55 @@ public class SpatialHash
         return new Vector2Int(Mathf.FloorToInt(position.x / CellSize), Mathf.FloorToInt(position.z / CellSize));
     }
     
+    /*
     // Adds an Object to the Hash
     public void AddObject(Unit obj)
     {
         Vector2Int hashKey = CalculateHashKey(obj.transform.position);
         AddObjectWithHashKey(obj, hashKey);
     }
+    */
     
-    public void AddObjectWithHashKey(Unit obj, Vector2Int hashKey)
+    public void AddObjectWithHashKey(Unit unit, Vector2Int hashKey)
     {
+        int playerID = unit.UnitPlayerID;
+
         if (!_grid.ContainsKey(hashKey))
         {
-            _grid[hashKey] = new List<Unit>();
+            _grid[hashKey] = new Dictionary<int, List<Unit>>();
         }
 
-        if (_grid[hashKey].Contains(obj))
+        if (!_grid[hashKey].ContainsKey(playerID))
         {
-            throw new Exception("Already Exists");
+            _grid[hashKey][playerID] = new List<Unit>();
         }
-        _grid[hashKey].Add(obj);
+
+        _grid[hashKey][playerID].Add(unit);
         RegisteredUnits += 1;
     }
 
+    /*
     // Removes an Object from the Hash
     public void RemoveObject(Unit obj, Vector3 oldPosition)
     {
         Vector2Int hashKey = CalculateHashKey(oldPosition);
         RemoveObjectWithHashKey(obj, hashKey);
     }
-
-    public void RemoveObjectWithHashKey(Unit obj, Vector2Int hashKey)
+    */
+    
+    public void RemoveObjectWithHashKey(Unit unit, Vector2Int hashKey)
     {
-        if (_grid.ContainsKey(hashKey))
+        int playerID = unit.UnitPlayerID;
+
+        if (_grid.ContainsKey(hashKey) && _grid[hashKey].ContainsKey(playerID))
         {
-            _grid[hashKey].Remove(obj);
+            _grid[hashKey][playerID].Remove(unit);
+
+            if (_grid[hashKey][playerID].Count == 0)
+            {
+                _grid[hashKey].Remove(playerID);
+            }
+
             if (_grid[hashKey].Count == 0)
             {
                 _grid.Remove(hashKey);
@@ -72,6 +87,7 @@ public class SpatialHash
         RegisteredUnits -= 1;
     }
 
+    /*
     // Find all Units close to the 'position'
     public List<Unit> GetNearbyUnits(Vector3 position, bool alsoSearchInNearbyHashKeys)
     {
@@ -87,7 +103,9 @@ public class SpatialHash
         }
         return new List<Unit>();
     }
+    */
     
+    /*
     public List<Unit> GetNearbyUnitsInNearbyHashKeys(Vector3 position)
     {
         nearbyUnits.Clear();
@@ -113,6 +131,7 @@ public class SpatialHash
         
         return nearbyUnits;
     }
+    */
 
     public void InitializeCellOffsetsForDistanceCalculation()
     {
@@ -121,5 +140,26 @@ public class SpatialHash
         {
             precomputedOffsets.Add(new Vector2(offset.x * CellSize, offset.y * CellSize));
         }
+    }
+
+    // Find all Units close to the 'position' from different teams
+    public List<Unit> GetNearbyUnitsFromDifferentTeams(Vector3 position, int playerID)
+    {
+        List<Unit> nearbyUnits = new List<Unit>();
+
+        Vector2Int hashKey = CalculateHashKey(position);
+
+        if (_grid.TryGetValue(hashKey, out var teams))
+        {
+            foreach (var kvp in teams)
+            {
+                if (kvp.Key != playerID)
+                {
+                    nearbyUnits.AddRange(kvp.Value);
+                }
+            }
+        }
+
+        return nearbyUnits;
     }
 }

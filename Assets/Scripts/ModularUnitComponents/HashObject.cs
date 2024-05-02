@@ -27,7 +27,8 @@ public class HashObject : MonoBehaviour
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        SpatialHashManager.Instance.SpatialHash.RemoveObject(_unit, lastPosition);
+        _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(_unit, _lastHashKey);
     }
 
     private void HandleTick()
@@ -49,6 +50,7 @@ public class HashObject : MonoBehaviour
 
     private void OnDestroy()
     {
-        SpatialHashManager.Instance.SpatialHash.RemoveObject(_unit, transform.position);
+        _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(_unit, _lastHashKey);
     }
 }
