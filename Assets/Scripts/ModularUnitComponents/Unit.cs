@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public bool IsUnitDead { get; private set; }
+    private bool IsUnitDead { get; set; }
     
     [Header("Data")]
     [ExposedScriptableObject]
@@ -147,7 +147,19 @@ public class Unit : MonoBehaviour
         {
             Vector2Int currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
             SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(this, currentHashKey);
-            UnitData.PlayerID = Random.Range(0, 999999);
+            //UnitData.PlayerID = Random.Range(0, 999999);
+            UnitData.PlayerID++;
+            UnitPlayerID = UnitData.PlayerID;
+            SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
+            RandomizeUnitPlayerID = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.K) && selectionSprite.gameObject.activeSelf)
+        {
+            Vector2Int currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+            SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(this, currentHashKey);
+            //UnitData.PlayerID = Random.Range(0, 999999);
+            UnitData.PlayerID++;
             UnitPlayerID = UnitData.PlayerID;
             SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
             RandomizeUnitPlayerID = false;

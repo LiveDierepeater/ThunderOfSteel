@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class UnitManager : MonoBehaviour
 {
-    public static UnitManager Instance { get; private set; }
+    private static UnitManager Instance { get; set; }
 
     // Dictionary for mapping PlayerIDs to the lists of units per team
-    private Dictionary<int, List<Unit>> _teamUnits = new Dictionary<int, List<Unit>>();
+    private readonly Dictionary<int, List<Unit>> _teamUnits = new Dictionary<int, List<Unit>>();
 
     // List of existing PlayerIDs
-    private List<int> _playerIDs = new List<int>();
+    private readonly List<int> _playerIDs = new List<int>();
 
     private void Awake()
     {
@@ -31,9 +31,8 @@ public class UnitManager : MonoBehaviour
             _playerIDs.Add(unitsPlayerID);
             
             // Create a new first team List
-            List<Unit> newTeamList = new List<Unit>();
-            newTeamList.Add(unit);
-            
+            List<Unit> newTeamList = new List<Unit> { unit };
+
             // Add the new list to the dictionary
             _teamUnits.Add(unitsPlayerID, newTeamList);
         }
@@ -49,9 +48,8 @@ public class UnitManager : MonoBehaviour
                 _playerIDs.Add(unitsPlayerID);
                 
                 // Create a new list for the new team
-                List<Unit> newTeamList = new List<Unit>();
-                newTeamList.Add(unit);
-                
+                List<Unit> newTeamList = new List<Unit> { unit };
+
                 // Add the new list to the dictionary
                 _teamUnits.Add(unitsPlayerID, newTeamList);
             }

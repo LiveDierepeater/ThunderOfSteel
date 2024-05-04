@@ -10,10 +10,11 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public ArtilleryShell artilleryShellPrefab;
     public TankShell tankShellPrefab;
     
+    public Unit _targetUnit { get; private set; }
+    
 #region Internal Fields
 
     // Private Fields
-    private Unit _targetUnit;
     private UnitWeaponry _weaponryData;
 
     private int _damage_Infantry;
@@ -114,6 +115,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     public void SetTarget(Unit target)
     {
+        // Informs BattleManager, if the target was not set to null
+        if (target is not null) BattleManager.Instance.StartAttack(this, target);
+        
         _targetUnit = target;
     }
 
@@ -170,65 +174,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
         }
     }
 
-    /*
-    private void CheckForNewTargetInRange()
-    {
-        if (_targetUnit is not null) return;
-
-        var nearbyObjects =
-            SpatialHashManager.Instance.SpatialHash.GetNearbyUnits(transform.position, true);
-        Unit closestEnemy = null;
-        var closestDistanceSqrt = 1000000f;
-        //bool foundItself = false;
-        
-        // First iteration of nearbyObjects in own HashKey
-        foreach (var nearbyObject in nearbyObjects)
-        {
-            if (CanWeaponryAttackTarget(nearbyObject))
-            {
-                var distanceSqrt = Vector3.SqrMagnitude(nearbyObject.transform.position - transform.position);
-                
-                if (distanceSqrt <= .2) continue; // Skip itself
-        
-                if (distanceSqrt < closestDistanceSqrt && distanceSqrt <= MaxAttackRange * MaxAttackRange)
-                {
-                    closestDistanceSqrt = distanceSqrt;
-                    closestEnemy = nearbyObject;
-                }
-            }
-        }
-        
-        // When no enemy got found second iteration starts
-        // Second Iteration of nearbyObjects in nearby HashKeys except own HashKey
-        if (closestEnemy is null)
-        {
-            nearbyObjects = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsInNearbyHashKeys(transform.position);
-            closestDistanceSqrt = 1000000f;
-        
-            foreach (var nearbyObject in nearbyObjects)
-            {
-                if (CanWeaponryAttackTarget(nearbyObject))
-                {
-                    var distanceSqrt = Vector3.SqrMagnitude(nearbyObject.transform.position - transform.position);
-                    
-                    if (distanceSqrt <= .2) continue; // Skip itself
-            
-                    if (distanceSqrt < closestDistanceSqrt && distanceSqrt <= MaxAttackRange * MaxAttackRange)
-                    {
-                        closestDistanceSqrt = distanceSqrt;
-                        closestEnemy = nearbyObject;
-                    }
-                }
-            }
-        }
-        
-        if (closestEnemy is null) return;
-        
-        _targetUnit = closestEnemy;
-        AddWeaponryToBattleManager(_targetUnit);
-    }
-    */
-
 #endregion
 
 #region Extracted Logic Methods
@@ -272,11 +217,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private void ApplyDamageToTarget()
     {
         _targetUnit.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)_targetUnit.UnitData.Armor]);
-    }
-
-    public void AddWeaponryToBattleManager(Unit target)
-    {
-        BattleManager.Instance.StartAttack(this, target);
     }
 
     private void InitializeProjectile(Projectile projectileInstance, Unit target)
@@ -323,16 +263,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private bool IsWeaponsCoolDownActive()
     {
         return CooldownManager.Instance.IsCooldownActive(GetInstanceID());
-    }
-
-    public Unit GetTargetUnit()
-    {
-        return _targetUnit;
-    }
-
-    public bool IsTargetUnitInSameTeam(int playerID)
-    {
-        return playerID == localPlayerID;
     }
 
     public bool CanWeaponryDamageTargetUnit(Unit targetUnit)

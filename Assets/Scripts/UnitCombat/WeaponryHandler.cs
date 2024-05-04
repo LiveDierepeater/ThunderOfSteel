@@ -50,22 +50,16 @@ public class WeaponryHandler : MonoBehaviour
         // Iterates through every Unit in nearby HashKeys
         foreach (var nearbyUnit in nearbyUnits)
         {
-            // Continues foreach, if nearbyUnit is in same Team
-            //if (inactiveWeapons[0].IsTargetUnitInSameTeam(nearbyUnit.UnitPlayerID)) continue;
-            
             // Goes through every weapon in 'inactiveWeapons'
             for (var index = 0; index < inactiveWeapons.Count; index++)
             {
                 var inactiveWeapon = inactiveWeapons[index];
                 
                 // Continues for, if current 'inactiveWeapon' cannot damage 'nearbyUnit'
-                if (!inactiveWeapon.CanWeaponryDamageTargetUnit(nearbyUnit)) continue;
+                if ( ! inactiveWeapon.CanWeaponryDamageTargetUnit(nearbyUnit)) continue;
                 
                 // Calculates squared distance to 'nearbyUnit'
                 var distanceSqrt = Vector3.SqrMagnitude(nearbyUnit.transform.position - transform.position);
-                
-                // Skip itself, if distance to 'nearbyUnit' is too close
-                if (distanceSqrt <= .2) continue;
                 
                 // Stores the enemy 'nearbyUnit' and it's distance to it in the current index slot
                 if (distanceSqrt < closestDistanceSqrt[index] && distanceSqrt <= inactiveWeapon.MaxAttackRange * inactiveWeapon.MaxAttackRange)
@@ -85,7 +79,6 @@ public class WeaponryHandler : MonoBehaviour
             // Sets the enemy targetUnit for the current Weaponry
             // Adds the current Weaponry to the BattleManager.cs
             inactiveWeapons[index].SetTarget(closestEnemies[index]);
-            inactiveWeapons[index].AddWeaponryToBattleManager(closestEnemies[index]);
         }
     }
 
@@ -95,7 +88,7 @@ public class WeaponryHandler : MonoBehaviour
         
         foreach (var weaponry in _weapons)
         {
-            if (weaponry.GetTargetUnit() is not null) continue;
+            if (weaponry._targetUnit is not null) continue;
             searchingWeapons.Add(weaponry);
         }
         
