@@ -3,22 +3,30 @@ using UnityEngine;
 
 public class WeaponryHandler : MonoBehaviour
 {
-    private readonly List<Weaponry> _weapons = new();
+    private Weaponry[] _weapons = new Weaponry[5];
     private List<Weaponry> inactiveWeapons = new();
 
     private void Start()
     {
+        InitializeWeaponryArray();
+        
+        TickManager.Instance.TickSystem.OnTick += UpdateTargets;
+    }
+
+    private void InitializeWeaponryArray()
+    {
+        int i = 0;
         // Find all Weaponry objects as children of this object
         foreach (Transform child in transform)
         {
             var weaponry = child.GetComponent<Weaponry>();
             if (weaponry != null)
             {
-                _weapons.Add(weaponry);
+                _weapons[i] = weaponry;
+                i++;
             }
         }
-        
-        TickManager.Instance.TickSystem.OnTick += UpdateTargets;
+        System.Array.Resize(ref _weapons, i);
     }
 
     private void UpdateTargets()
