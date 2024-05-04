@@ -143,27 +143,23 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (RandomizeUnitPlayerID)
-        {
-            Vector2Int currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
-            SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(this, currentHashKey);
-            //UnitData.PlayerID = Random.Range(0, 999999);
-            UnitData.PlayerID++;
-            UnitPlayerID = UnitData.PlayerID;
-            SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
-            RandomizeUnitPlayerID = false;
-        }
+        if (RandomizeUnitPlayerID) RandomizePlayerID();
+        if (Input.GetKeyDown(KeyCode.K) && selectionSprite.gameObject.activeSelf) RandomizePlayerID();
+    }
 
-        if (Input.GetKeyDown(KeyCode.K) && selectionSprite.gameObject.activeSelf)
-        {
-            Vector2Int currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
-            SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(this, currentHashKey);
-            //UnitData.PlayerID = Random.Range(0, 999999);
-            UnitData.PlayerID++;
-            UnitPlayerID = UnitData.PlayerID;
-            SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
-            RandomizeUnitPlayerID = false;
-        }
+    private void RandomizePlayerID()
+    {
+        Vector2Int currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
+            
+        SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(this, currentHashKey);
+            
+        int newPlayerID = Random.Range(0, 999999);
+        UnitPlayerID = newPlayerID;
+        UnitData.PlayerID = newPlayerID;
+            
+        SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
+
+        RandomizeUnitPlayerID = false;
     }
 
 #endregion

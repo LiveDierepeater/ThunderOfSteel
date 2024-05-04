@@ -29,7 +29,7 @@ public class SpatialHash
     public void AddObjectWithHashKey(Unit unit, Vector2Int hashKey)
     {
         int playerID = unit.UnitPlayerID;
-
+        
         if ( ! _grid.ContainsKey(hashKey))
         {
             _grid[hashKey] = new Dictionary<int, List<Unit>>();
@@ -47,7 +47,7 @@ public class SpatialHash
     public void RemoveObjectWithHashKey(Unit unit, Vector2Int hashKey)
     {
         int playerID = unit.UnitPlayerID;
-
+        
         if (_grid.ContainsKey(hashKey) && _grid[hashKey].ContainsKey(playerID))
         {
             _grid[hashKey][playerID].Remove(unit);

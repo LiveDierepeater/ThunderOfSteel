@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponryHandler : MonoBehaviour
+public class WeaponryHandler : UnitSystem
 {
     private Weaponry[] _weapons = new Weaponry[5];
     private List<Weaponry> inactiveWeapons = new();
@@ -10,7 +10,7 @@ public class WeaponryHandler : MonoBehaviour
     {
         InitializeWeaponryArray();
         
-        TickManager.Instance.TickSystem.OnTick += UpdateTargets;
+        TickManager.Instance.TickSystem.OnTick += HandleTick;
     }
 
     private void InitializeWeaponryArray()
@@ -27,6 +27,14 @@ public class WeaponryHandler : MonoBehaviour
             }
         }
         System.Array.Resize(ref _weapons, i);
+    }
+
+    private void HandleTick()
+    {
+        // DEBUG -> Updating Weaponry's 'localPlayerID'
+        foreach (var weaponry in _weapons) weaponry.localPlayerID = Unit.UnitPlayerID;
+        
+        UpdateTargets();
     }
 
     private void UpdateTargets()
