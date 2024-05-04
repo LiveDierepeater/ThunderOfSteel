@@ -41,7 +41,7 @@ public class WeaponryHandler : UnitSystem
     {
         // Find inactive Weapons which can search for a new target
         // Cashes 'inactiveWeapons.Count'
-        inactiveWeapons = WeaponsSearchingForTarget();
+        inactiveWeapons = GetWeaponsSearchingForTarget();
         int inactiveWeaponsCount = inactiveWeapons.Count;
         
         // Return, if there are no inactive weapons
@@ -90,7 +90,7 @@ public class WeaponryHandler : UnitSystem
         }
     }
 
-    private List<Weaponry> WeaponsSearchingForTarget()
+    private List<Weaponry> GetWeaponsSearchingForTarget()
     {
         var searchingWeapons = new List<Weaponry>();
         
