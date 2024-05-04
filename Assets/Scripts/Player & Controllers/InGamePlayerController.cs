@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class InGamePlayerController : MonoBehaviour
 {
+    public CameraSystem CameraSystem;
     public GameObject moveToSpritePrefab;
     
     private new Camera camera;
