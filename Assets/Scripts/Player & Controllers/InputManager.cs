@@ -34,6 +34,7 @@ public class InputManager : InputReader
     private void Start()
     {
         _gameManager.OnChangedGameState += ChangePlayerController;
+        ActivatePlayerController(_inGamePlayerController);
     }
 
     #endregion

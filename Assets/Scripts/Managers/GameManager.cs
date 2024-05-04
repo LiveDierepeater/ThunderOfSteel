@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        State = GameState.MainMenu;
+        State = GameState.InGame;
     }
 
     private void Start()
