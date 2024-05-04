@@ -22,10 +22,13 @@ public class CameraSystem : MonoBehaviour
         if (Input.GetKey(KeyCode.A)) inputDirection.x = -1f;
         if (Input.GetKey(KeyCode.D)) inputDirection.x = +1f;
 
-        if (Input.mousePosition.x < EdgeScrollSize) inputDirection.x = -0.5f;
-        if (Input.mousePosition.y < EdgeScrollSize) inputDirection.z = -0.5f;
-        if (Input.mousePosition.x > Screen.width - EdgeScrollSize) inputDirection.x = +0.5f;
-        if (Input.mousePosition.y > Screen.height - EdgeScrollSize) inputDirection.z = +0.5f;
+        if (UseEdgeScrolling)
+        {
+            if (Input.mousePosition.x < EdgeScrollSize) inputDirection.x = -0.5f;
+            if (Input.mousePosition.y < EdgeScrollSize) inputDirection.z = -0.5f;
+            if (Input.mousePosition.x > Screen.width - EdgeScrollSize) inputDirection.x = +0.5f;
+            if (Input.mousePosition.y > Screen.height - EdgeScrollSize) inputDirection.z = +0.5f;
+        }
         
         Vector3 moveDirection = transform.forward * inputDirection.z + transform.right * inputDirection.x;
         transform.position += moveDirection * (MoveSpeed * Time.deltaTime);
