@@ -33,7 +33,6 @@ public class InputManager : InputReader
 
     private void Start()
     {
-        _gameManager.OnChangedGameState += ChangePlayerController;
         ActivatePlayerController(_inGamePlayerController);
     }
 
@@ -62,10 +61,13 @@ public class InputManager : InputReader
         }
     }
 
+    // ATTENTION: Only Call this Function once!
     public void SetGameManager(GameManager newGameManager)
     {
         _gameManager = newGameManager;
         _gameState = _gameManager.State;
+        
+        _gameManager.OnChangedGameState += ChangePlayerController;
     }
 
     #endregion
