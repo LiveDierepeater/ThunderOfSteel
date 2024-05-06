@@ -31,9 +31,11 @@ public class CameraSystem : MonoBehaviour
     private float _standardMoveSpeed;
     private float _standardDragPanSpeed;
     private float _standardRotateSpeed;
+    private float _standardZoomAmount;
     private float _fastMoveSpeed;
     private float _fastDragPanSpeed;
     private float _fastRotateSpeed;
+    private float _fastZoomAmount;
     
     private bool _isMouseRotatingActive;
     private bool _isDragPanMoveActive;
@@ -46,9 +48,11 @@ public class CameraSystem : MonoBehaviour
         _standardMoveSpeed = MoveSpeed;
         _standardRotateSpeed = RotateSpeed;
         _standardDragPanSpeed = DragPanSpeed;
+        _standardZoomAmount = ZoomAmount / 5f;
         _fastMoveSpeed = _standardMoveSpeed * 3f;
         _fastRotateSpeed = _standardRotateSpeed * 1.5f;
         _fastDragPanSpeed = _standardDragPanSpeed;
+        _fastZoomAmount = ZoomAmount;
     }
 
     private void Update()
@@ -180,12 +184,14 @@ public class CameraSystem : MonoBehaviour
             MoveSpeed = _fastMoveSpeed;
             RotateSpeed = _fastRotateSpeed;
             DragPanSpeed = _fastDragPanSpeed;
+            ZoomAmount = _fastZoomAmount;
         }
         else
         {
             MoveSpeed = _standardMoveSpeed;
             RotateSpeed = _standardRotateSpeed;
             DragPanSpeed = _standardDragPanSpeed;
+            ZoomAmount = _standardZoomAmount;
         }
     }
 
