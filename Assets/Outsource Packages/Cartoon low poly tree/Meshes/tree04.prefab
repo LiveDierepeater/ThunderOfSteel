@@ -60,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Tree_04_LOD_01
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e6a0d3e64cc0754459d7ae3bc2519853, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -135,6 +139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Tree_04_LOD_02
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6751636f8a3510a4c9bc88a8928217b2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -161,6 +169,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
       propertyPath: m_Name
       value: tree04
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
       propertyPath: m_LocalScale.x

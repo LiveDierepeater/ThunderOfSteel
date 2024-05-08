@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &4689182684747853756
+--- !u!1001 &3463532467119672716
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -49,10 +49,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 29b741d48ac592848a950e9c15bb9949, type: 3}
-      propertyPath: m_ScaleInLightmap
-      value: 1.8079104
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 29b741d48ac592848a950e9c15bb9949, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: faff3c7e646bbbe4fb407521f496cea9, type: 2}
@@ -65,15 +61,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 29b741d48ac592848a950e9c15bb9949, type: 3}
---- !u!4 &5087356411578648663 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 29b741d48ac592848a950e9c15bb9949, type: 3}
-  m_PrefabInstance: {fileID: 4689182684747853756}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &6256282113569223480 stripped
+--- !u!23 &2869186366339666184 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 29b741d48ac592848a950e9c15bb9949, type: 3}
-  m_PrefabInstance: {fileID: 4689182684747853756}
+  m_PrefabInstance: {fileID: 3463532467119672716}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4006595155259697767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 29b741d48ac592848a950e9c15bb9949, type: 3}
+  m_PrefabInstance: {fileID: 3463532467119672716}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5422890328796980859
 PrefabInstance:
@@ -86,6 +82,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
       propertyPath: m_Name
       value: tree07
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
       propertyPath: m_LocalScale.x
@@ -156,18 +156,18 @@ PrefabInstance:
       addedObject: {fileID: 7947894866757819364}
     - targetCorrespondingSourceObject: {fileID: 400000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5087356411578648663}
+      addedObject: {fileID: 4006595155259697767}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6878373633762226782}
+      addedObject: {fileID: 2248649910951857495}
   m_SourcePrefab: {fileID: 100100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
 --- !u!1 &5422890328797077723 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 5863453db05cbdc46a18aed2eb08ffbc, type: 3}
   m_PrefabInstance: {fileID: 5422890328796980859}
   m_PrefabAsset: {fileID: 0}
---- !u!205 &6878373633762226782
+--- !u!205 &2248649910951857495
 LODGroup:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,18 +181,18 @@ LODGroup:
   m_AnimateCrossFading: 0
   m_LastLODIsBillboard: 0
   m_LODs:
-  - screenRelativeHeight: 0.9486937
+  - screenRelativeHeight: 0.9809986
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 5422890328799280667}
-  - screenRelativeHeight: 0.4519776
+  - screenRelativeHeight: 0.6670772
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 9081425743533039755}
-  - screenRelativeHeight: 0
+  - screenRelativeHeight: 0.08271238
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 6256282113569223480}
+    - renderer: {fileID: 2869186366339666184}
   m_Enabled: 1
 --- !u!4 &5422890328797379835 stripped
 Transform:
@@ -254,7 +254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3be75fe00f5a5c747a853ebc0e3de7d6, type: 3}
       propertyPath: m_ScaleInLightmap
-      value: 1.8973874
+      value: 1.9619972
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3be75fe00f5a5c747a853ebc0e3de7d6, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -263,6 +263,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 3be75fe00f5a5c747a853ebc0e3de7d6, type: 3}
       propertyPath: m_Name
       value: SM_Tree_07_LOD_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 3be75fe00f5a5c747a853ebc0e3de7d6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
