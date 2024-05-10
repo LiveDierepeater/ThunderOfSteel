@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9033711903113486012, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -48,13 +52,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4167790031135544870, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -540910593152406926, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: faff3c7e646bbbe4fb407521f496cea9, type: 2}
+    - target: {fileID: 112212316182836057, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
       propertyPath: m_Name
       value: SM_Tree_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 1792773673383777532, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -79,6 +95,10 @@ PrefabInstance:
     - target: {fileID: 4742473837712756890, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
       propertyPath: m_LODs.Array.data[2].screenRelativeHeight
       value: 0.07271796
+      objectReference: {fileID: 0}
+    - target: {fileID: 4957304480201643003, guid: bf7e2a2415b01d44fa117dcf0edc1570, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -52,6 +52,18 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: faff3c7e646bbbe4fb407521f496cea9, type: 2}
+    - target: {fileID: -7840354352272233682, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -5310440618043738408, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: -3774817507989072713, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -3117960420424658829, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -67,6 +79,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
       propertyPath: m_Name
       value: SM_Tree_08
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2508452906259805223, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 4742473837712756890, guid: 6c5b462809d5fd64eb0b898064f58374, type: 3}
       propertyPath: m_LODs.Array.data[0].screenRelativeHeight

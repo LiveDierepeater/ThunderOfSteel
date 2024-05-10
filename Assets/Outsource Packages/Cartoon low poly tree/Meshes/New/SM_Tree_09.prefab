@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9107232058476062267, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -8759728706367422353, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -56,6 +60,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: faff3c7e646bbbe4fb407521f496cea9, type: 2}
+    - target: {fileID: -6536303398443639389, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: -5269204478473986942, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -64,10 +72,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SM_Tree_09
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3270242216276621134, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: faff3c7e646bbbe4fb407521f496cea9, type: 2}
+    - target: {fileID: 3436668014520569592, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4128023044668162920, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4742473837712756890, guid: eb473faea4fee5a4aacea126d408c71b, type: 3}
       propertyPath: m_LODs.Array.data[0].screenRelativeHeight
       value: 0.675936
