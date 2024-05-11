@@ -2473,10 +2473,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1226371209}
     m_Modifications:
-    - target: {fileID: 2825945031855990872, guid: d8860901d3842ae40bc40664cd233a52, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
-      objectReference: {fileID: 0}
     - target: {fileID: 3064784638446406538, guid: d8860901d3842ae40bc40664cd233a52, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2520,10 +2516,6 @@ PrefabInstance:
     - target: {fileID: 6751317761882354448, guid: d8860901d3842ae40bc40664cd233a52, type: 3}
       propertyPath: m_Name
       value: Map_Colditz
-      objectReference: {fileID: 0}
-    - target: {fileID: 6751317761882354448, guid: d8860901d3842ae40bc40664cd233a52, type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

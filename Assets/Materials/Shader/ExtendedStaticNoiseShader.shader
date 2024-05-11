@@ -1,6 +1,8 @@
 Shader "Custom/ExtendedStaticNoiseShader" {
     Properties {
-        _MainTex ("Base Color (RGB)", 2D) = "white" {}
+        _MainTex ("Grass Base Color (RGB)", 2D) = "white" {}
+        _NormalMap ("Grass Normal Map", 2D) = "bump" {}
+        _AOMap ("Grass AO Map", 2D) = "white" {}
         _NoiseTex ("Noise Texture", 2D) = "white" {}
         _NoiseColor ("Primary Noise Color", Color) = (1,1,1,1)
         _SecondaryNoiseColor ("Secondary Noise Color", Color) = (1,1,1,1)
@@ -14,10 +16,13 @@ Shader "Custom/ExtendedStaticNoiseShader" {
         _PrimaryNoiseContrast ("Primary Noise Contrast", Range(0.1, 2.0)) = 1.0
         _SecondaryNoiseContrast ("Secondary Noise Contrast", Range(0.1, 2.0)) = 1.0
         _TertiaryNoiseContrast ("Tertiary Noise Contrast", Range(0.1, 2.0)) = 1.0
-        _NormalMap ("Normal Map", 2D) = "bump" {}
-        _Metallic ("Metallic", Range(0, 1)) = 0.5 // Metallic-Eigenschaft hinzugefügt
-        _Smoothness ("Smoothness", Range(0, 1)) = 0.5 // Smoothness-Eigenschaft hinzugefügt
-        _AOMap ("AO Map", 2D) = "white" {}
+        _Metallic ("Metallic", Range(0, 1)) = 0.5
+        _Smoothness ("Smoothness", Range(0, 1)) = 0.5
+        
+        _ColorThreshold ("Color Threshold", Range(0.0, 1.0)) = 0.5
+        _AltMainTex ("Forest Base Color (RGB)", 2D) = "white" {}
+        _AltNormalMap ("Forest Normal Map", 2D) = "bump" {}
+        _AltAOMap ("Forest AO Map", 2D) = "white" {}
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -28,12 +33,16 @@ Shader "Custom/ExtendedStaticNoiseShader" {
 
         struct Input {
             float2 uv_MainTex;
+            float2 uv_AltMainTex;
             float3 worldPos;
             float2 uv_NormalMap;
             float2 uv_AOMap;
+            fixed4 color : COLOR; // Vertex color input
         };
 
         sampler2D _MainTex;
+        sampler2D _NormalMap;
+        sampler2D _AOMap;
         sampler2D _NoiseTex;
         fixed4 _NoiseColor;
         fixed4 _SecondaryNoiseColor;
@@ -47,34 +56,33 @@ Shader "Custom/ExtendedStaticNoiseShader" {
         float _PrimaryNoiseContrast;
         float _SecondaryNoiseContrast;
         float _TertiaryNoiseContrast;
-        sampler2D _NormalMap;
-        sampler2D _AOMap;
         float _Metallic;
         float _Smoothness;
+        
+        float _ColorThreshold;
+        sampler2D _AltMainTex;
+        sampler2D _AltNormalMap;
+        sampler2D _AltAOMap;
 
         void surf (Input IN, inout SurfaceOutputStandard o) {
-            fixed4 c = tex2D(_MainTex, IN.uv_MainTex);
-
-            // Anwendung der Noise Texturen
+            // Anwendung der Noise Texturen mit separaten Impact-Werten für jede Schicht
             fixed2 primaryCoord = IN.worldPos.xz / _Scale;
             fixed2 secondaryCoord = IN.worldPos.xz / _SecondaryScale;
             fixed2 tertiaryCoord = IN.worldPos.xz / _TertiaryScale;
-            fixed4 primaryNoise = pow(tex2D(_NoiseTex, primaryCoord), _PrimaryNoiseContrast);
-            fixed4 secondaryNoise = pow(tex2D(_NoiseTex, secondaryCoord), _SecondaryNoiseContrast);
-            fixed4 tertiaryNoise = pow(tex2D(_NoiseTex, tertiaryCoord), _TertiaryNoiseContrast);
+            fixed4 primaryNoise = pow(tex2D(_NoiseTex, primaryCoord), _PrimaryNoiseContrast) * _PrimaryNoiseImpact;
+            fixed4 secondaryNoise = pow(tex2D(_NoiseTex, secondaryCoord), _SecondaryNoiseContrast) * _SecondaryNoiseImpact;
+            fixed4 tertiaryNoise = pow(tex2D(_NoiseTex, tertiaryCoord), _TertiaryNoiseContrast) * _TertiaryNoiseImpact;
+            
+            // Auswahl der Texturen basierend auf Vertex-Farben und Schwelle
+            float vertexColorInfluence = saturate((IN.color.g - _ColorThreshold) * tertiaryNoise * tertiaryNoise * _TertiaryScale / 2);
+            fixed4 texColor = lerp(tex2D(_MainTex, IN.uv_MainTex), tex2D(_AltMainTex, IN.uv_AltMainTex), vertexColorInfluence);
+            fixed3 normal = lerp(UnpackNormal(tex2D(_NormalMap, IN.uv_NormalMap)), UnpackNormal(tex2D(_AltNormalMap, IN.uv_AltMainTex)), vertexColorInfluence);
+            fixed ao = lerp(tex2D(_AOMap, IN.uv_AOMap).r, tex2D(_AltAOMap, IN.uv_AltMainTex).r, vertexColorInfluence);
 
-            fixed4 modulatedPrimaryNoise = lerp(fixed4(1, 1, 1, 1), primaryNoise * _NoiseColor, _PrimaryNoiseImpact);
-            fixed4 modulatedSecondaryNoise = lerp(fixed4(1, 1, 1, 1), secondaryNoise * _SecondaryNoiseColor, _SecondaryNoiseImpact);
-            fixed4 modulatedTertiaryNoise = lerp(fixed4(1, 1, 1, 1), tertiaryNoise * _TertiaryNoiseColor, _TertiaryNoiseImpact);
-
-            fixed4 combinedNoise = modulatedPrimaryNoise * modulatedSecondaryNoise * modulatedTertiaryNoise;
-
-            // Normal Map und AO Map
-            fixed3 normal = UnpackNormal(tex2D(_NormalMap, IN.uv_NormalMap));
-            fixed ao = tex2D(_AOMap, IN.uv_AOMap).r;
+            fixed4 combinedNoise = primaryNoise * secondaryNoise * tertiaryNoise;
 
             // Setup der finalen Material-Eigenschaften
-            o.Albedo = c.rgb * combinedNoise.rgb * ao;
+            o.Albedo = texColor.rgb * combinedNoise.rgb * ao * 20;
             o.Metallic = _Metallic;
             o.Smoothness = _Smoothness;
             o.Normal = normal;
