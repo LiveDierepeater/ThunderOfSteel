@@ -20,9 +20,13 @@ Shader "Custom/ExtendedStaticNoiseShader" {
         _Smoothness ("Smoothness", Range(0, 1)) = 0.5
         
         _ColorThreshold ("Color Threshold", Range(0.0, 1.0)) = 0.5
-        _AltMainTex ("Forest Base Color (RGB)", 2D) = "white" {}
-        _AltNormalMap ("Forest Normal Map", 2D) = "bump" {}
-        _AltAOMap ("Forest AO Map", 2D) = "white" {}
+        _AltMainTex ("River Rocks Base Color (RGB)", 2D) = "white" {}
+        _AltNormalMap ("River Rocks Nromal Map", 2D) = "bump" {}
+        _AltAOMap ("River Rocks AO Map", 2D) = "white" {}
+        
+        _ThirdTex ("Forest Base Color (RGB)", 2D) = "white" {}
+        _ThirdNormalMap ("Forest Normal Map", 2D) = "bump" {}
+        _ThirdAOMap ("Forest AO Map", 2D) = "white" {}
     }
     SubShader {
         Tags { "RenderType"="Opaque" }
@@ -30,10 +34,12 @@ Shader "Custom/ExtendedStaticNoiseShader" {
         
         CGPROGRAM
         #pragma surface surf Standard fullforwardshadows
+        #pragma target 3.0
 
         struct Input {
             float2 uv_MainTex;
             float2 uv_AltMainTex;
+            float2 uv_ThirdTex;
             float3 worldPos;
             float2 uv_NormalMap;
             float2 uv_AOMap;
@@ -64,6 +70,10 @@ Shader "Custom/ExtendedStaticNoiseShader" {
         sampler2D _AltNormalMap;
         sampler2D _AltAOMap;
 
+        sampler2D _ThirdTex;
+        sampler2D _ThirdNormalMap;
+        sampler2D _ThirdAOMap;
+
         void surf (Input IN, inout SurfaceOutputStandard o) {
             // Anwendung der Noise Texturen mit separaten Impact-Werten für jede Schicht
             fixed2 primaryCoord = IN.worldPos.xz / _Scale;
@@ -74,18 +84,24 @@ Shader "Custom/ExtendedStaticNoiseShader" {
             fixed4 tertiaryNoise = pow(tex2D(_NoiseTex, tertiaryCoord), _TertiaryNoiseContrast) * _TertiaryNoiseImpact;
             
             // Auswahl der Texturen basierend auf Vertex-Farben und Schwelle
-            float vertexColorInfluence = saturate((IN.color.g - _ColorThreshold) * tertiaryNoise * tertiaryNoise * _TertiaryScale / 2);
-            fixed4 texColor = lerp(tex2D(_MainTex, IN.uv_MainTex), tex2D(_AltMainTex, IN.uv_AltMainTex), vertexColorInfluence);
-            fixed3 normal = lerp(UnpackNormal(tex2D(_NormalMap, IN.uv_NormalMap)), UnpackNormal(tex2D(_AltNormalMap, IN.uv_AltMainTex)), vertexColorInfluence);
-            fixed ao = lerp(tex2D(_AOMap, IN.uv_AOMap).r, tex2D(_AltAOMap, IN.uv_AltMainTex).r, vertexColorInfluence);
+            float vertexColorInfluenceBlue = saturate((IN.color.b - _ColorThreshold * 1.25) * tertiaryNoise * tertiaryNoise * _TertiaryScale / 2);
+            fixed4 texColor = lerp(tex2D(_MainTex, IN.uv_MainTex), tex2D(_AltMainTex, IN.uv_AltMainTex), vertexColorInfluenceBlue);
+            fixed3 normal = lerp(UnpackNormal(tex2D(_NormalMap, IN.uv_NormalMap)), UnpackNormal(tex2D(_AltNormalMap, IN.uv_AltMainTex)), vertexColorInfluenceBlue);
+            fixed ao = lerp(tex2D(_AOMap, IN.uv_AOMap).r, tex2D(_AltAOMap, IN.uv_AltMainTex).r, vertexColorInfluenceBlue);
+
+            // River Rocks
+            float vertexColorInfluenceGreen = saturate((IN.color.g - _ColorThreshold) * tertiaryNoise * tertiaryNoise * _TertiaryScale / 2);
+            fixed4 newTexColor = lerp(texColor, tex2D(_ThirdTex, IN.uv_ThirdTex), vertexColorInfluenceGreen);
+            fixed3 newNormal = lerp(normal, UnpackNormal(tex2D(_ThirdNormalMap, IN.uv_ThirdTex)), vertexColorInfluenceGreen);
+            fixed newAO = lerp(ao, tex2D(_ThirdAOMap, IN.uv_ThirdTex).r, vertexColorInfluenceGreen);
 
             fixed4 combinedNoise = primaryNoise * secondaryNoise * tertiaryNoise;
 
             // Setup der finalen Material-Eigenschaften
-            o.Albedo = texColor.rgb * combinedNoise.rgb * ao * 20;
+            o.Albedo = newTexColor.rgb * combinedNoise.rgb * newAO * 20;
             o.Metallic = _Metallic;
             o.Smoothness = _Smoothness;
-            o.Normal = normal;
+            o.Normal = newNormal;
         }
         ENDCG
     }

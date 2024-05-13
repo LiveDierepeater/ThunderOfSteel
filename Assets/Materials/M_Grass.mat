@@ -30,15 +30,15 @@ Material:
         m_Scale: {x: 1500, y: 1500}
         m_Offset: {x: 0, y: 0}
     - _AltAOMap:
-        m_Texture: {fileID: 2800000, guid: b09041be2782c2c4d88ffddfeaa2fe6f, type: 3}
+        m_Texture: {fileID: 2800000, guid: 1ddbd50ee76edac418300be2afe784bd, type: 3}
         m_Scale: {x: 1000, y: 1000}
         m_Offset: {x: 0, y: 0}
     - _AltMainTex:
-        m_Texture: {fileID: 2800000, guid: a92a8246a14180642999e8815207db15, type: 3}
+        m_Texture: {fileID: 2800000, guid: c5ffa987e2917d34aabe2cd6cf575759, type: 3}
         m_Scale: {x: 1000, y: 1000}
         m_Offset: {x: 0, y: 0}
     - _AltNormalMap:
-        m_Texture: {fileID: 2800000, guid: cb2247427f92dca45b984cd78acaa8cf, type: 3}
+        m_Texture: {fileID: 2800000, guid: bf55935804f969048b3bad2e82f1bebd, type: 3}
         m_Scale: {x: 1000, y: 1000}
         m_Offset: {x: 0, y: 0}
     - _BumpMap:
@@ -92,6 +92,18 @@ Material:
     - _TerrainHolesTexture:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _ThirdAOMap:
+        m_Texture: {fileID: 2800000, guid: b09041be2782c2c4d88ffddfeaa2fe6f, type: 3}
+        m_Scale: {x: 1000, y: 1000}
+        m_Offset: {x: 0, y: 0}
+    - _ThirdNormalMap:
+        m_Texture: {fileID: 2800000, guid: cb2247427f92dca45b984cd78acaa8cf, type: 3}
+        m_Scale: {x: 1000, y: 1000}
+        m_Offset: {x: 0, y: 0}
+    - _ThirdTex:
+        m_Texture: {fileID: 2800000, guid: a92a8246a14180642999e8815207db15, type: 3}
+        m_Scale: {x: 1000, y: 1000}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
