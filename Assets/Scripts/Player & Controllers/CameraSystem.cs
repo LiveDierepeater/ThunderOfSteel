@@ -47,8 +47,8 @@ public class CameraSystem : MonoBehaviour
         _followOffset = _cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
         _standardMoveSpeed = MoveSpeed;
         _standardRotateSpeed = RotateSpeed;
-        _standardDragPanSpeed = DragPanSpeed;
-        _standardZoomAmount = ZoomAmount / 5f;
+        _standardDragPanSpeed = DragPanSpeed * 0.3f;
+        _standardZoomAmount = ZoomAmount * 0.2f;
         _fastMoveSpeed = _standardMoveSpeed * 3f;
         _fastRotateSpeed = _standardRotateSpeed * 1.5f;
         _fastDragPanSpeed = _standardDragPanSpeed;
