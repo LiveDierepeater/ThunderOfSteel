@@ -41,13 +41,13 @@ public class Unit : MonoBehaviour
             case UnitData.Type.Infantry:
                 gameObject.AddComponent<InfantryMovement>();
                 CreateWeaponry();
-                gameObject.AddComponent<UnitHealth>();
+                gameObject.AddComponent<UHealth>();
                 break;
 
             case UnitData.Type.Tank:
                 gameObject.AddComponent<TankMovement>();
                 CreateWeaponry();
-                gameObject.AddComponent<UnitHealth>();
+                gameObject.AddComponent<UHealth>();
                 break;
 
             case UnitData.Type.Truck:

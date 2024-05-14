@@ -1,4 +1,4 @@
-public class UnitHealth : UnitSystem
+public class UHealth : UnitSystem
 {
     // Stats Fields
     private int _maxHealth;
