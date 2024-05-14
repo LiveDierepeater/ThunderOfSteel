@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class TickSystem : MonoBehaviour
 {
+    public delegate void TickBeginDelegate();
+    public TickBeginDelegate OnTickBegin;
+    
     public delegate void TickDelegate();
     public TickDelegate OnTick;
     
@@ -27,7 +30,7 @@ public class TickSystem : MonoBehaviour
     {
         if (Time.time >= nextTick)
         {
-            // Calls Tick-Event here.
+            OnTickBegin?.Invoke();
             OnTick?.Invoke();
             OnTickEnd?.Invoke();
             

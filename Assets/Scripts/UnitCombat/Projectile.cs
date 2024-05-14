@@ -22,14 +22,15 @@ public abstract class Projectile : MonoBehaviour
 
     private void UpdateTargetPosition()
     {
-        try
-        {
-            targetPosition = target.transform.position;
-        }
-        catch (MissingReferenceException _)
-        {
-            
-        }
+        targetPosition = target.transform.position;
+        // try
+        // {
+        //     targetPosition = target.transform.position;
+        // }
+        // catch (MissingReferenceException _)
+        // {
+        //     
+        // }
     }
 
     protected virtual void UpdateProjectilePosition()
