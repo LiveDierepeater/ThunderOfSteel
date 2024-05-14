@@ -54,6 +54,9 @@ MonoBehaviour:
   interactableLayerMask:
     serializedVersion: 2
     m_Bits: 192
+  RaycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 768
 --- !u!1 &8379190462176672582
 GameObject:
   m_ObjectHideFlags: 0

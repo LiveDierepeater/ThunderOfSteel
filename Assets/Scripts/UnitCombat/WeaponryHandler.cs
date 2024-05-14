@@ -58,6 +58,9 @@ public class WeaponryHandler : UnitSystem
         // Iterates through every Unit in nearby HashKeys
         foreach (var nearbyUnit in nearbyUnits)
         {
+            // Continues for, if current 'nearbyUnt' is not spotted
+            if ( ! nearbyUnit.IsSpotted) continue;
+            
             // Goes through every weapon in 'inactiveWeapons'
             for (var index = 0; index < inactiveWeapons.Count; index++)
             {

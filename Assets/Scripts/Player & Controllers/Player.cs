@@ -7,4 +7,5 @@ public class Player : MonoBehaviour
     public LayerMask unitsLayerMask;
     public LayerMask terrainLayerMask;
     public LayerMask interactableLayerMask;
+    public LayerMask RaycastLayerMask;
 }

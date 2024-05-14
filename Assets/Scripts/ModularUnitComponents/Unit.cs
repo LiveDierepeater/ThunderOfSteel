@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour
 {
@@ -17,10 +18,13 @@ public class Unit : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
     public Transform ShellSpawnLocation;
-    public bool IsAttacking;
+    public bool IsAttacking; // Could be removed in future
     public bool RandomizeUnitPlayerID;
-
     public int UnitPlayerID;
+
+    [Space(10)]
+    public Unit SpottingUnit;
+    public bool IsSpotted;
 
     #region Initializing
 
@@ -42,22 +46,26 @@ public class Unit : MonoBehaviour
                 gameObject.AddComponent<InfantryMovement>();
                 CreateWeaponry();
                 gameObject.AddComponent<UHealth>();
+                gameObject.AddComponent<USpottingSystem>();
                 break;
-
+            
             case UnitData.Type.Tank:
                 gameObject.AddComponent<TankMovement>();
                 CreateWeaponry();
                 gameObject.AddComponent<UHealth>();
+                gameObject.AddComponent<USpottingSystem>();
                 break;
-
+            
             case UnitData.Type.Truck:
+                gameObject.AddComponent<InfantryMovement>();
+                gameObject.AddComponent<UHealth>();
                 break;
-
+            
             default:
                 Debug.LogWarning("Unknown Unit-Type: " + UnitData.UnitType);
                 break;
         }
-
+        
         ShellSpawnLocation = transform.Find("ShellSpawnLocation");
     }
 

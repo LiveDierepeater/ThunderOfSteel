@@ -79,7 +79,9 @@ public class UnitData : ScriptableObject
     public Weaponry weaponryPrefab;
     [ExposedScriptableObject]
     public UnitWeaponry[] UnitWeaponry;
-    
+
+    [Header("Spotting")]
+    public float SpottingRange;
     
     public enum UnitCommands
     {
