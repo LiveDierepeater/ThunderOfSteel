@@ -136,8 +136,8 @@ public class USpottingSystem : UnitSystem
         int hitCount = Mathf.Min(forwardHits.Length, backwardHits.Length);
         
         // DEBUG: The RaycastHit-Arrays do not share the same length, although they should!
-        if (forwardHits.Length != backwardHits.Length)
-            print("Something went wrong! forwardHits: " + forwardHits.Length + " | backwardHits: " + backwardHits.Length);
+        // if (forwardHits.Length != backwardHits.Length)
+        //     print("Something went wrong! forwardHits: " + forwardHits.Length + " | backwardHits: " + backwardHits.Length);
         
         for (int i = 0; i < hitCount; i++)
         {
