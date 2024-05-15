@@ -33,5 +33,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 390966b2563f3974398cc31b231ff468, type: 2}
   - {fileID: 11400000, guid: 7ebeb08da9bd2a24bbe748dd8c01361d, type: 2}
   - {fileID: 11400000, guid: 00ee208a97ef26b44ab51021b10fc8af, type: 2}
-  SpottingRange: 12.5
+  SpottingRange: 20
   CurrentUnitCommand: 0

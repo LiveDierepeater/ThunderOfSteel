@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 
-public abstract class Projectile : MonoBehaviour
+public abstract class Projectile: MonoBehaviour
 {
-    public float initialSpeed;
-    public Unit target;
-    public Vector3 targetPosition;
+    public float InitialSpeed;
+    public Unit Target;
+    public Vector3 TargetPosition;
+    private int[] _armorDamage = new int[9];
 
     protected virtual void Update()
     {
@@ -17,12 +18,13 @@ public abstract class Projectile : MonoBehaviour
 
     protected virtual void HitTarget()
     {
+        ApplyDamageToTarget();
         Destroy(gameObject);
     }
 
     private void UpdateTargetPosition()
     {
-        targetPosition = target.transform.position;
+        TargetPosition = Target.transform.position;
         // try
         // {
         //     targetPosition = target.transform.position;
@@ -33,13 +35,15 @@ public abstract class Projectile : MonoBehaviour
         // }
     }
 
-    protected virtual void UpdateProjectilePosition()
-    {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, initialSpeed * Time.deltaTime);
-    }
+    private void ApplyDamageToTarget() => Target.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)Target.UnitData.Armor]);
 
-    private bool DoesProjectileReachTargetPosition()
-    {
-        return Vector3.Distance(transform.position, targetPosition) < 0.1f;
-    }
+    private void HandleTargetDeath() => Target = null;
+
+    public void InitializeWeaponryEvents(Weaponry ownerWeaponry) => ownerWeaponry.OnTargetDeath += HandleTargetDeath;
+
+    public void InitializeArmorDamage(int[] armorDamage) => _armorDamage = armorDamage;
+
+    protected virtual void UpdateProjectilePosition() => transform.position = Vector3.MoveTowards(transform.position, TargetPosition, InitialSpeed * Time.deltaTime);
+
+    private bool DoesProjectileReachTargetPosition() => Vector3.Distance(transform.position, TargetPosition) < 0.1f;
 }

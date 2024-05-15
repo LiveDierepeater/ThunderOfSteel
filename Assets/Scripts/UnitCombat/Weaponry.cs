@@ -11,6 +11,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public TankShell tankShellPrefab;
     
     public Unit _targetUnit { get; private set; }
+
+    public delegate void OnTargetDeathDelegate();
+    public OnTargetDeathDelegate OnTargetDeath;
     
 #region Internal Fields
 
@@ -97,9 +100,14 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private void HandleTick()
     {
-        if (_targetUnit is not null && _targetUnit.transform.gameObject.activeSelf) // Unit has target
-            // TODO: Here has to be a switch-case for the UnitData.UnitCommands
-            MoveInRange();
+        if (_targetUnit is not null)
+            if (_targetUnit.transform.gameObject.activeSelf) // Unit has target
+                MoveInRange();
+            else                                             // Unit is inactive (dead)
+            {
+                OnTargetDeath?.Invoke();
+                SetTarget(null);
+            }
 /*
         else if (_targetUnit is null) // Unit has NO target
             CheckForNewTargetInRange();
@@ -155,8 +163,15 @@ public class Weaponry : UnitSystem, IAttackBehavior
             }
         }
 
-        if (_targetUnit is not null && CanAttack)
+        if (CanAttack)
         {
+            // Returns, if '_targetUnit' is not spotted and the ShellType of this weaponry is not an artillery shell
+            if ( ! _targetUnit.IsSpotted && _weaponryData.ShellType != UnitWeaponry.Shells.Artillery)
+            {
+                SetTarget(null);
+                return;
+            }
+            
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
 
             // Target is in 'AttackRange'
@@ -183,7 +198,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (IsWeaponsCoolDownActive()) return;
 
         FireWeaponry(targetUnit);
-        ApplyDamageToTarget();
+        //ApplyDamageToTarget();
         NewCoolDown();
         
         //Unit.UnitData.Events.OnStopUnit?.Invoke();
@@ -200,29 +215,39 @@ public class Weaponry : UnitSystem, IAttackBehavior
             case UnitWeaponry.Shells.Artillery:
             {
                 projectileInstance = Instantiate(artilleryShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
-                if (projectileInstance is ArtilleryShell artilleryShell)
-                {
-                    artilleryShell.MaxArcHeight = 15.0f;  // Safely accessing the specific property
-                }
+                
+                if (projectileInstance is ArtilleryShell artilleryShell) // TODO: Maybe get removed in future
+                    artilleryShell.MaxArcHeight = 15.0f; // Safely accessing the specific property
+                
                 InitializeProjectile(projectileInstance, target);
+                projectileInstance.InitializeWeaponryEvents(this);
+                projectileInstance.InitializeArmorDamage(_armorDamage);
+                
                 break;
             }
             case UnitWeaponry.Shells.APShell or UnitWeaponry.Shells.HEShell:
+            {
+                // Returns, if '_targetUnit' is not spotted anymore and sets '_targetUnit' to null
+                if ( ! _targetUnit.IsSpotted)
+                {
+                    SetTarget(null);
+                    return;
+                }
+                
                 projectileInstance = Instantiate(tankShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
                 InitializeProjectile(projectileInstance, target);
+                projectileInstance.InitializeWeaponryEvents(this);
+                projectileInstance.InitializeArmorDamage(_armorDamage);
+                
                 break;
+            }
         }
-    }
-
-    private void ApplyDamageToTarget()
-    {
-        _targetUnit.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)_targetUnit.UnitData.Armor]);
     }
 
     private void InitializeProjectile(Projectile projectileInstance, Unit target)
     {
-        projectileInstance.initialSpeed = _weaponryData.ProjectileSpeed;
-        projectileInstance.target = target;
+        projectileInstance.InitialSpeed = _weaponryData.ProjectileSpeed;
+        projectileInstance.Target = target;
     }
 
 #region Cooldown Management

@@ -1,5 +1,5 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Unit : MonoBehaviour
 {
@@ -8,6 +8,7 @@ public class Unit : MonoBehaviour
     [Header("Data")]
     [ExposedScriptableObject]
     public UnitData UnitData;
+    public Transform Mesh;
     [Space(5)]
     
     [Header("Movement Curves")]
@@ -67,6 +68,7 @@ public class Unit : MonoBehaviour
         }
         
         ShellSpawnLocation = transform.Find("ShellSpawnLocation");
+        Mesh = transform.Find("Mesh");
     }
 
     private void Start()
@@ -141,7 +143,10 @@ public class Unit : MonoBehaviour
         if (IsUnitDead)
         {
             //UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
-            transform.gameObject.SetActive(false);
+            //transform.gameObject.SetActive(false);
+            
+            Mesh.gameObject.SetActive(false);
+            StartCoroutine(KillUnit());
         }
     }
 
@@ -168,6 +173,12 @@ public class Unit : MonoBehaviour
         SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
 
         RandomizeUnitPlayerID = false;
+    }
+
+    private IEnumerator KillUnit()
+    {
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
     }
 
 #endregion

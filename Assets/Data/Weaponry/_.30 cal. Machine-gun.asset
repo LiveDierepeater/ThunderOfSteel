@@ -25,4 +25,4 @@ MonoBehaviour:
   ShellType: 1
   AttackRange: 25
   CoolDown: 0.5
-  ProjectileSpeed: 10
+  ProjectileSpeed: 30

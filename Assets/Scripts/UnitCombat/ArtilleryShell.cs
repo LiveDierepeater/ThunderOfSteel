@@ -5,16 +5,16 @@ public class ArtilleryShell : Projectile
     public float MinArcHeight = 3f;
     public float MaxArcHeight = 50f;
     
-    private Vector3 initialPosition;
-    private Vector3 velocity;
-    private float launchTime;
+    private Vector3 _initialPosition;
+    private Vector3 _velocity;
+    private float _launchTime;
     private const float _GroundLevel = 0f;
     private const float _Gravity = 9.81f;
 
     protected void Start()
     {
-        initialPosition = transform.position;
-        launchTime = Time.time;
+        _initialPosition = transform.position;
+        _launchTime = Time.time;
         CalculateInitialVelocity();
     }
     
@@ -26,9 +26,9 @@ public class ArtilleryShell : Projectile
 
     protected override void UpdateProjectilePosition()
     {
-        float timeSinceLaunch = Time.time - launchTime;
+        float timeSinceLaunch = Time.time - _launchTime;
         // Calculate current Position
-        Vector3 position = initialPosition + velocity * timeSinceLaunch + Vector3.up * (0.5f * (-_Gravity * timeSinceLaunch * timeSinceLaunch));
+        Vector3 position = _initialPosition + _velocity * timeSinceLaunch + Vector3.up * (0.5f * (-_Gravity * timeSinceLaunch * timeSinceLaunch));
         
         // Destroys Projectile when ground is hit
         if (position.y < _GroundLevel)
@@ -44,7 +44,7 @@ public class ArtilleryShell : Projectile
     
     private void CalculateInitialVelocity()
     {
-        Vector3 displacement = target.transform.position - initialPosition;
+        Vector3 displacement = Target.transform.position - _initialPosition;
         Vector3 displacementXZ = new Vector3(displacement.x, 0, displacement.z);
         float horizontalDistance = displacementXZ.magnitude;
         float maxHeight = CalculateMaxHeightBasedOnDistance(horizontalDistance, MaxArcHeight, MinArcHeight, MaxArcHeight * 2);
@@ -57,7 +57,7 @@ public class ArtilleryShell : Projectile
         float initialHorizontalSpeed = horizontalDistance / totalFlightTime; // Horizontal speed adjustment
 
         // Set the initial speed
-        velocity = new Vector3(displacementXZ.normalized.x * initialHorizontalSpeed, initialVerticalVelocity, displacementXZ.normalized.z * initialHorizontalSpeed);
+        _velocity = new Vector3(displacementXZ.normalized.x * initialHorizontalSpeed, initialVerticalVelocity, displacementXZ.normalized.z * initialHorizontalSpeed);
     }
     
     private float CalculateMaxHeightBasedOnDistance(float distance, float maxPossibleHeight, float minHeight, float minDistanceForMaxHeight)

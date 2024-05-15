@@ -11,6 +11,7 @@ public class WeaponryHandler : UnitSystem
         InitializeWeaponryArray();
         
         TickManager.Instance.TickSystem.OnTick += HandleTick;
+        Unit.UnitData.Events.OnUnitDeath += HandleUnitDeath;
     }
 
     private void InitializeWeaponryArray()
@@ -27,6 +28,12 @@ public class WeaponryHandler : UnitSystem
             }
         }
         System.Array.Resize(ref _weapons, i);
+    }
+
+    private void HandleUnitDeath()
+    {
+        TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
     }
 
     private void HandleTick()
@@ -60,6 +67,14 @@ public class WeaponryHandler : UnitSystem
         {
             // Continues for, if current 'nearbyUnt' is not spotted
             if ( ! nearbyUnit.IsSpotted) continue;
+            
+            //1<<LayerMask.NameToLayer("Buildings")
+            if (Physics.Raycast(transform.position, nearbyUnit.transform.position - transform.position,
+                    Vector3.Distance(transform.position, nearbyUnit.transform.position),
+                    LayerMask.GetMask("Buildings")))
+            {
+                continue;
+            }
             
             // Goes through every weapon in 'inactiveWeapons'
             for (var index = 0; index < inactiveWeapons.Count; index++)
