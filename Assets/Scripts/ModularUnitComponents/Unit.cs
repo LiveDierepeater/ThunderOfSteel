@@ -24,6 +24,7 @@ public class Unit : MonoBehaviour
     public int UnitPlayerID;
 
     [Space(10)]
+    public USpottingSystem USpottingSystem;
     public Unit SpottingUnit;
     public bool IsSpotted;
 
@@ -47,14 +48,14 @@ public class Unit : MonoBehaviour
                 gameObject.AddComponent<InfantryMovement>();
                 CreateWeaponry();
                 gameObject.AddComponent<UHealth>();
-                gameObject.AddComponent<USpottingSystem>();
+                USpottingSystem = gameObject.AddComponent<USpottingSystem>();
                 break;
             
             case UnitData.Type.Tank:
                 gameObject.AddComponent<TankMovement>();
                 CreateWeaponry();
                 gameObject.AddComponent<UHealth>();
-                gameObject.AddComponent<USpottingSystem>();
+                USpottingSystem = gameObject.AddComponent<USpottingSystem>();
                 break;
             
             case UnitData.Type.Truck:

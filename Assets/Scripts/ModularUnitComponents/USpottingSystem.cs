@@ -8,6 +8,9 @@ public class USpottingSystem : UnitSystem
     private LayerMask _unitsLayer;
     private LayerMask _obstacleLayer;
     
+    public delegate void HandleSpotterUnitsDeath();
+    public HandleSpotterUnitsDeath OnSpotterUnitDeath;
+    
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTickBegin += HandleTick;
@@ -19,8 +22,15 @@ public class USpottingSystem : UnitSystem
 
     private void HandleUnitDeath()
     {
+        OnSpotterUnitDeath?.Invoke();
         TickManager.Instance.TickSystem.OnTickBegin -= HandleTick;
         Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
+    }
+
+    public void HandleSpotterUnitDeath()
+    {
+        Unit.SpottingUnit.USpottingSystem.OnSpotterUnitDeath -= HandleSpotterUnitDeath;
+        DeleteSpotterUnitReference();
     }
 
     private void HandleTick()
@@ -70,6 +80,7 @@ public class USpottingSystem : UnitSystem
                 {
                     targetUnit.IsSpotted = true;
                     targetUnit.SpottingUnit = Unit;
+                    OnSpotterUnitDeath += targetUnit.USpottingSystem.HandleSpotterUnitDeath;
                 }
             }
         }
@@ -146,5 +157,11 @@ public class USpottingSystem : UnitSystem
         }
         
         return totalForestThickness;
+    }
+
+    private void DeleteSpotterUnitReference()
+    {
+        Unit.IsSpotted = false;
+        Unit.SpottingUnit = null;
     }
 }
