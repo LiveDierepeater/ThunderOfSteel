@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     [ExposedScriptableObject]
     public UnitData UnitData;
     public Transform Mesh;
+    public CapsuleCollider Collider;
     [Space(5)]
     
     [Header("Movement Curves")]
@@ -70,6 +71,7 @@ public class Unit : MonoBehaviour
         
         ShellSpawnLocation = transform.Find("ShellSpawnLocation");
         Mesh = transform.Find("Mesh");
+        Collider = GetComponent<CapsuleCollider>();
     }
 
     private void Start()
@@ -147,6 +149,7 @@ public class Unit : MonoBehaviour
             //transform.gameObject.SetActive(false);
             
             Mesh.gameObject.SetActive(false);
+            Collider.enabled = false;
             StartCoroutine(KillUnit());
         }
     }
@@ -180,6 +183,7 @@ public class Unit : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
+        print(UnitData.UnitName + " is dead!");
     }
 
 #endregion

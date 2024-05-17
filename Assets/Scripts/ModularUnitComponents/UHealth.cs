@@ -30,7 +30,6 @@ public class UHealth : UnitSystem
     private void TakeDamage(int amount)
     {
         _currentHealth -= amount;
-        print(Unit.UnitData.UnitName + " took " + amount + " damage!");
         
         if (_currentHealth <= 0)
         {
@@ -49,8 +48,6 @@ public class UHealth : UnitSystem
         
         // Calls Event to Unit-Instance
         Unit.UnitData.Events.OnUnitDeath?.Invoke();
-        
-        print(Unit.UnitData.UnitName + " is Destroyed");
         
         // TODO: Unit and it's components have to unsubscribe from multiple Events here.
         Unit.UnitData.Events.OnAttack -= TakeDamage;
