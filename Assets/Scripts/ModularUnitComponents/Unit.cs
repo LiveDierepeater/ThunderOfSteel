@@ -143,18 +143,24 @@ public class Unit : MonoBehaviour
 
     private void DestroyUnit()
     {
-        if (IsUnitDead)
-        {
-            //UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
-            //transform.gameObject.SetActive(false);
+        if (!IsUnitDead) return;
+        
+        //UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
+        //transform.gameObject.SetActive(false);
             
-            Mesh.gameObject.SetActive(false);
-            Collider.enabled = false;
-            StartCoroutine(KillUnit());
-        }
+        Mesh.gameObject.SetActive(false);
+        Collider.enabled = false;
+        StartCoroutine(KillUnit());
     }
 
 #endregion
+
+    private IEnumerator KillUnit()
+    {
+        yield return new WaitForSeconds(1f);
+        Destroy(gameObject);
+        print(UnitData.UnitName + " is dead!");
+    }
 
 #region Debug
 
@@ -177,13 +183,6 @@ public class Unit : MonoBehaviour
         SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
 
         RandomizeUnitPlayerID = false;
-    }
-
-    private IEnumerator KillUnit()
-    {
-        yield return new WaitForSeconds(1f);
-        Destroy(gameObject);
-        print(UnitData.UnitName + " is dead!");
     }
 
 #endregion
