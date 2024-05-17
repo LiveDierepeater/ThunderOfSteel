@@ -22,7 +22,7 @@ MonoBehaviour:
   Cost: 15
   ProducedBy: 3
   StandardSpeed: 43
-  TurnSpeed: 2000
+  TurnSpeed: 20
   MaxAcceleration: 172
   StoppingDistance: 10
   SpeedBonusOnRoad: 1

@@ -112,6 +112,29 @@ public class TankMovement : UnitSystem, IMovementBehavior
     private void FixedUpdate()
     {
         _currentAgentSpeed = _agent.velocity.magnitude;
+        TankMovementBehavior();
+    }
+
+    private void TankMovementBehavior()
+    {
+        // When the tank has a destination
+        if (_agent.path.corners.Length <= 1) return;
+        
+        // Getting values for calculation
+        var forwardAmount = 1f;
+        var directionToNextPathCorner = (_agent.path.corners[1] - transform.position).normalized;
+        var dot = Vector3.Dot(transform.forward, directionToNextPathCorner);
+        var angleToDir = Vector3.SignedAngle(transform.forward, directionToNextPathCorner, Vector3.up);
+        
+        // New forwardAmount when tank needs to turn to nextPathCorner
+        if (dot < 0.925f) forwardAmount = 1f * dot;
+        
+        // The amount the tank has to turn
+        var turnAmount = Mathf.Sign(angleToDir) * _turnSpeed * Time.deltaTime * (1f - dot);
+        transform.Rotate(Vector3.up, turnAmount);
+        
+        // Set _agent.speed to new value
+        _agent.speed = _currentMaxSpeed * forwardAmount;
     }
 
     private void HandleTick()
@@ -274,4 +297,29 @@ public class TankMovement : UnitSystem, IMovementBehavior
     }
 
 #endregion
+
+    /*private void OnDrawGizmos()
+    {
+        if (_agent == null || _agent.path == null)
+            return;
+
+        // Get the corners of the agent's path
+        Vector3[] corners = _agent.path.corners;
+
+        // Draw a sphere at each corner
+        for (int i = 0; i < corners.Length; i++)
+        {
+            // Set the gizmo color
+            if (i == 0) Gizmos.color = Color.yellow;
+            else Gizmos.color = Color.red;
+            
+            Gizmos.DrawWireSphere(corners[i], 1.5f);
+
+            // Draw lines between the corners
+            if (i < corners.Length - 1)
+            {
+                Gizmos.DrawLine(corners[i], corners[i + 1]);
+            }
+        }
+    }*/
 }
