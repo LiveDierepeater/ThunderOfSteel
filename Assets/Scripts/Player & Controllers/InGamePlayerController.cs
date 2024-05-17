@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class InGamePlayerController : MonoBehaviour
@@ -13,7 +14,9 @@ public class InGamePlayerController : MonoBehaviour
     private LayerMask _interactableLayerMask;
     [SerializeField] private float dragDelay = 0.1f;
 
-    #region Internal Fields
+    [SerializeField, Range(0, 10)] private int _unitWidth = 5;
+
+#region Internal Fields
 
     private bool isDragging;
     private float mouseDownTime;
@@ -22,9 +25,9 @@ public class InGamePlayerController : MonoBehaviour
     private KeyCode lastHitKey;
     private KeyCode currentHitKey;
 
-    #endregion
+#endregion
 
-    #region Initializing
+#region Initializing
 
     private void Awake()
     {
@@ -32,9 +35,9 @@ public class InGamePlayerController : MonoBehaviour
         selectionBox = GameObject.FindGameObjectWithTag("SelectionBox").GetComponent<RectTransform>();
     }
 
-    #endregion
+#endregion
 
-    #region UPDATES
+#region UPDATES
 
     private void Update()
     {
@@ -42,9 +45,9 @@ public class InGamePlayerController : MonoBehaviour
         HandleMovementInputs();
     }
 
-    #endregion
+#endregion
 
-    #region External Called Logic
+#region External Called Logic
 
     public void SetLayerMaskInfo(Player player)
     {
@@ -53,9 +56,9 @@ public class InGamePlayerController : MonoBehaviour
         _interactableLayerMask = player.interactableLayerMask;
     }
 
-    #endregion
+#endregion
 
-    #region Intern Logic
+#region Intern Logic
 
     private void HandleSelectionInputs()
     {
@@ -78,7 +81,7 @@ public class InGamePlayerController : MonoBehaviour
                 if ((_unitsLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
                     Unit unitToAttack = hit.transform.GetComponent<Unit>();
-                    
+                
                     if (unitToAttack is not null)
                     {
                         foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
@@ -90,20 +93,26 @@ public class InGamePlayerController : MonoBehaviour
                 // Check, if clicked on Terrain
                 else if ((_terrainLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
                 {
-                    foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
+                    var selectedUnits = SelectionManager.Instance.SelectedUnits;
+                    var center = CalculateCenterPoint(selectedUnits);
+                    var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits);
+                    var unitCount = 0;
+                    
+                    foreach (var unit in selectedUnits)
                     {
                         unit.RemoveTarget();
-                        unit.CommandToDestination(hit.point);
-                        //SpawnMoveToSprite(hit.point);
+                        unit.CommandToDestination(formationPositions[unitCount]);
+                        unitCount++;
+                        //SpawnMoveToSprite(formationPositions[i]);
                     }
                 }
             }
         }
     }
 
-    #endregion
+#endregion
 
-    #region Extracted Logic Methods
+#region Extracted Logic Methods
 
     private void MakeSelectionBox()
     {
@@ -228,9 +237,9 @@ public class InGamePlayerController : MonoBehaviour
         }
     }
 
-    #endregion
+#endregion
 
-    #region Extracted Return Methods
+#region Extracted Return Methods
 
     private bool UnitIsInSelectionBox(Vector3 position, Bounds bounds)
     {
@@ -239,8 +248,43 @@ public class InGamePlayerController : MonoBehaviour
                && position.y > bounds.min.y
                && position.y < bounds.max.y;
     }
+    
+    private List<Vector3> CalculateFormationPositions(Vector3 center, Vector3 destination, HashSet<Unit> units)
+    {
+        var positions = new List<Vector3>();
+        
+        var unitCount = units.Count;
+        var width = Mathf.Min(_unitWidth, unitCount);
+        var depth = Mathf.CeilToInt(unitCount / (float)_unitWidth);
+        
+        var offsetX = width / 2f - 0.5f;
+        var offsetZ = depth / 2f - 0.5f;
+        
+        var direction = (destination - center).normalized;
+        var rotation = Quaternion.LookRotation(direction);
+        
+        for (var i = 0; i < unitCount; i++)
+        {
+            var row = i / _unitWidth;
+            var col = i % _unitWidth;
+            
+            var localPosition = new Vector3((col - offsetX) * 2, 0, (row - offsetZ) * 2);
+            var rotatedPosition = rotation * localPosition;
+            positions.Add(destination + rotatedPosition);
+        }
+        
+        return positions;
+    }
+    
+    private Vector3 CalculateCenterPoint(HashSet<Unit> units)
+    {
+        var center = Vector3.zero;
+        foreach (var unit in units) center += unit.transform.position;
+        center /= units.Count;
+        return center;
+    }
 
-    #endregion
+#endregion
 
     private void SpawnMoveToSprite(Vector3 destination)
     {
