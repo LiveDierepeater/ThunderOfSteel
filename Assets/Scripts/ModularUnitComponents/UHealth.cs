@@ -9,6 +9,13 @@ public class UHealth : UnitSystem
 
     private const int _RegenerateHealthAmount = 3;
 
+    private enum HealthState
+    {
+        Operational,
+        Flee
+    }
+    private HealthState _unitHealthState;
+
     #region Initializing
 
     protected override void Awake()
@@ -21,6 +28,7 @@ public class UHealth : UnitSystem
     {
         _maxHealth = Unit.UnitData.MaxHealth;
         _currentHealth = Unit.UnitData.MaxHealth;
+        _unitHealthState = HealthState.Operational;
 
         Unit.UnitData.Events.OnAttack += TakeDamage;
     }
@@ -32,19 +40,30 @@ public class UHealth : UnitSystem
 
 #endregion
 
-    private void TakeDamage(int amount)
+    private void TakeDamage(Vector3 projectilesOriginPosition , int amount)
     {
         _currentHealth -= amount;
         TickManager.Instance.TickSystem.OnTick -= RegenerateHealth;
+
+        if (_currentHealth <= _maxHealth * 0.3f) CallUnitToFlee(projectilesOriginPosition);
         
         if (_currentHealth <= 0)
         {
             UnsubscribeUnit();
             return;
         }
-
+        
         StopAllCoroutines();
         StartCoroutine(RegenerateHealthCooldown());
+    }
+
+    private void CallUnitToFlee(Vector3 projectilesOriginPosition)
+    {
+        // Return, if Unit is already fleeing
+        if (_unitHealthState != HealthState.Operational) return;
+        
+        _unitHealthState = HealthState.Flee;
+        Unit.UnitData.Events.OnUnitFlee?.Invoke(projectilesOriginPosition);
     }
 
     private void UnsubscribeUnit()
@@ -68,6 +87,12 @@ public class UHealth : UnitSystem
         // Add health-amount
         _currentHealth += _RegenerateHealthAmount;
         print("heal");
+
+        if (_currentHealth >= _maxHealth * 0.3f)
+        {
+            _unitHealthState = HealthState.Operational;
+            Unit.UnitData.Events.OnUnitOperational?.Invoke();
+        }
         
         // Return, if Health are not fully healed
         if (_currentHealth <= _maxHealth) return;

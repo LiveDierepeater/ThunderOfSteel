@@ -189,7 +189,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
             ResetUnitMovementValuesToDefault();
     }
 
-    #endregion
+#endregion
 
     #region Movement: Area-Based Logic
 

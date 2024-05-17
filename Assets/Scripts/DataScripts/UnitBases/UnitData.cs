@@ -56,6 +56,7 @@ public class UnitData : ScriptableObject
     public float TurnSpeed;
     public float MaxAcceleration;
     public float StoppingDistance;
+    public float FleeSpeed;
     
     public float SpeedBonusOnRoad;
     

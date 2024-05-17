@@ -5,8 +5,10 @@ public abstract class Projectile: MonoBehaviour
     public float InitialSpeed;
     public Unit Target;
     public Vector3 TargetPosition;
+    
     private int[] _armorDamage = new int[9];
-
+    private Vector3 originPosition;
+    
     protected virtual void Update()
     {
         UpdateTargetPosition();
@@ -15,6 +17,8 @@ public abstract class Projectile: MonoBehaviour
         if (DoesProjectileReachTargetPosition())
             HitTarget();
     }
+
+    protected void Start() => originPosition = transform.position;
 
     protected virtual void HitTarget()
     {
@@ -35,7 +39,7 @@ public abstract class Projectile: MonoBehaviour
         // }
     }
 
-    private void ApplyDamageToTarget() => Target.UnitData.Events.OnAttack?.Invoke(_armorDamage[(int)Target.UnitData.Armor]);
+    private void ApplyDamageToTarget() => Target.UnitData.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
 
     private void HandleTargetDeath() => Target = null;
 

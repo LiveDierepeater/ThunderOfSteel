@@ -23,6 +23,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     private float _turnSpeed;
     private float _maxAcceleration;
     private float _speedBonusOnRoad;
+    private float _fleeSpeed;
     private float _speedOnRoad;
     
     private float _stoppingDistance;
@@ -37,7 +38,14 @@ public class TankMovement : UnitSystem, IMovementBehavior
         Decelerate
     }
     [SerializeField] private MovementStates _currentMovementState = MovementStates.Idle;
-
+    
+    private enum HealthState
+    {
+        Operational,
+        Flee
+    }
+    private HealthState _unitHealthState;
+    
     private int _currentAreaIndex;
 
 #endregion
@@ -58,6 +66,8 @@ public class TankMovement : UnitSystem, IMovementBehavior
         Unit.UnitData.Events.OnAttackUnit += MoveToDestination;
         Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
         Unit.UnitData.Events.OnUnitDeath += HandleDeath;
+        Unit.UnitData.Events.OnUnitFlee += FleeToDestination;
+        Unit.UnitData.Events.OnUnitOperational += HandleUnitRegenerated;
     }
 
     private void OnDisable()
@@ -65,6 +75,8 @@ public class TankMovement : UnitSystem, IMovementBehavior
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
+        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
+        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
     private void OnDestroy()
@@ -72,6 +84,8 @@ public class TankMovement : UnitSystem, IMovementBehavior
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
+        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
+        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
@@ -82,7 +96,9 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _maxAcceleration = data.MaxAcceleration;
         _stoppingDistance = data.StoppingDistance;
         _speedBonusOnRoad = data.SpeedBonusOnRoad;
+        _fleeSpeed = data.FleeSpeed;
         _speedOnRoad = _standardSpeed * _speedBonusOnRoad;
+        _unitHealthState = HealthState.Operational;
         
         // Functionality Values
         _currentMaxSpeed = _standardSpeed;
@@ -163,11 +179,36 @@ public class TankMovement : UnitSystem, IMovementBehavior
         DecelerateNearStoppingDistance();
     }
 
+    private void FleeToDestination(Vector3 projectilesOriginPosition)
+    {
+        _unitHealthState = HealthState.Flee;
+        
+        var fleeDirection = transform.position - projectilesOriginPosition;
+        fleeDirection = new Vector3(fleeDirection.x, 0, fleeDirection.z);
+        Vector3 newDestination;
+
+        if (Physics.Raycast(transform.position, fleeDirection, out RaycastHit hit, 100f, InputManager.Instance.Player.RaycastLayerMask))
+            newDestination = new Vector3(hit.point.x, 0, hit.point.z);
+        else
+            newDestination = transform.position + fleeDirection.normalized * 100f;
+        _currentMaxSpeed = _fleeSpeed;
+        
+        _agent.SetDestination(newDestination);
+    }
+
+    private void HandleUnitRegenerated()
+    {
+        _unitHealthState = HealthState.Operational;
+        _currentMaxSpeed = _standardSpeed;
+    }
+
     private void HandleDeath()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
+        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
+        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
 #endregion
@@ -298,7 +339,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
 
 #endregion
 
-    /*private void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         if (_agent == null || _agent.path == null)
             return;
@@ -321,5 +362,5 @@ public class TankMovement : UnitSystem, IMovementBehavior
                 Gizmos.DrawLine(corners[i], corners[i + 1]);
             }
         }
-    }*/
+    }
 }

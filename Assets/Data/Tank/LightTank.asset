@@ -25,6 +25,7 @@ MonoBehaviour:
   TurnSpeed: 20
   MaxAcceleration: 172
   StoppingDistance: 10
+  FleeSpeed: 20
   SpeedBonusOnRoad: 1
   Armor: 3
   MaxHealth: 400
