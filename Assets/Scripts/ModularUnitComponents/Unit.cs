@@ -28,7 +28,7 @@ public class Unit : MonoBehaviour
     public Unit SpottingUnit;
     public bool IsSpotted;
 
-    #region Initializing
+#region Initializing
 
     private void Awake()
     {
@@ -102,7 +102,7 @@ public class Unit : MonoBehaviour
         TickManager.Instance.TickSystem.OnTickEnd -= DestroyUnit;
     }
 
-    #endregion
+#endregion
 
 #region External Called Logic
 
