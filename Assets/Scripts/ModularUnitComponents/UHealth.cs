@@ -1,8 +1,13 @@
+using System.Collections;
+using UnityEngine;
+
 public class UHealth : UnitSystem
 {
     // Stats Fields
     private int _maxHealth;
     private int _currentHealth;
+
+    private const int _RegenerateHealthAmount = 3;
 
     #region Initializing
 
@@ -30,11 +35,16 @@ public class UHealth : UnitSystem
     private void TakeDamage(int amount)
     {
         _currentHealth -= amount;
+        TickManager.Instance.TickSystem.OnTick -= RegenerateHealth;
         
         if (_currentHealth <= 0)
         {
             UnsubscribeUnit();
+            return;
         }
+
+        StopAllCoroutines();
+        StartCoroutine(RegenerateHealthCooldown());
     }
 
     private void UnsubscribeUnit()
@@ -51,5 +61,25 @@ public class UHealth : UnitSystem
         
         // TODO: Unit and it's components have to unsubscribe from multiple Events here.
         Unit.UnitData.Events.OnAttack -= TakeDamage;
+    }
+
+    private void RegenerateHealth()
+    {
+        // Add health-amount
+        _currentHealth += _RegenerateHealthAmount;
+        print("heal");
+        
+        // Return, if Health are not fully healed
+        if (_currentHealth <= _maxHealth) return;
+        
+        // Health are fully regenerated
+        _currentHealth = _maxHealth;
+        TickManager.Instance.TickSystem.OnTick -= RegenerateHealth;
+    }
+
+    private IEnumerator RegenerateHealthCooldown()
+    {
+        yield return new WaitForSeconds(10f);
+        TickManager.Instance.TickSystem.OnTick += RegenerateHealth;
     }
 }

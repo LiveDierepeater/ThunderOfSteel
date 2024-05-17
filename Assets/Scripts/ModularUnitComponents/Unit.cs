@@ -159,7 +159,7 @@ public class Unit : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
         Destroy(gameObject);
-        print(UnitData.UnitName + " is dead!");
+        print(UnitData.UnitName + " is destroyed!");
     }
 
 #region Debug
