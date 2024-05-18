@@ -22,7 +22,9 @@ public abstract class Projectile: MonoBehaviour
 
     protected virtual void HitTarget()
     {
-        ApplyDamageToTarget();
+        if (Target is not null)
+            ApplyDamageToTarget();
+        
         Destroy(gameObject);
     }
 
@@ -39,7 +41,11 @@ public abstract class Projectile: MonoBehaviour
         // }
     }
 
-    private void ApplyDamageToTarget() => Target.UnitData.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
+    private void ApplyDamageToTarget()
+    {
+        print(Target);
+        Target.UnitData.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
+    }
 
     private void HandleTargetDeath() => Target = null;
 

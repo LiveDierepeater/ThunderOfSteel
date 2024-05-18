@@ -22,6 +22,7 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     private float _standardSpeed;
     private float _turnSpeed;
     private float _maxAcceleration;
+    private float _fleeSpeed;
     private float _speedBonusOnRoad;
     private float _speedOnRoad;
     
@@ -57,14 +58,13 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.UnitData.Events.OnAttackUnit += MoveToDestination;
         Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
+        Unit.UnitData.Events.OnUnitFlee += FleeToDestination;
+        Unit.UnitData.Events.OnUnitOperational += HandleUnitRegenerated;
     }
 
-    private void OnDisable()
-    {
-        TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
-        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
-    }
+    private void OnDisable() => UnsubscribeFromAllEvents();
+
+    private void OnDestroy() => UnsubscribeFromAllEvents();
 
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
     {
@@ -72,9 +72,10 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
         _standardSpeed = data.StandardSpeed;
         _turnSpeed = data.TurnSpeed;
         _maxAcceleration = data.MaxAcceleration;
-        _stoppingDistance = data.StoppingDistance;
+        _fleeSpeed = data.FleeSpeed;
         _speedBonusOnRoad = data.SpeedBonusOnRoad;
         _speedOnRoad = _standardSpeed * _speedBonusOnRoad;
+        _stoppingDistance = data.StoppingDistance;
         
         // Functionality Values
         _currentMaxSpeed = _standardSpeed;
@@ -131,6 +132,23 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
         _agent.SetDestination(_stoppingDistance/2 * _agent.velocity.normalized + transform.position);
         DecelerateNearStoppingDistance();
     }
+    
+    private void FleeToDestination(Vector3 projectilesOriginPosition)
+    {
+        var fleeDirection = transform.position - projectilesOriginPosition;
+        fleeDirection = new Vector3(fleeDirection.x, 0, fleeDirection.z);
+        Vector3 newDestination;
+
+        if (Physics.Raycast(transform.position, fleeDirection, out RaycastHit hit, 100f, InputManager.Instance.Player.RaycastLayerMask))
+            newDestination = new Vector3(hit.point.x, 0, hit.point.z);
+        else
+            newDestination = transform.position + fleeDirection.normalized * 100f;
+        _currentMaxSpeed = _fleeSpeed;
+        
+        _agent.SetDestination(newDestination);
+    }
+
+    private void HandleUnitRegenerated() => _currentMaxSpeed = _standardSpeed;
 
 #endregion
 
@@ -238,19 +256,22 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
             _currentMovementState = MovementStates.Decelerate;
     }
 
+    private void UnsubscribeFromAllEvents()
+    {
+        TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.UnitData.Events.OnAttackUnit -= MoveToDestination;
+        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
+        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
+        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
+    }
+
 #endregion
 
 #region Extracted Return Methods
 
-    private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition)
-    {
-        return Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
-    }
+    private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition) => Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
 
-    private bool IsUnitStanding()
-    {
-        return _currentAgentSpeed < 0.25f;
-    }
+    private bool IsUnitStanding() => _currentAgentSpeed < 0.25f;
 
     private int GetUnitsCurrentArea()
     {

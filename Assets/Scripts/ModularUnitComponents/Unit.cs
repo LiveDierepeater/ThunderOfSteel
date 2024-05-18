@@ -15,6 +15,7 @@ public class Unit : MonoBehaviour
     [Header("Movement Curves")]
     public AnimationCurve accelerationCurve;
     public AnimationCurve decelerationCurve;
+    public AnimationCurve RotationCurve;
     [Space(5)]
     
     [Header("Debug")]
@@ -136,10 +137,7 @@ public class Unit : MonoBehaviour
         UnitData.CurrentUnitCommand = UnitData.UnitCommands.Idle;
     }
     
-    private void SetUnitDead()
-    {
-        IsUnitDead = true;
-    }
+    private void SetUnitDead() => IsUnitDead = true;
 
     private void DestroyUnit()
     {

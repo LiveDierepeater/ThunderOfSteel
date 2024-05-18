@@ -22,10 +22,10 @@ MonoBehaviour:
   Cost: 15
   ProducedBy: 3
   StandardSpeed: 43
-  TurnSpeed: 20
+  TurnSpeed: 40
   MaxAcceleration: 172
   StoppingDistance: 10
-  FleeSpeed: 20
+  FleeSpeed: 10
   SpeedBonusOnRoad: 1
   Armor: 3
   MaxHealth: 400

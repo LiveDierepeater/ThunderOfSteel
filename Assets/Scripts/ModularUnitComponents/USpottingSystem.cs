@@ -17,17 +17,18 @@ public class USpottingSystem : UnitSystem
         _spottingRange = Unit.UnitData.SpottingRange;
         _obstacleLayer = InputManager.Instance.Player.RaycastLayerMask;
         _unitsLayer = InputManager.Instance.Player.unitsLayerMask;
-        Unit.UnitData.Events.OnUnitDeath += HandleUnitDeath;
+        Unit.UnitData.Events.OnHandleUnitDeathForSpotting += HandleUnitDeath;
     }
 
     private void HandleUnitDeath()
     {
         OnSpotterUnitDeath?.Invoke();
+        Unit.UnitData.Events.OnUnitDeath?.Invoke();
         TickManager.Instance.TickSystem.OnTickBegin -= HandleTick;
         Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
     }
 
-    public void HandleSpotterUnitDeath()
+    private void HandleSpotterUnitDeath()
     {
         Unit.SpottingUnit.USpottingSystem.OnSpotterUnitDeath -= HandleSpotterUnitDeath;
         DeleteSpotterUnitReference();

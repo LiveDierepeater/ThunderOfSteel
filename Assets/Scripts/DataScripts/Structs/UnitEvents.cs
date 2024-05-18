@@ -9,6 +9,7 @@ public struct UnitEvents
     public Action OnStopUnit;
     public Action<Vector3, int> OnAttack;
     public Action OnUnitDeath;
+    public Action OnHandleUnitDeathForSpotting;
     public Action <Vector3> OnUnitFlee;
     public Action OnUnitOperational;
 }

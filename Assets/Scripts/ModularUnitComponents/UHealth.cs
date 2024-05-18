@@ -68,6 +68,9 @@ public class UHealth : UnitSystem
 
     private void UnsubscribeUnit()
     {
+        // Stop Regeneration Coroutine
+        StopAllCoroutines();
+        
         // Notifying BattleManager about the Death of this.Unit
         BattleManager.Instance.NotifyDeath(Unit);
         
@@ -75,11 +78,10 @@ public class UHealth : UnitSystem
         SelectionManager.Instance.Deselect(Unit);
         SelectionManager.Instance.RemoveAvailableUnit(Unit);
         
-        // Calls Event to Unit-Instance
-        Unit.UnitData.Events.OnUnitDeath?.Invoke();
+        // Calls Event to USpottingSystem
+        Unit.UnitData.Events.OnHandleUnitDeathForSpotting?.Invoke();
         
-        // TODO: Unit and it's components have to unsubscribe from multiple Events here.
-        Unit.UnitData.Events.OnAttack -= TakeDamage;
+        OnDisable();
     }
 
     private void RegenerateHealth()
