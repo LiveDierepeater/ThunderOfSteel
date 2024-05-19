@@ -89,9 +89,8 @@ public class UHealth : UnitSystem
     {
         // Add health-amount
         _currentHealth += _RegenerateHealthAmount;
-        print("heal");
 
-        if (_currentHealth >= _maxHealth * 0.3f)
+        if (_currentHealth >= _maxHealth * 0.3f && _unitHealthState == HealthState.Flee)
         {
             _unitHealthState = HealthState.Operational;
             Unit.UnitData.Events.OnUnitOperational?.Invoke();

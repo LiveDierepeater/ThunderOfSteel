@@ -42,11 +42,7 @@ public abstract class Projectile: MonoBehaviour
         // }
     }
 
-    private void ApplyDamageToTarget()
-    {
-        print(_armorDamage[(int)Target.UnitData.Armor]);
-        Target.UnitData.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
-    }
+    private void ApplyDamageToTarget() => Target.UnitData.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
 
     private void HandleTargetDeath() => Target = null;
 

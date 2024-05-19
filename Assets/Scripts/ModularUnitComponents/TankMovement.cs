@@ -39,13 +39,6 @@ public class TankMovement : UnitSystem, IMovementBehavior
     }
     [SerializeField] private MovementStates _currentMovementState = MovementStates.Idle;
     
-    private enum HealthState
-    {
-        Operational,
-        Flee
-    }
-    private HealthState _unitHealthState;
-    
     private int _currentAreaIndex;
 
 #endregion
@@ -98,7 +91,6 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _speedBonusOnRoad = data.SpeedBonusOnRoad;
         _fleeSpeed = data.FleeSpeed;
         _speedOnRoad = _standardSpeed * _speedBonusOnRoad;
-        _unitHealthState = HealthState.Operational;
         
         // Functionality Values
         _currentMaxSpeed = _standardSpeed;
@@ -183,8 +175,6 @@ public class TankMovement : UnitSystem, IMovementBehavior
 
     private void FleeToDestination(Vector3 projectilesOriginPosition)
     {
-        _unitHealthState = HealthState.Flee;
-        
         var fleeDirection = transform.position - projectilesOriginPosition;
         fleeDirection = new Vector3(fleeDirection.x, 0, fleeDirection.z);
         Vector3 newDestination;
@@ -198,11 +188,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _agent.SetDestination(newDestination);
     }
 
-    private void HandleUnitRegenerated()
-    {
-        _unitHealthState = HealthState.Operational;
-        _currentMaxSpeed = _standardSpeed;
-    }
+    private void HandleUnitRegenerated() => _currentMaxSpeed = _standardSpeed;
 
     private void HandleDeath()
     {

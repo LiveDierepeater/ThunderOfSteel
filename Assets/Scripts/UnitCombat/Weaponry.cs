@@ -52,10 +52,16 @@ public class Weaponry : UnitSystem, IAttackBehavior
         localArmorDamage = _armorDamage;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnNewTargetUnit -= SetTarget;
+    }
+
+    public void OnEnableWeaponry()
+    {
+        TickManager.Instance.TickSystem.OnTick += HandleTick;
+        Unit.UnitData.Events.OnNewTargetUnit += SetTarget;
     }
 
     private void InitializeWeaponry()
@@ -105,13 +111,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 MoveInRange();
             else                                             // Unit is inactive (dead)
                 SetTarget(null);
-/*
-        else if (_targetUnit is null) // Unit has NO target
-            CheckForNewTargetInRange();
-
-        else if ( ! _targetUnit.transform.gameObject.activeSelf) // SAFEGUARD: Unit has a _targetUnit which is not active!
-            SetTarget(null);
-*/
     }
 
 #endregion
@@ -133,10 +132,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         InitializeWeaponry();
     }
 
-    public void RemoveCooldownTime(float amount)
-    {
-        CurrentCoolDownTime -= amount;
-    }
+    public void RemoveCooldownTime(float amount) => CurrentCoolDownTime -= amount;
 
 #endregion
 
@@ -196,10 +192,8 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (IsWeaponsCoolDownActive()) return;
 
         FireWeaponry(targetUnit);
-        //ApplyDamageToTarget();
         NewCoolDown();
         
-        //Unit.UnitData.Events.OnStopUnit?.Invoke();
         // DEBUG
         Unit.IsAttacking = true;
     }
@@ -256,15 +250,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
         StartCoolDown();
     }
 
-    private void ResetCoolDownTime()
-    {
-        CurrentCoolDownTime = _coolDown;
-    }
+    private void ResetCoolDownTime() => CurrentCoolDownTime = _coolDown;
 
-    private void StartCoolDown()
-    {
-        CooldownManager.Instance.StartCooldown(GetInstanceID(), this);
-    }
+    private void StartCoolDown() => CooldownManager.Instance.StartCooldown(GetInstanceID(), this);
 
 #endregion
 
@@ -279,19 +267,11 @@ public class Weaponry : UnitSystem, IAttackBehavior
     /// <param name="targetUnit"></param>
     /// <returns></returns>
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    private bool CanWeaponryAttackTarget(Unit targetUnit) {
-        return targetUnit.UnitData.PlayerID != localPlayerID && localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
-    }
+    private bool CanWeaponryAttackTarget(Unit targetUnit) => targetUnit.UnitData.PlayerID != localPlayerID && localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
 
-    private bool IsWeaponsCoolDownActive()
-    {
-        return CooldownManager.Instance.IsCooldownActive(GetInstanceID());
-    }
+    private bool IsWeaponsCoolDownActive() => CooldownManager.Instance.IsCooldownActive(GetInstanceID());
 
-    public bool CanWeaponryDamageTargetUnit(Unit targetUnit)
-    {
-        return localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
-    }
+    public bool CanWeaponryDamageTargetUnit(Unit targetUnit) => localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
 
 #endregion
 }

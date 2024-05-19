@@ -12,6 +12,8 @@ public class WeaponryHandler : UnitSystem
         
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.UnitData.Events.OnUnitDeath += HandleUnitDeath;
+        Unit.UnitData.Events.OnUnitFlee += HandleUnitFlee;
+        Unit.UnitData.Events.OnUnitOperational += HandleUnitOperational;
     }
 
     private void InitializeWeaponryArray()
@@ -34,6 +36,27 @@ public class WeaponryHandler : UnitSystem
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
+        Unit.UnitData.Events.OnUnitFlee -= HandleUnitFlee;
+        Unit.UnitData.Events.OnUnitOperational -= HandleUnitOperational;
+    }
+
+    private void HandleUnitFlee(Vector3 projectileOrigin)
+    {
+        foreach (var weaponry in _weapons)
+        {
+            weaponry.SetTarget(null);
+            weaponry.OnDisable();
+            weaponry.enabled = false;
+        }
+    }
+
+    private void HandleUnitOperational()
+    {
+        foreach (var weaponry in _weapons)
+        {
+            weaponry.OnEnableWeaponry();
+            weaponry.enabled = true;
+        }
     }
 
     private void HandleTick()
