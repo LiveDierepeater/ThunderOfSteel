@@ -25,13 +25,15 @@ public class CameraSystem : MonoBehaviour
     
     public float ZoomSpeed = 3f;
     public float ZoomAmount = 30f;
-    public float FollowOffsetMin = 15f;
+    public float FollowOffsetMin = 30f;
     public float FollowOffsetMax = 400f;
 
+    // Private Fields
+    
     private float _standardMoveSpeed;
     private float _standardDragPanSpeed;
     private float _standardRotateSpeed;
-    private float _standardZoomAmount;
+    //private float _standardZoomAmount;
     private float _fastMoveSpeed;
     private float _fastDragPanSpeed;
     private float _fastRotateSpeed;
@@ -48,7 +50,7 @@ public class CameraSystem : MonoBehaviour
         _standardMoveSpeed = MoveSpeed;
         _standardRotateSpeed = RotateSpeed;
         _standardDragPanSpeed = DragPanSpeed * 0.3f;
-        _standardZoomAmount = ZoomAmount * 0.2f;
+        //_standardZoomAmount = ZoomAmount * 0.2f;
         _fastMoveSpeed = _standardMoveSpeed * 3f;
         _fastRotateSpeed = _standardRotateSpeed * 1.5f;
         _fastDragPanSpeed = _standardDragPanSpeed;
@@ -152,11 +154,11 @@ public class CameraSystem : MonoBehaviour
         {
             if (mouseMovementDelta.x > 0)
             {
-                rotateDirection = mouseMovementDelta.x * 0.006f;
+                rotateDirection = mouseMovementDelta.x * 0.003f;
             }
             else if (mouseMovementDelta.x < 0)
             {
-                rotateDirection = mouseMovementDelta.x * 0.006f;
+                rotateDirection = mouseMovementDelta.x * 0.003f;
             }
         }
         
@@ -179,20 +181,15 @@ public class CameraSystem : MonoBehaviour
 
     private void ModifyCameraSpeedWithZoomLevel()
     {
-        if (IsCameraZoomedOut())
-        {
-            MoveSpeed = _fastMoveSpeed;
-            RotateSpeed = _fastRotateSpeed;
-            DragPanSpeed = _fastDragPanSpeed;
-            ZoomAmount = _fastZoomAmount;
-        }
-        else
-        {
-            MoveSpeed = _standardMoveSpeed;
-            RotateSpeed = _standardRotateSpeed;
-            DragPanSpeed = _standardDragPanSpeed;
-            ZoomAmount = _standardZoomAmount;
-        }
+        var angledAmount = (_cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.magnitude / FollowOffsetMax);
+        var newYFollowOffset = Mathf.Clamp(-_followOffset.z * Mathf.Clamp01(angledAmount * 5f) - (200f * angledAmount), 15f, 1000f);
+        
+        _followOffset = new Vector3(_followOffset.x, newYFollowOffset, _followOffset.z);
+        
+        MoveSpeed = _fastMoveSpeed * Mathf.Clamp01(angledAmount * 2f);
+        RotateSpeed = _fastRotateSpeed * Mathf.Clamp01(angledAmount * 7.5f);
+        DragPanSpeed = _fastDragPanSpeed * Mathf.Clamp01(angledAmount * 10f);
+        ZoomAmount = _fastZoomAmount * angledAmount * 2f;
     }
 
     private void CalculateCameraMovement(Vector3 inputDirection)
@@ -201,13 +198,7 @@ public class CameraSystem : MonoBehaviour
         transform.position += moveDirection * (MoveSpeed * Time.deltaTime);
     }
 
-    private void CalculateCameraRotation(float rotateDirection)
-    {
-        transform.eulerAngles += new Vector3(0, rotateDirection * RotateSpeed * Time.deltaTime, 0);
-    }
+    private void CalculateCameraRotation(float rotateDirection) => transform.eulerAngles += new Vector3(0, rotateDirection * RotateSpeed * Time.deltaTime, 0);
 
-    private bool IsCameraZoomedOut()
-    {
-        return _followOffset.magnitude > 200f;
-    }
+    //private bool IsCameraZoomedOut() => _followOffset.magnitude > ZoomedBarrier;
 }

@@ -53,9 +53,10 @@ MonoBehaviour:
   UseDragPanMove: 1
   UseMouseCameraRotation: 1
   ZoomSpeed: 10
-  ZoomAmount: 100
+  ZoomAmount: 80
   FollowOffsetMin: 30
   FollowOffsetMax: 1500
+  ZoomedBarrier: 200
 --- !u!1 &1256726020488385428
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +210,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5307496882201268267}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.3284428, y: -0.000000012385044, z: 0.000000004306685, w: -0.9445239}
+  m_LocalRotation: {x: -0.38268343, y: 0.000000010367103, z: -0.0000000042944066, w: -0.92387956}
   m_LocalPosition: {x: -0.000027815346, y: 1060.66, z: -1060.6602}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
