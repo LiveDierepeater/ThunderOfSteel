@@ -30,7 +30,8 @@ public abstract class Projectile: MonoBehaviour
 
     private void UpdateTargetPosition()
     {
-        TargetPosition = Target.transform.position;
+        if (Target is not null)
+            TargetPosition = Target.transform.position;
         // try
         // {
         //     targetPosition = target.transform.position;
@@ -43,13 +44,13 @@ public abstract class Projectile: MonoBehaviour
 
     private void ApplyDamageToTarget()
     {
-        print(Target);
+        print(_armorDamage[(int)Target.UnitData.Armor]);
         Target.UnitData.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
     }
 
     private void HandleTargetDeath() => Target = null;
 
-    public void InitializeWeaponryEvents(Weaponry ownerWeaponry) => ownerWeaponry.OnTargetDeath += HandleTargetDeath;
+    public void InitializeWeaponryEvents(Weaponry ownerWeaponry) => ownerWeaponry.OnLoosingTarget += HandleTargetDeath;
 
     public void InitializeArmorDamage(int[] armorDamage) => _armorDamage = armorDamage;
 

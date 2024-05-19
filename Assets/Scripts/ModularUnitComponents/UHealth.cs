@@ -70,6 +70,7 @@ public class UHealth : UnitSystem
     {
         // Stop Regeneration Coroutine
         StopAllCoroutines();
+        TickManager.Instance.TickSystem.OnTick -= RegenerateHealth;
         
         // Notifying BattleManager about the Death of this.Unit
         BattleManager.Instance.NotifyDeath(Unit);

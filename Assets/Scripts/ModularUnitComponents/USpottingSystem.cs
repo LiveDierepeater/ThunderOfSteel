@@ -8,8 +8,7 @@ public class USpottingSystem : UnitSystem
     private LayerMask _unitsLayer;
     private LayerMask _obstacleLayer;
     
-    public delegate void HandleSpotterUnitsDeath();
-    public HandleSpotterUnitsDeath OnSpotterUnitDeath;
+    public Action OnSpotterUnitDeath;
     
     private void Start()
     {
@@ -25,13 +24,7 @@ public class USpottingSystem : UnitSystem
         OnSpotterUnitDeath?.Invoke();
         Unit.UnitData.Events.OnUnitDeath?.Invoke();
         TickManager.Instance.TickSystem.OnTickBegin -= HandleTick;
-        Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
-    }
-
-    private void HandleSpotterUnitDeath()
-    {
-        Unit.SpottingUnit.USpottingSystem.OnSpotterUnitDeath -= HandleSpotterUnitDeath;
-        DeleteSpotterUnitReference();
+        Unit.UnitData.Events.OnHandleUnitDeathForSpotting -= HandleUnitDeath;
     }
 
     private void HandleTick()
@@ -81,7 +74,7 @@ public class USpottingSystem : UnitSystem
                 {
                     targetUnit.IsSpotted = true;
                     targetUnit.SpottingUnit = Unit;
-                    OnSpotterUnitDeath += targetUnit.USpottingSystem.HandleSpotterUnitDeath;
+                    OnSpotterUnitDeath += targetUnit.USpottingSystem.DeleteSpotterUnitReference;
                 }
             }
         }

@@ -13,7 +13,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public Unit _targetUnit { get; private set; }
 
     public delegate void OnTargetDeathDelegate();
-    public OnTargetDeathDelegate OnTargetDeath;
+    public OnTargetDeathDelegate OnLoosingTarget;
     
 #region Internal Fields
 
@@ -104,10 +104,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
             if (_targetUnit.transform.gameObject.activeSelf) // Unit has target
                 MoveInRange();
             else                                             // Unit is inactive (dead)
-            {
-                OnTargetDeath?.Invoke();
                 SetTarget(null);
-            }
 /*
         else if (_targetUnit is null) // Unit has NO target
             CheckForNewTargetInRange();
@@ -127,6 +124,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (target is not null) BattleManager.Instance.StartAttack(this, target);
         
         _targetUnit = target;
+        OnLoosingTarget?.Invoke();
     }
 
     public void SetWeaponryData(UnitWeaponry weaponryData)
