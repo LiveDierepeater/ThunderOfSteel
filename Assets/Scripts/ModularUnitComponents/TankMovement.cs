@@ -107,8 +107,6 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _agent.angularSpeed = _turnSpeed;
         _agent.acceleration = _maxAcceleration;
         _agent.stoppingDistance = _stoppingDistance;
-
-        _agent.agentTypeID = -1;
         
         // Pasting Class Values
         _currentMovementState = MovementStates.Idle;
