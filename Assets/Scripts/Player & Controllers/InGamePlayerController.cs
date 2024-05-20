@@ -113,7 +113,7 @@ public class InGamePlayerController : MonoBehaviour
                     var center = CalculateCenterPoint(selectedUnits);
                     var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits, _unitSpacing);
                     var unitCount = 0;
-                    print("Woods");
+                    
                     foreach (var unit in selectedUnits)
                     {
                         if (unit.UnitData.UnitType == UnitData.Type.Infantry)
