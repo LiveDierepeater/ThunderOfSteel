@@ -3,7 +3,22 @@ guid: 92586320800f2fb49a12ec320a632fb8
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hull
+    second: {fileID: 2100000, guid: 3ae231eecc6af94429ca094647ad022a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tracks
+    second: {fileID: 2100000, guid: 8e2be483b5d082a4fbac8a3bd20853a4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: turret
+    second: {fileID: 2100000, guid: d7ea8452ac40177468dd9428d67cda79, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

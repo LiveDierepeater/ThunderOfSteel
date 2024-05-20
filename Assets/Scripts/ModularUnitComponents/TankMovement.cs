@@ -130,18 +130,18 @@ public class TankMovement : UnitSystem, IMovementBehavior
         if (_agent.path.corners.Length <= 1) return;
         
         // Getting values for calculation
-        var forwardAmount = 1f;
+        var forwardAmount = 0f;
         var directionToNextPathCorner = (_agent.path.corners[1] - transform.position).normalized;
         var dot = Vector3.Dot(transform.forward, directionToNextPathCorner);
         var angleToDir = Vector3.SignedAngle(transform.forward, directionToNextPathCorner, Vector3.up);
         
         // New forwardAmount when tank needs to turn to nextPathCorner
-        if (dot < 0.925f) forwardAmount = 1f * dot * dot * dot * dot;
-
+        if (dot > 0.925f) forwardAmount = 1f * dot * dot * dot * dot;
+        
         if ((Mathf.Abs(angleToDir)) >= 90) forwardAmount = 0f;
 
         // The amount the tank has to turn
-        var turnAmount = Mathf.Sign(angleToDir) * _turnSpeed * Time.deltaTime * (1f - dot);
+        var turnAmount = Mathf.Sign(angleToDir) * _turnSpeed * Time.deltaTime;
         transform.Rotate(Vector3.up, turnAmount);
         
         // Set _agent.speed to new value

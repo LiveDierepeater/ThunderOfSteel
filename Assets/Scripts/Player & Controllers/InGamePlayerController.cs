@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class InGamePlayerController : MonoBehaviour
 {
@@ -16,7 +15,8 @@ public class InGamePlayerController : MonoBehaviour
     private LayerMask _interactableLayerMask;
     [SerializeField] private float dragDelay = 0.1f;
 
-    [SerializeField, Range(0, 10)] private int _unitWidth = 5;
+    [SerializeField, Range(0, 10)] private int _unitWidth = 10;
+    [SerializeField] private float _unitSpacing = 20f;
 
 #region Internal Fields
 
@@ -95,7 +95,7 @@ public class InGamePlayerController : MonoBehaviour
                 {
                     var selectedUnits = SelectionManager.Instance.SelectedUnits;
                     var center = CalculateCenterPoint(selectedUnits);
-                    var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits);
+                    var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits, _unitSpacing);
                     var unitCount = 0;
                     
                     foreach (var unit in selectedUnits)
@@ -111,7 +111,7 @@ public class InGamePlayerController : MonoBehaviour
                 {
                     var selectedUnits = SelectionManager.Instance.SelectedUnits;
                     var center = CalculateCenterPoint(selectedUnits);
-                    var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits);
+                    var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits, _unitSpacing);
                     var unitCount = 0;
                     print("Woods");
                     foreach (var unit in selectedUnits)
@@ -266,7 +266,7 @@ public class InGamePlayerController : MonoBehaviour
                && position.y < bounds.max.y;
     }
     
-    private List<Vector3> CalculateFormationPositions(Vector3 center, Vector3 destination, HashSet<Unit> units)
+    private List<Vector3> CalculateFormationPositions(Vector3 center, Vector3 destination, HashSet<Unit> units, float spacing)
     {
         var positions = new List<Vector3>();
         
@@ -285,7 +285,7 @@ public class InGamePlayerController : MonoBehaviour
             var row = i / _unitWidth;
             var col = i % _unitWidth;
             
-            var localPosition = new Vector3((col - offsetX) * 2, 0, (row - offsetZ) * 2);
+            var localPosition = new Vector3((col - offsetX) * spacing, 0, (row - offsetZ) * spacing);
             var rotatedPosition = rotation * localPosition;
             positions.Add(destination + rotatedPosition);
         }
