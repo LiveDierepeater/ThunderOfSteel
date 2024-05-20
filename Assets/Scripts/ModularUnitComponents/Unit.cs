@@ -8,25 +8,25 @@ public class Unit : MonoBehaviour
     [Header("Data")]
     [ExposedScriptableObject]
     public UnitData UnitData;
-    public Transform Mesh;
-    public CapsuleCollider Collider;
+    [HideInInspector] public Transform Mesh;
+    [HideInInspector] public SphereCollider Collider;
     [Space(5)]
     
     [Header("Movement Curves")]
     public AnimationCurve accelerationCurve;
     public AnimationCurve decelerationCurve;
-    public AnimationCurve RotationCurve;
+
     [Space(5)]
     
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
+    private Color selectionSpriteColor;
     public Transform ShellSpawnLocation;
     public bool IsAttacking; // Could be removed in future
-    public bool RandomizeUnitPlayerID;
     public int UnitPlayerID;
 
     [Space(10)]
-    public USpottingSystem USpottingSystem;
+    [HideInInspector] public USpottingSystem USpottingSystem;
     public Unit SpottingUnit;
     public bool IsSpotted;
 
@@ -72,7 +72,17 @@ public class Unit : MonoBehaviour
         
         ShellSpawnLocation = transform.Find("ShellSpawnLocation");
         Mesh = transform.Find("Mesh");
-        Collider = GetComponent<CapsuleCollider>();
+        Collider = GetComponent<SphereCollider>();
+        
+    }
+
+    private void InitializeSpritePlayerColor()
+    {
+        if (UnitData.PlayerID == InputManager.Instance.Player.GetInstanceID())
+        {
+            selectionSpriteColor = InputManager.Instance.Player.PlayerColor;
+            selectionSprite.color = selectionSpriteColor;
+        }
     }
 
     private void Start()
@@ -80,6 +90,7 @@ public class Unit : MonoBehaviour
         UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
         UnitPlayerID = UnitData.PlayerID;
         //UnitManager.Instance.AddUnit(this, UnitPlayerID);
+        InitializeSpritePlayerColor();
         UnitDeathInitialization();
     }
 
@@ -109,15 +120,9 @@ public class Unit : MonoBehaviour
 
 #region External Called Logic
 
-    public void OnSelected()
-    {
-        selectionSprite.gameObject.SetActive(true);
-    }
+    public void OnSelected() => selectionSprite.color = Color.white;
 
-    public void OnDeselected()
-    {
-        selectionSprite.gameObject.SetActive(false);
-    }
+    public void OnDeselected() => selectionSprite.color = selectionSpriteColor;
 
     public void CommandToDestination(Vector3 newDestination)
     {
@@ -164,8 +169,7 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (RandomizeUnitPlayerID) RandomizePlayerID();
-        if (Input.GetKeyDown(KeyCode.K) && selectionSprite.gameObject.activeSelf) RandomizePlayerID();
+        if (Input.GetKeyDown(KeyCode.K) && selectionSprite.color == Color.white) RandomizePlayerID();
     }
 
     private void RandomizePlayerID()
@@ -179,8 +183,6 @@ public class Unit : MonoBehaviour
         UnitData.PlayerID = newPlayerID;
             
         SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
-
-        RandomizeUnitPlayerID = false;
     }
 
 #endregion

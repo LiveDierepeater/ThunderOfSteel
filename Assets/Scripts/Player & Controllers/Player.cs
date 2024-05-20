@@ -9,4 +9,6 @@ public class Player : MonoBehaviour
     public LayerMask WoodsLayerMask;
     public LayerMask interactableLayerMask;
     public LayerMask RaycastLayerMask;
+
+    public Color PlayerColor = Color.blue;
 }

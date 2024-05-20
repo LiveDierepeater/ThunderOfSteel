@@ -172,6 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitData: {fileID: 11400000, guid: 4fbcad05a7064594d87b83c659dc35c7, type: 2}
+  Mesh: {fileID: 0}
+  Collider: {fileID: 0}
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -238,10 +240,21 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  RotationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   selectionSprite: {fileID: 804835849124565450}
+  selectionSpriteColor: {r: 0, g: 0, b: 0, a: 0}
   ShellSpawnLocation: {fileID: 0}
   IsAttacking: 0
   RandomizeUnitPlayerID: 0
+  UnitPlayerID: 0
+  USpottingSystem: {fileID: 0}
+  SpottingUnit: {fileID: 0}
+  IsSpotted: 0
 --- !u!114 &5316016410058570438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +398,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &771121102969332315
 Transform:
   m_ObjectHideFlags: 0
@@ -395,8 +408,8 @@ Transform:
   m_GameObject: {fileID: 6548636575653184667}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5442004313004225068}
@@ -442,7 +455,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 21300000, guid: 5574ccb59b05c73429bdbc6b18854a1c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
