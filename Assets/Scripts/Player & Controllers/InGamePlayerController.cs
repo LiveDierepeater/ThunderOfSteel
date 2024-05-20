@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class InGamePlayerController : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class InGamePlayerController : MonoBehaviour
     [SerializeField] private RectTransform selectionBox;
     private LayerMask _unitsLayerMask;
     private LayerMask _terrainLayerMask;
+    private LayerMask _woodsLayerMask;
     private LayerMask _interactableLayerMask;
     [SerializeField] private float dragDelay = 0.1f;
 
@@ -53,6 +55,7 @@ public class InGamePlayerController : MonoBehaviour
     {
         _unitsLayerMask = player.unitsLayerMask;
         _terrainLayerMask = player.terrainLayerMask;
+        _woodsLayerMask = player.WoodsLayerMask;
         _interactableLayerMask = player.interactableLayerMask;
     }
 
@@ -60,10 +63,7 @@ public class InGamePlayerController : MonoBehaviour
 
 #region Intern Logic
 
-    private void HandleSelectionInputs()
-    {
-        HandleMouseInputs();
-    }
+    private void HandleSelectionInputs() => HandleMouseInputs();
 
     private void HandleMouseInputs()
     {
@@ -104,6 +104,24 @@ public class InGamePlayerController : MonoBehaviour
                         unit.CommandToDestination(formationPositions[unitCount]);
                         unitCount++;
                         //SpawnMoveToSprite(formationPositions[i]);
+                    }
+                }
+                // Check, if clicked on Woods
+                else if ((_woodsLayerMask.value & (1 << hit.transform.gameObject.layer)) != 0)
+                {
+                    var selectedUnits = SelectionManager.Instance.SelectedUnits;
+                    var center = CalculateCenterPoint(selectedUnits);
+                    var formationPositions = CalculateFormationPositions(center, hit.point, selectedUnits);
+                    var unitCount = 0;
+                    print("Woods");
+                    foreach (var unit in selectedUnits)
+                    {
+                        if (unit.UnitData.UnitType == UnitData.Type.Infantry)
+                        {
+                            unit.RemoveTarget();
+                            unit.CommandToDestination(formationPositions[unitCount]);
+                        }
+                        unitCount++;
                     }
                 }
             }
@@ -170,8 +188,7 @@ public class InGamePlayerController : MonoBehaviour
             mouseDownTime = 0;
         }
     }
-    
-    
+
     private void HandleUnitSelection(Unit unit)
     {
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
@@ -191,7 +208,7 @@ public class InGamePlayerController : MonoBehaviour
             SelectionManager.Instance.Select(unit);
         }
     }
-    
+
     private void SelectUnitsInBox()
     {
         // The rectangle is created from the current position and size of the selectionBox on the screen
@@ -217,7 +234,7 @@ public class InGamePlayerController : MonoBehaviour
             }
         }
     }
-    
+
     private void ResizeSelectionBox()
     {
         float width = Input.mousePosition.x - startMousePosition.x;

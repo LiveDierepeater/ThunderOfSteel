@@ -96,16 +96,19 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _currentMaxSpeed = _standardSpeed;
         
         // DrivingOnStreets Setup
-        if (Unit.UnitData.UnitType == UnitData.Type.Infantry)
-            _agent.SetAreaCost(3, 1);
-        else
+        if (Unit.UnitData.UnitType == UnitData.Type.Tank)
+        {
             _agent.SetAreaCost(3, 50);
-
+            _agent.SetAreaCost(4, 500);
+        }
+        
         // Pasting Agent Values
         _agent.speed = _standardSpeed;
         _agent.angularSpeed = _turnSpeed;
         _agent.acceleration = _maxAcceleration;
         _agent.stoppingDistance = _stoppingDistance;
+
+        _agent.agentTypeID = -1;
         
         // Pasting Class Values
         _currentMovementState = MovementStates.Idle;

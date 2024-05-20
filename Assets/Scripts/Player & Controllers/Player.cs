@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     [Space(10)]
     public LayerMask unitsLayerMask;
     public LayerMask terrainLayerMask;
+    public LayerMask WoodsLayerMask;
     public LayerMask interactableLayerMask;
     public LayerMask RaycastLayerMask;
 }
