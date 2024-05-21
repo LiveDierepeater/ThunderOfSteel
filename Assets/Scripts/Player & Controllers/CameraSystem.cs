@@ -182,7 +182,7 @@ public class CameraSystem : MonoBehaviour
     private void ModifyCameraSpeedWithZoomLevel()
     {
         var angledAmount = (_cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset.magnitude / FollowOffsetMax);
-        var newYFollowOffset = Mathf.Clamp(-_followOffset.z * Mathf.Clamp01(angledAmount * 5f) - (80f * angledAmount), 20f, 1000f);
+        var newYFollowOffset = Mathf.Clamp(-_followOffset.z * Mathf.Clamp01(angledAmount * 5f) - (40f * angledAmount), 20f, 1000f);
         
         _followOffset = new Vector3(_followOffset.x, newYFollowOffset, _followOffset.z);
         

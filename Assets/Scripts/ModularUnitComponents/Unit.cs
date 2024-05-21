@@ -48,16 +48,16 @@ public class Unit : MonoBehaviour
         {
             case UnitData.Type.Infantry:
                 gameObject.AddComponent<InfantryMovement>();
-                CreateWeaponry();
                 gameObject.AddComponent<UHealth>();
                 USpottingSystem = gameObject.AddComponent<USpottingSystem>();
+                CreateWeaponry();
                 break;
             
             case UnitData.Type.Tank:
                 gameObject.AddComponent<TankMovement>();
-                CreateWeaponry();
                 gameObject.AddComponent<UHealth>();
                 USpottingSystem = gameObject.AddComponent<USpottingSystem>();
+                CreateWeaponry();
                 break;
             
             case UnitData.Type.Truck:
@@ -73,7 +73,24 @@ public class Unit : MonoBehaviour
         ShellSpawnLocation = transform.Find("ShellSpawnLocation");
         Mesh = transform.Find("Mesh");
         Collider = GetComponent<SphereCollider>();
-        
+    }
+
+    private void CreateWeaponry()
+    {
+        foreach (var weaponryData in UnitData.UnitWeaponry)
+        {
+            Weaponry newWeaponry = Instantiate(UnitData.weaponryPrefab, transform);
+            newWeaponry.SetWeaponryData(weaponryData);
+        }
+    }
+
+    private void Start()
+    {
+        UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
+        UnitPlayerID = UnitData.PlayerID;
+        UnitManager.Instance.AddUnit(this, UnitPlayerID);
+        InitializeSpritePlayerColor();
+        UnitDeathInitialization();
     }
 
     private void InitializeSpritePlayerColor()
@@ -83,23 +100,15 @@ public class Unit : MonoBehaviour
             selectionSpriteColor = InputManager.Instance.Player.PlayerColor;
             selectionSprite.color = selectionSpriteColor;
         }
-    }
-
-    private void Start()
-    {
-        UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
-        UnitPlayerID = UnitData.PlayerID;
-        //UnitManager.Instance.AddUnit(this, UnitPlayerID);
-        InitializeSpritePlayerColor();
-        UnitDeathInitialization();
-    }
-
-    private void CreateWeaponry()
-    {
-        foreach (var weaponryData in UnitData.UnitWeaponry)
+        else if (CompareTag("AI"))
         {
-            Weaponry newWeaponry = Instantiate(UnitData.weaponryPrefab, transform);
-            newWeaponry.SetWeaponryData(weaponryData);
+            selectionSpriteColor = Color.red;
+            selectionSprite.color = selectionSpriteColor;
+        }
+        else
+        {
+            selectionSpriteColor = Color.green;
+            selectionSprite.color = selectionSpriteColor;
         }
     }
 
@@ -112,6 +121,7 @@ public class Unit : MonoBehaviour
 
     private void OnDestroy()
     {
+        UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
         UnitData.Events.OnUnitDeath -= SetUnitDead;
         TickManager.Instance.TickSystem.OnTickEnd -= DestroyUnit;
     }

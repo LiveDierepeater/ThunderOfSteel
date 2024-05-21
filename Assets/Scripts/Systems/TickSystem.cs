@@ -16,15 +16,9 @@ public class TickSystem : MonoBehaviour
     public int elapsedTicks { get; private set; }
     private float nextTick;
 
-    private void Awake()
-    {
-        TickManager.Instance.TickSystem = this;
-    }
+    private void Awake() => TickManager.Instance.TickSystem = this;
 
-    void Update()
-    {
-        TickTimer();
-    }
+    void Update() => TickTimer();
 
     private void TickTimer()
     {

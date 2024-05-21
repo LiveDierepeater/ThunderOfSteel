@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class UnitManager
 {
-    private static UnitManager Instance { get; set; }
+    private static UnitManager _instance;
+
+    public static UnitManager Instance => _instance ??= new UnitManager();
 
     // Dictionary for mapping PlayerIDs to the lists of units per team
     private readonly Dictionary<int, List<Unit>> _teamUnits = new Dictionary<int, List<Unit>>();
@@ -11,20 +12,17 @@ public class UnitManager : MonoBehaviour
     // List of existing PlayerIDs
     private readonly List<int> _playerIDs = new List<int>();
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
+    private const int AI_ID = 10101;
 
     public void AddUnit(Unit unit, int unitsPlayerID)
     {
+        if (unit.CompareTag("AI"))
+        {
+            unit.UnitData.PlayerID = AI_ID;
+            unit.UnitPlayerID = AI_ID;
+            unitsPlayerID = AI_ID;
+        }
+        
         // If there are no PlayerIDs, add the first one
         if (_playerIDs.Count == 0)
         {
@@ -66,18 +64,15 @@ public class UnitManager : MonoBehaviour
         
         // Remove unitsPlayerID from _teamUnits List, if there are no more units registered under this unitsPlayerID
         if (_teamUnits[unitsPlayerID].Count == 0) _teamUnits.Remove(unitsPlayerID);
+
+        //Debug.Log(GetUnitsForPlayerID(unitsPlayerID).Count.ToString());
     }
 
-    // Method to get the unit list for a specific PlayerID
-    public List<Unit> GetUnitsForPlayerID(int playerID)
-    {
-        if (_teamUnits.TryGetValue(playerID, out var id))
-            return id;
-        
-        // If the PlayerID does not exist, return an empty list
-        return new List<Unit>();
-    }
-    
-    // Method to get the combined unit lists for all enemy PlayerID's
-    
+    /// <summary>
+    /// Method to get the unit list for a specific PlayerID.
+    /// If the PlayerID does not exist, return an empty list.
+    /// </summary>
+    /// <param name="playerID"></param>
+    /// <returns></returns>
+    public List<Unit> GetUnitsForPlayerID(int playerID) => _teamUnits.TryGetValue(playerID, out var id) ? id : new List<Unit>();
 }
