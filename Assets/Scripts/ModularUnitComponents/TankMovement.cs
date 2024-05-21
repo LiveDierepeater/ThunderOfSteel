@@ -204,7 +204,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
 
 #region Intern Logic
 
-    #region Movement: Base Logic
+#region Movement: Base Logic
 
     private void HandleMovementState()
     {
@@ -257,9 +257,9 @@ public class TankMovement : UnitSystem, IMovementBehavior
             ResetUnitMovementValuesToDefault();
     }
 
-    #endregion
+#endregion
 
-    #region Movement: Area-Based Logic
+#region Movement: Area-Based Logic
 
     private void HandleMovementSpeedOnAreas()
     {
@@ -280,7 +280,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
         _currentAreaIndex = newUnitArea;
     }
 
-    #endregion
+#endregion
 
 #endregion
 
@@ -310,15 +310,9 @@ public class TankMovement : UnitSystem, IMovementBehavior
 
 #region Extracted Return Methods
 
-    private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition)
-    {
-        return Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
-    }
+    private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition) => Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
 
-    private bool IsUnitStanding()
-    {
-        return _currentAgentSpeed < 0.25f;
-    }
+    private bool IsUnitStanding() => _currentAgentSpeed < 0.25f;
 
     private int GetUnitsCurrentArea()
     {
