@@ -14,6 +14,7 @@ public class WeaponryHandler : UnitSystem
         Unit.UnitData.Events.OnUnitDeath += HandleUnitDeath;
         Unit.UnitData.Events.OnUnitFlee += HandleUnitFlee;
         Unit.UnitData.Events.OnUnitOperational += HandleUnitOperational;
+        Unit.UnitData.Events.OnGetMaxAttackRange += GetMaxAttackRange;
 
         Invoke(nameof(InitializeOnCheckForEnemyUnit), 0.1f);
     }
@@ -40,6 +41,7 @@ public class WeaponryHandler : UnitSystem
         Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
         Unit.UnitData.Events.OnUnitFlee -= HandleUnitFlee;
         Unit.UnitData.Events.OnUnitOperational -= HandleUnitOperational;
+        Unit.UnitData.Events.OnGetMaxAttackRange -= GetMaxAttackRange;
     }
 
     private void HandleUnitFlee(Vector3 projectileOrigin)
@@ -147,6 +149,17 @@ public class WeaponryHandler : UnitSystem
         }
         
         return searchingWeapons;
+    }
+
+    private float GetMaxAttackRange()
+    {
+        var maxAttackRange = - 1f;
+        
+        foreach (var weaponry in _weapons)
+            if (weaponry.MaxAttackRange > maxAttackRange)
+                maxAttackRange = weaponry.MaxAttackRange;
+        
+        return maxAttackRange;
     }
 
     private void InitializeOnCheckForEnemyUnit()

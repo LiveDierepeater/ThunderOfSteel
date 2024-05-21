@@ -4,7 +4,7 @@ using UnityEngine;
 public struct UnitEvents
 {
     //public delegate void UnitIsInRange(Vector3 newDestination);
-    public Action<Vector3> OnAttackUnit;
+    public Action<Vector3> OnCommandToDestination;
     public Action<Unit> OnNewTargetUnit;
     public Action OnStopUnit;
     public Action<Vector3, int> OnAttack;
@@ -15,4 +15,7 @@ public struct UnitEvents
     
     public delegate bool CheckForEnemyUnits(int unitID);
     public CheckForEnemyUnits OnCheckForEnemyUnit;
+
+    public delegate float GetMaxAttackRange();
+    public GetMaxAttackRange OnGetMaxAttackRange;
 }

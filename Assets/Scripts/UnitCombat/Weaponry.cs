@@ -159,13 +159,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
         if (CanAttack)
         {
-            // Returns, if '_targetUnit' is not spotted and the ShellType of this weaponry is not an artillery shell
-            if ( ! _targetUnit.IsSpotted && _weaponryData.ShellType != UnitWeaponry.Shells.Artillery)
-            {
-                SetTarget(null);
-                return;
-            }
-            
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
 
             // Target is in 'AttackRange'
@@ -176,10 +169,13 @@ public class Weaponry : UnitSystem, IAttackBehavior
             else if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack)
             {
                 // Move to target, till Unit is in 'AttackRange'
-
-                Unit.UnitData.Events.OnAttackUnit?.Invoke(_targetUnit.transform.position);
+                print("invoked");
+                Unit.UnitData.Events.OnCommandToDestination?.Invoke(_targetUnit.transform.position);
                 Unit.IsAttacking = false; // DEBUG
             }
+            
+            // Returns, if '_targetUnit' is not spotted and the ShellType of this weaponry is not an artillery shell
+            //if ( ! _targetUnit.IsSpotted && _weaponryData.ShellType != UnitWeaponry.Shells.Artillery) SetTarget(null);
         }
     }
 
