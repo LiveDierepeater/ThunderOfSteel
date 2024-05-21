@@ -11,7 +11,7 @@ public class ArtilleryShell : Projectile
     private const float _GroundLevel = 0f;
     private const float _Gravity = 9.81f;
 
-    protected void Start()
+    protected new void Start()
     {
         _initialPosition = transform.position;
         _launchTime = Time.time;
