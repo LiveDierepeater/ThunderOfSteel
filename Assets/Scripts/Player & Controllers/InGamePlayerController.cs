@@ -247,6 +247,9 @@ public class InGamePlayerController : MonoBehaviour
 
         foreach (var availableUnit in SelectionManager.Instance.AvailableUnits)
         {
+            // Return, if availableUnit is not a unit from player
+            if (availableUnit.UnitPlayerID != InputManager.Instance.Player.GetInstanceID()) return;
+            
             if (UnitIsInSelectionBox(camera.WorldToScreenPoint(availableUnit.transform.position), bounds))
                 SelectionManager.Instance.Select(availableUnit);
             else
