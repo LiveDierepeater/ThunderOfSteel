@@ -7,16 +7,28 @@ public class USpottingSystem : UnitSystem
     private float _spottingRange;
     private LayerMask _unitsLayer;
     private LayerMask _obstacleLayer;
-    
+
     public Action OnSpotterUnitDeath;
     
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTickBegin += HandleTick;
-        _spottingRange = Unit.UnitData.SpottingRange;
+        
+        InitializeSpottingRange();
+        
         _obstacleLayer = InputManager.Instance.Player.RaycastLayerMask;
         _unitsLayer = InputManager.Instance.Player.unitsLayerMask;
         Unit.UnitData.Events.OnHandleUnitDeathForSpotting += HandleUnitDeath;
+    }
+
+    private void InitializeSpottingRange()
+    {
+        _spottingRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke() * 0.5f;
+        
+        if (_spottingRange < 150f)
+            _spottingRange = 150f;
+        
+        Unit.UnitData.SpottingRange = _spottingRange;
     }
 
     private void HandleUnitDeath()

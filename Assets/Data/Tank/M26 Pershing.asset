@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5d5bc2e0b21d541a62c932c0d4036b, type: 3}
+  m_Name: M26 Pershing
+  m_EditorClassIdentifier: 
+  InstanceID: 0
+  PlayerID: 0
+  UnitName: M26 Pershing Eagle 7
+  Faction: 0
+  Class: Heavy Tank
+  WarMode: 2
+  UnitType: 1
+  Cost: 40
+  ProducedBy: 3
+  StandardSpeed: 34
+  TurnSpeed: 120
+  MaxAcceleration: 100
+  StoppingDistance: 10
+  FleeSpeed: 10
+  SpeedBonusOnRoad: 1
+  Armor: 6
+  MaxHealth: 400
+  weaponryPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
+  UnitWeaponry:
+  - {fileID: 11400000, guid: f44cd4d0f609f0a46903ec2572ff59f3, type: 2}
+  - {fileID: 11400000, guid: 9814831bcd159a54fb3ed90ec02246ae, type: 2}
+  - {fileID: 11400000, guid: 00ee208a97ef26b44ab51021b10fc8af, type: 2}
+  SpottingRange: 250
+  CurrentUnitCommand: 0
