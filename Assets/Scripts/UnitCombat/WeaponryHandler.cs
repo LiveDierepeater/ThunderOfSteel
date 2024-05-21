@@ -6,9 +6,6 @@ public class WeaponryHandler : UnitSystem
     private Weaponry[] _weapons = new Weaponry[5];
     private List<Weaponry> inactiveWeapons = new();
 
-    private delegate bool CheckForEnemyUnits(int unitID);
-    private CheckForEnemyUnits OnCheckForEnemyUnit;
-
     private void Start()
     {
         InitializeWeaponryArray();
@@ -97,11 +94,7 @@ public class WeaponryHandler : UnitSystem
             if ( ! nearbyUnit.IsSpotted) continue;
             
             // Continues for, if 'nearbyUnit' cannot get attacked by his team member
-            if (OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true)
-            {
-                print("Continue: " + nearbyUnit.name);
-                continue;
-            }
+            if (Unit.UnitData.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true) continue;
             
             //1<<LayerMask.NameToLayer("Buildings")
             if (Physics.Raycast(transform.position, nearbyUnit.transform.position - transform.position,
@@ -159,13 +152,13 @@ public class WeaponryHandler : UnitSystem
     private void InitializeOnCheckForEnemyUnit()
     {
         if (CompareTag("Ally"))
-            OnCheckForEnemyUnit += CheckForPlayerUnit;
+            Unit.UnitData.Events.OnCheckForEnemyUnit += CheckForPlayerUnit;
         
         else if (CompareTag("Untagged"))
-            OnCheckForEnemyUnit += CheckForAllyUnit;
+            Unit.UnitData.Events.OnCheckForEnemyUnit += CheckForAllyUnit;
         
         else
-            OnCheckForEnemyUnit += null;
+            Unit.UnitData.Events.OnCheckForEnemyUnit += null;
     }
     
     private bool CheckForPlayerUnit(int unitPlayerID) => unitPlayerID == InputManager.Instance.Player.GetInstanceID();

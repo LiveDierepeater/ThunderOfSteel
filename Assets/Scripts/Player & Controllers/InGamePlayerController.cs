@@ -86,6 +86,9 @@ public class InGamePlayerController : MonoBehaviour
                     {
                         foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
                         {
+                            // Continues for, if 'unitToAttack' cannot get attacked by his team member
+                            if (unit.UnitData.Events.OnCheckForEnemyUnit?.Invoke(unitToAttack.UnitPlayerID) == true) continue;
+                            
                             unit.CommandToAttack(unitToAttack);
                         }
                     }

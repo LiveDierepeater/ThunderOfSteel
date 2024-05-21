@@ -12,4 +12,7 @@ public struct UnitEvents
     public Action OnHandleUnitDeathForSpotting;
     public Action <Vector3> OnUnitFlee;
     public Action OnUnitOperational;
+    
+    public delegate bool CheckForEnemyUnits(int unitID);
+    public CheckForEnemyUnits OnCheckForEnemyUnit;
 }
