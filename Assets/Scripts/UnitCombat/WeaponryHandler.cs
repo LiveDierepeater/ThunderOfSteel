@@ -6,6 +6,9 @@ public class WeaponryHandler : UnitSystem
     private Weaponry[] _weapons = new Weaponry[5];
     private List<Weaponry> inactiveWeapons = new();
 
+    private delegate bool CheckForEnemyUnits(int unitID);
+    private CheckForEnemyUnits OnCheckForEnemyUnit;
+
     private void Start()
     {
         InitializeWeaponryArray();
@@ -14,6 +17,8 @@ public class WeaponryHandler : UnitSystem
         Unit.UnitData.Events.OnUnitDeath += HandleUnitDeath;
         Unit.UnitData.Events.OnUnitFlee += HandleUnitFlee;
         Unit.UnitData.Events.OnUnitOperational += HandleUnitOperational;
+
+        Invoke(nameof(InitializeOnCheckForEnemyUnit), 0.1f);
     }
 
     private void InitializeWeaponryArray()
@@ -91,6 +96,13 @@ public class WeaponryHandler : UnitSystem
             // Continues for, if current 'nearbyUnt' is not spotted
             if ( ! nearbyUnit.IsSpotted) continue;
             
+            // Continues for, if 'nearbyUnit' cannot get attacked by his team member
+            if (OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true)
+            {
+                print("Continue: " + nearbyUnit.name);
+                continue;
+            }
+            
             //1<<LayerMask.NameToLayer("Buildings")
             if (Physics.Raycast(transform.position, nearbyUnit.transform.position - transform.position,
                     Vector3.Distance(transform.position, nearbyUnit.transform.position),
@@ -143,4 +155,20 @@ public class WeaponryHandler : UnitSystem
         
         return searchingWeapons;
     }
+
+    private void InitializeOnCheckForEnemyUnit()
+    {
+        if (CompareTag("Ally"))
+            OnCheckForEnemyUnit += CheckForPlayerUnit;
+        
+        else if (CompareTag("Untagged"))
+            OnCheckForEnemyUnit += CheckForAllyUnit;
+        
+        else
+            OnCheckForEnemyUnit += null;
+    }
+    
+    private bool CheckForPlayerUnit(int unitPlayerID) => unitPlayerID == InputManager.Instance.Player.GetInstanceID();
+    
+    private bool CheckForAllyUnit(int unitPlayerID) => unitPlayerID == UnitManager.ALLY_ID;
 }

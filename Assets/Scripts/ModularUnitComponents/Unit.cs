@@ -105,7 +105,7 @@ public class Unit : MonoBehaviour
             selectionSpriteColor = Color.red;
             selectionSprite.color = selectionSpriteColor;
         }
-        else
+        else if (CompareTag("Ally"))
         {
             selectionSpriteColor = Color.green;
             selectionSprite.color = selectionSpriteColor;

@@ -11,4 +11,9 @@ public class Player : MonoBehaviour
     public LayerMask RaycastLayerMask;
 
     public Color PlayerColor = Color.blue;
+    
+    // ReSharper disable once NotAccessedField.Local
+    [SerializeField] private int PlayerID;
+
+    private void Awake() => PlayerID = GetInstanceID();
 }

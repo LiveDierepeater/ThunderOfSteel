@@ -175,6 +175,9 @@ public class InGamePlayerController : MonoBehaviour
                 {
                     if (hit.collider.gameObject.TryGetComponent(out Unit unit))
                     {
+                        // Return, if availableUnit is not a unit from player
+                        if ( ! unit.CompareTag("Untagged")) return;
+                        
                         HandleUnitSelection(unit);
                     }
                 }
@@ -193,14 +196,8 @@ public class InGamePlayerController : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            if (SelectionManager.Instance.IsSelected(unit))
-            {
-                SelectionManager.Instance.Deselect(unit);
-            }
-            else
-            {
-                SelectionManager.Instance.Select(unit);
-            }
+            if (SelectionManager.Instance.IsSelected(unit)) SelectionManager.Instance.Deselect(unit);
+            else SelectionManager.Instance.Select(unit);
         }
         else
         {
@@ -226,6 +223,9 @@ public class InGamePlayerController : MonoBehaviour
             // Ignore Z coordinate because ScreenPoint Z is always positive
             if (selectionRect.Contains(new Vector2(unitScreenPosition.x, unitScreenPosition.y)))
             {
+                // Return, if availableUnit is not a unit from player
+                if ( ! unit.CompareTag("Untagged")) return;
+                
                 SelectionManager.Instance.Select(unit);
             }
             else
@@ -248,7 +248,7 @@ public class InGamePlayerController : MonoBehaviour
         foreach (var availableUnit in SelectionManager.Instance.AvailableUnits)
         {
             // Return, if availableUnit is not a unit from player
-            if (availableUnit.UnitPlayerID != InputManager.Instance.Player.GetInstanceID()) return;
+            if ( ! availableUnit.CompareTag("Untagged")) return;
             
             if (UnitIsInSelectionBox(camera.WorldToScreenPoint(availableUnit.transform.position), bounds))
                 SelectionManager.Instance.Select(availableUnit);

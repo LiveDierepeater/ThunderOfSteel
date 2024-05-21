@@ -12,7 +12,8 @@ public class UnitManager
     // List of existing PlayerIDs
     private readonly List<int> _playerIDs = new List<int>();
 
-    private const int AI_ID = 10101;
+    public const int AI_ID = 10101;
+    public const int ALLY_ID = 10102;
 
     public void AddUnit(Unit unit, int unitsPlayerID)
     {
@@ -21,6 +22,13 @@ public class UnitManager
             unit.UnitData.PlayerID = AI_ID;
             unit.UnitPlayerID = AI_ID;
             unitsPlayerID = AI_ID;
+        }
+
+        if (unit.CompareTag("Ally"))
+        {
+            unit.UnitData.PlayerID = ALLY_ID;
+            unit.UnitPlayerID = ALLY_ID;
+            unitsPlayerID = ALLY_ID;
         }
         
         // If there are no PlayerIDs, add the first one

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InstanceID: 0
   PlayerID: 0
-  UnitName: Stuart
+  UnitName: M3 Stuart
   Faction: 0
   Class: Light Tank
   WarMode: 0
