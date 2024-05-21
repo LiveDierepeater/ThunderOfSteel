@@ -178,7 +178,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
             
             if (distanceFromPenultimateCornerToNewDestination <= maxAttackRange) return;
             
-            newDestination = (newDestination - penultimateCorner).normalized *
+            newDestination -= (newDestination - penultimateCorner).normalized *
                              (distanceFromPenultimateCornerToNewDestination - maxAttackRange);
             print("A: " + _agent.path.corners.Length);
         }
@@ -189,7 +189,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
             
             if (distanceFromUnitToNewDestination <= maxAttackRange) return;
             
-            newDestination += (newDestination - transform.position).normalized *
+            newDestination -= (newDestination - transform.position).normalized *
                              (distanceFromUnitToNewDestination - maxAttackRange);
             print(newDestination);
             print("B: " + _agent.path.corners.Length);
