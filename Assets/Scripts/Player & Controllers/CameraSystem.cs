@@ -59,8 +59,6 @@ public class CameraSystem : MonoBehaviour
         _fastZoomAmount = ZoomAmount;
     }
 
-    private void Start() => InputManager.Instance.CameraSystem = this;
-
     private void Update()
     {
         ModifyCameraSpeedWithZoomLevel();
@@ -196,6 +194,7 @@ public class CameraSystem : MonoBehaviour
         ZoomAmount = _fastZoomAmount * angledAmount * 2f;
 
         CurrentZoomLevel = angledAmount;
+        InputManager.Instance.OnCameraUpdate?.Invoke(CurrentZoomLevel);
     }
 
     private void CalculateCameraMovement(Vector3 inputDirection)

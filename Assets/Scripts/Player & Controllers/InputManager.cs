@@ -15,6 +15,8 @@ public class InputManager : InputReader
     [HideInInspector] public CameraSystem CameraSystem;
     [HideInInspector] public Player Player;
 
+    public Action<float> OnCameraUpdate;
+
 #region Initializing
 
     protected override void Awake()

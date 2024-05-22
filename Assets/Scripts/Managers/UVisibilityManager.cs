@@ -1,18 +1,19 @@
-using System;
 using UnityEngine;
 
 public class UVisibilityManager : UnitSystem
 {
+    [Header("Data")]
     public FactionData FactionData;
     
-    public Texture2D MaskTexture;
-    public Color PlayerColor;
-
+    [HideInInspector] public Texture2D MaskTexture;
+    [HideInInspector] public Color PlayerColor;
+    
+    [Header("References")]
+    [SerializeField] private Transform _meshSlot;
     [SerializeField] private Renderer _renderer;
     private MaterialPropertyBlock _propertyBlock;
-
-    private CameraSystem _cameraSystem;
-    private float _cameraZoomAmount;
+    
+    private float _currentCameraZoomLevel;
     private float _standardScale = 5f;
     
     private static readonly int PlayerColor1 = Shader.PropertyToID("_PlayerColor");
@@ -41,16 +42,18 @@ public class UVisibilityManager : UnitSystem
     private void Start()
     {
         if (Unit.UnitData.Chip == UnitData.ChipType.Big) _standardScale *= 2f;
-        Invoke(nameof(InitializeCameraSystemReference), 0.2f);
+        InputManager.Instance.OnCameraUpdate += HandleCameraUpdate;
     }
 
-    private void InitializeCameraSystemReference() => _cameraSystem = InputManager.Instance.CameraSystem;
-
-    private void OnDestroy() => Unit.OnInitializeChip -= InitializeChip;
-
-    private void Update()
+    private void OnDestroy()
     {
-        _cameraZoomAmount = _cameraSystem.CurrentZoomLevel;
+        Unit.OnInitializeChip -= InitializeChip;
+        InputManager.Instance.OnCameraUpdate -= HandleCameraUpdate;
+    }
+
+    private void HandleCameraUpdate(float currentZoomLevel)
+    {
+        _currentCameraZoomLevel = currentZoomLevel;
         
         // TODO: Implement automatic-scaling of units
     }
