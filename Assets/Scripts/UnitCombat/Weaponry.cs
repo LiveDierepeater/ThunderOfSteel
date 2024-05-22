@@ -156,26 +156,27 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 return;
             }
         }
-
+        
         if (CanAttack)
         {
             var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
 
             // Target is in 'AttackRange'
-            if (distanceToTarget <= MaxAttackRange)
+            if (distanceToTarget <= MaxAttackRange && _targetUnit.IsSpotted)
             {
                 Attack(_targetUnit);
+            }
+            else if (distanceToTarget <= MaxAttackRange && ! _targetUnit.IsSpotted)
+            {
+                Unit.UnitData.Events.OnCommandToAttack?.Invoke(_targetUnit);
+                Unit.IsAttacking = false; // DEBUG
             }
             else if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack)
             {
                 // Move to target, till Unit is in 'AttackRange'
-                print("invoked");
-                Unit.UnitData.Events.OnCommandToDestination?.Invoke(_targetUnit.transform.position);
+                Unit.UnitData.Events.OnCommandToAttack?.Invoke(_targetUnit);
                 Unit.IsAttacking = false; // DEBUG
             }
-            
-            // Returns, if '_targetUnit' is not spotted and the ShellType of this weaponry is not an artillery shell
-            //if ( ! _targetUnit.IsSpotted && _weaponryData.ShellType != UnitWeaponry.Shells.Artillery) SetTarget(null);
         }
     }
 

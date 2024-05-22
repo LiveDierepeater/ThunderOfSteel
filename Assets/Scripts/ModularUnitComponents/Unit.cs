@@ -10,6 +10,7 @@ public class Unit : MonoBehaviour
     public UnitData UnitData;
     [HideInInspector] public Transform Mesh;
     [HideInInspector] public SphereCollider Collider;
+    public Unit TargetUnit;
     [Space(5)]
     
     [Header("Movement Curves")]
@@ -137,21 +138,31 @@ public class Unit : MonoBehaviour
     public void CommandToDestination(Vector3 newDestination)
     {
         UnitData.Events.OnCommandToDestination?.Invoke(newDestination);
+        TargetUnit = null;
         UnitData.CurrentUnitCommand = UnitData.UnitCommands.Move;
     }
 
     public void CommandToAttack(Unit newUnitTarget)
     {
         UnitData.CurrentUnitCommand = UnitData.UnitCommands.Attack;
+        TargetUnit = newUnitTarget;
+        TargetUnit.UnitData.Events.OnUnitDeath += RemoveTarget;
         UnitData.Events.OnNewTargetUnit?.Invoke(newUnitTarget);
     }
 
     public void RemoveTarget()
     {
         UnitData.Events.OnNewTargetUnit?.Invoke(null);
+        
+        if (TargetUnit is not null)
+        {
+            TargetUnit.UnitData.Events.OnUnitDeath -= RemoveTarget;
+            TargetUnit = null;
+        }
+        
         UnitData.CurrentUnitCommand = UnitData.UnitCommands.Idle;
     }
-    
+
     private void SetUnitDead() => IsUnitDead = true;
 
     private void DestroyUnit()

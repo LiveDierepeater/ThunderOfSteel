@@ -5,6 +5,7 @@ public struct UnitEvents
 {
     //public delegate void UnitIsInRange(Vector3 newDestination);
     public Action<Vector3> OnCommandToDestination;
+    public Action<Unit> OnCommandToAttack;
     public Action<Unit> OnNewTargetUnit;
     public Action OnStopUnit;
     public Action<Vector3, int> OnAttack;

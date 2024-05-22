@@ -41,7 +41,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     
     private int _currentAreaIndex;
 
-#endregion
+    #endregion
     
 #region Initializing
 
@@ -57,6 +57,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.UnitData.Events.OnCommandToDestination += MoveToDestination;
+        Unit.UnitData.Events.OnCommandToAttack += MoveToAndAttackUnit;
         Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
         Unit.UnitData.Events.OnUnitDeath += HandleDeath;
         Unit.UnitData.Events.OnUnitFlee += FleeToDestination;
@@ -67,6 +68,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.UnitData.Events.OnCommandToAttack -= MoveToAndAttackUnit;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
         Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
         Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
@@ -76,6 +78,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.UnitData.Events.OnCommandToAttack -= MoveToAndAttackUnit;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
         Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
         Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
@@ -122,6 +125,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     {
         _currentAgentSpeed = _agent.velocity.magnitude;
         TankMovementBehavior();
+        StopUnitAtPositionWhenUnitAttacksAnUnitInAttackRange();
     }
 
     private void TankMovementBehavior()
@@ -166,36 +170,32 @@ public class TankMovement : UnitSystem, IMovementBehavior
         
         _agent.SetDestination(newDestination);
         _currentMovementState = MovementStates.Accelerate;
+    }
+
+    private void MoveToAndAttackUnit(Unit target)
+    {
+        var newDestination = target.transform.position;
+        
+        if (IsUnitCloserToDestinationThanStoppingDistance(newDestination))
+            _agent.stoppingDistance = 0.5f;
+        
+        _agent.SetDestination(newDestination);
+        _currentMovementState = MovementStates.Accelerate;
+    }
+
+    private void StopUnitAtPositionWhenUnitAttacksAnUnitInAttackRange()
+    {
+        if (Unit.TargetUnit is null) return;
+
+        var newDestination = Unit.TargetUnit.transform.position;
         
         if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
 
-        if (_agent.path.corners.Length > 2)
-        {
+        var maxAttackRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke();
 
-            var penultimateCorner = _agent.path.corners[^1];
-            var distanceFromPenultimateCornerToNewDestination = Vector3.Distance(penultimateCorner, newDestination);
-            var maxAttackRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke();
-            
-            if (distanceFromPenultimateCornerToNewDestination <= maxAttackRange) return;
-            
-            newDestination -= (newDestination - penultimateCorner).normalized *
-                             (distanceFromPenultimateCornerToNewDestination - maxAttackRange);
-            print("A: " + _agent.path.corners.Length);
-        }
-        else
-        {
-            var distanceFromUnitToNewDestination = Vector3.Distance(transform.position, newDestination);
-            var maxAttackRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke();
-            
-            if (distanceFromUnitToNewDestination <= maxAttackRange) return;
-            
-            newDestination -= (newDestination - transform.position).normalized *
-                             (distanceFromUnitToNewDestination - maxAttackRange);
-            print(newDestination);
-            print("B: " + _agent.path.corners.Length);
-        }
+        if ( ! (Vector3.Distance(transform.position, newDestination) <= maxAttackRange) || ! Unit.TargetUnit.IsSpotted) return;
         
-        _agent.SetDestination(newDestination);
+        StopUnitAtPosition();
     }
 
     public void StopUnitAtPosition()
@@ -225,6 +225,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
         Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.UnitData.Events.OnCommandToAttack -= MoveToAndAttackUnit;
         Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
         Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
         Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
