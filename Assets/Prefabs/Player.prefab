@@ -60,6 +60,10 @@ MonoBehaviour:
   RaycastLayerMask:
     serializedVersion: 2
     m_Bits: 768
+  PlayerColor: {r: 0, g: 0, b: 1, a: 1}
+  AllyColor: {r: 0, g: 0.5882353, b: 0, a: 1}
+  EnemyColor: {r: 1, g: 0, b: 0, a: 1}
+  PlayerID: 0
 --- !u!1 &8379190462176672582
 GameObject:
   m_ObjectHideFlags: 0
