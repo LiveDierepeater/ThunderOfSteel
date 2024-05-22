@@ -60,7 +60,6 @@ public class UVisibilityManager : UnitSystem
 
     private void HandleUnitDeath()
     {
-        print("HandleUnitDeath");
         Unit.OnInitializeChip -= InitializeChip;
         InputManager.Instance.OnCameraUpdate -= HandleCameraUpdate;
         Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
