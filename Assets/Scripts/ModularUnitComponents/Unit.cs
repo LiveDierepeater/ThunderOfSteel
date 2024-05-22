@@ -1,8 +1,12 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Unit : MonoBehaviour
 {
+    public event Action OnInitializeChip;
+    
     private bool IsUnitDead { get; set; }
     
     [Header("Data")]
@@ -10,6 +14,7 @@ public class Unit : MonoBehaviour
     public UnitData UnitData;
     [HideInInspector] public Transform Mesh;
     [HideInInspector] public SphereCollider Collider;
+    public Color PlayerColor;
     public Unit TargetUnit;
     [Space(5)]
     
@@ -90,7 +95,10 @@ public class Unit : MonoBehaviour
         UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
         UnitPlayerID = UnitData.PlayerID;
         UnitManager.Instance.AddUnit(this, UnitPlayerID);
+        
         InitializeSpritePlayerColor();
+        OnInitializeChip?.Invoke();
+        
         UnitDeathInitialization();
     }
 
@@ -100,16 +108,19 @@ public class Unit : MonoBehaviour
         {
             selectionSpriteColor = InputManager.Instance.Player.PlayerColor;
             selectionSprite.color = selectionSpriteColor;
+            PlayerColor = selectionSpriteColor;
         }
         else if (CompareTag("AI"))
         {
-            selectionSpriteColor = Color.red;
+            selectionSpriteColor = InputManager.Instance.Player.EnemyColor;
             selectionSprite.color = selectionSpriteColor;
+            PlayerColor = selectionSpriteColor;
         }
         else if (CompareTag("Ally"))
         {
-            selectionSpriteColor = Color.green;
+            selectionSpriteColor = InputManager.Instance.Player.AllyColor;
             selectionSprite.color = selectionSpriteColor;
+            PlayerColor = selectionSpriteColor;
         }
     }
 
