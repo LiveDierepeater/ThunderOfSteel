@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
     public LayerMask RaycastLayerMask;
 
     public Color PlayerColor = Color.blue;
-    public Color AllyColor = Color.green;
+    public Color AllyColor = new Color(0, 0.4f, 0);
     public Color EnemyColor = Color.red;
 
     // ReSharper disable once NotAccessedField.Local

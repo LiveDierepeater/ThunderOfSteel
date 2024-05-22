@@ -19,7 +19,7 @@ public class UVisibilityManager : UnitSystem
 
     private void InitializeChip()
     {
-        _propertyBlock = new MaterialPropertyBlock();
+        _propertyBlock ??= new MaterialPropertyBlock();
 
         MaskTexture = FactionData.FactionChipMasks[(int)Unit.UnitData.Faction];
         PlayerColor = Unit.PlayerColor;
