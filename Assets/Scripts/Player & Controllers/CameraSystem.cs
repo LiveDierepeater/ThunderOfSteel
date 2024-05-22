@@ -4,6 +4,7 @@ using UnityEngine;
 public class CameraSystem : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera _cinemachineVirtualCamera;
+    [SerializeField] private Transform _RoomSphere;
     
     [Space(10)]
     
@@ -71,6 +72,11 @@ public class CameraSystem : MonoBehaviour
         if (UseMouseCameraRotation) HandleMouseCameraRotation();
 
         HandleCameraZoom_MoveForward();
+        
+        if (CurrentZoomLevel < 0.25f)
+            _RoomSphere.gameObject.SetActive(false);
+        else
+            _RoomSphere.gameObject.SetActive(true);
     }
 
     private void HandleKeyboardCameraMovement()
