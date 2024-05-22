@@ -109,6 +109,7 @@ MonoBehaviour:
   FactionData: {fileID: 11400000, guid: ad5ede565466af44486043fc769c9464, type: 2}
   MaskTexture: {fileID: 0}
   PlayerColor: {r: 0, g: 0, b: 0, a: 0}
+  _mesh: {fileID: 6472877111338788793}
   _meshSlot: {fileID: 3560732300632971531}
   _renderer: {fileID: 6088604261744331568}
 --- !u!1 &4413719412424871657
@@ -138,7 +139,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 4514277300004227922}
@@ -284,7 +285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6761f4416d302994ea25382a1211720f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitData: {fileID: 11400000, guid: fbdb3499c9aa1cd44b1679696a40bf79, type: 2}
+  UnitData: {fileID: 11400000, guid: f7095176def4fc64db6c9ec4b42c208f, type: 2}
   Mesh: {fileID: 0}
   Collider: {fileID: 0}
   PlayerColor: {r: 0, g: 0, b: 0, a: 0}
@@ -475,12 +476,24 @@ PrefabInstance:
     m_TransformParent: {fileID: 4514277300004227922}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalPosition.z
@@ -513,6 +526,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_Name

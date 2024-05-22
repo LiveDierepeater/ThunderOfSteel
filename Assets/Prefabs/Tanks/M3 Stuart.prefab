@@ -78,6 +78,7 @@ MonoBehaviour:
   FactionData: {fileID: 11400000, guid: ad5ede565466af44486043fc769c9464, type: 2}
   MaskTexture: {fileID: 0}
   PlayerColor: {r: 0, g: 0, b: 0, a: 0}
+  _mesh: {fileID: 6333365651857793876}
   _meshSlot: {fileID: 8211971665357965280}
   _renderer: {fileID: 1708617801617561726}
 --- !u!1 &4005667131592366366
@@ -210,7 +211,7 @@ GameObject:
   - component: {fileID: 2626519408584917554}
   m_Layer: 6
   m_Name: M3 Stuart
-  m_TagString: Untagged
+  m_TagString: AI
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -480,7 +481,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
       propertyPath: m_LocalPosition.z

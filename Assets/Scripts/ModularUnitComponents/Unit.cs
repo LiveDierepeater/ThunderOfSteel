@@ -6,6 +6,7 @@ using Random = UnityEngine.Random;
 public class Unit : MonoBehaviour
 {
     public event Action OnInitializeChip;
+    public event Action OnUnitDeath;
     
     private bool IsUnitDead { get; set; }
     
@@ -182,9 +183,7 @@ public class Unit : MonoBehaviour
     {
         if (!IsUnitDead) return;
         
-        //UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
-        //transform.gameObject.SetActive(false);
-            
+        OnUnitDeath?.Invoke();
         Mesh.gameObject.SetActive(false);
         Collider.enabled = false;
         StartCoroutine(KillUnit());
