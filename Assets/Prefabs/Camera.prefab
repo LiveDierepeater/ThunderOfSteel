@@ -56,7 +56,6 @@ MonoBehaviour:
   ZoomAmount: 80
   FollowOffsetMin: 30
   FollowOffsetMax: 1500
-  ZoomedBarrier: 200
 --- !u!1 &1256726020488385428
 GameObject:
   m_ObjectHideFlags: 0

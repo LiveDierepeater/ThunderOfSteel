@@ -26,18 +26,17 @@ public class UnitData : ScriptableObject
     }
     public WarModes WarMode;
     
+    public Type UnitType;
     public enum Type
     {
         Infantry,
         Tank,
         Truck
     }
-    public Type UnitType;
 
     [Header("Production")]
-    
     public int Cost;
-
+    public ProductionBase ProducedBy;
     public enum ProductionBase
     {
         HQ,
@@ -48,7 +47,6 @@ public class UnitData : ScriptableObject
         Airfield,
         Prototype
     }
-    public ProductionBase ProducedBy;
     
     [Header("Movement")]
     
@@ -57,9 +55,10 @@ public class UnitData : ScriptableObject
     public float MaxAcceleration;
     public float StoppingDistance;
     public float FleeSpeed;
-    
     public float SpeedBonusOnRoad;
     
+    [Header("Resistance")]
+    public Armors Armor;
     public enum Armors
     {
         Infantry,
@@ -72,8 +71,6 @@ public class UnitData : ScriptableObject
         Level_05,
         Air
     }
-    [Header("Resistance")]
-    public Armors Armor;
     public int MaxHealth;
 
     [Header("Combat")]
@@ -83,15 +80,22 @@ public class UnitData : ScriptableObject
 
     [Header("Spotting")]
     public float SpottingRange;
+
+    public ChipType Chip;
+    public enum ChipType
+    {
+        Small,
+        Big
+    }
     
+    [Header("Communication")]
+    public UnitCommands CurrentUnitCommand;
     public enum UnitCommands
     {
         Idle,
         Move,
         Attack
     }
-    [Header("Communication")]
-    public UnitCommands CurrentUnitCommand;
 
     public UnitEvents Events;
 }

@@ -11,6 +11,13 @@ public class UVisibilityManager : UnitSystem
     [SerializeField] private Renderer _renderer;
     private MaterialPropertyBlock _propertyBlock;
 
+    private CameraSystem _cameraSystem;
+    private float _cameraZoomAmount;
+    private float _standardScale = 5f;
+    
+    private static readonly int PlayerColor1 = Shader.PropertyToID("_PlayerColor");
+    private static readonly int MaskTex = Shader.PropertyToID("_MaskTex");
+
     protected override void Awake()
     {
         base.Awake();
@@ -26,18 +33,25 @@ public class UVisibilityManager : UnitSystem
 
         // Set the initial values
         _renderer.GetPropertyBlock(_propertyBlock);
-        _propertyBlock.SetTexture("_MaskTex", MaskTexture);
-        _propertyBlock.SetColor("_PlayerColor", PlayerColor);
+        _propertyBlock.SetTexture(MaskTex, MaskTexture);
+        _propertyBlock.SetColor(PlayerColor1, PlayerColor);
         _renderer.SetPropertyBlock(_propertyBlock);
     }
 
+    private void Start()
+    {
+        if (Unit.UnitData.Chip == UnitData.ChipType.Big) _standardScale *= 2f;
+        Invoke(nameof(InitializeCameraSystemReference), 0.2f);
+    }
+
+    private void InitializeCameraSystemReference() => _cameraSystem = InputManager.Instance.CameraSystem;
+
     private void OnDestroy() => Unit.OnInitializeChip -= InitializeChip;
 
-    // private void Update()
-    // {
-    //     // Update the playerColor at runtime
-    //     _renderer.GetPropertyBlock(_propertyBlock);
-    //     _propertyBlock.SetColor("_PlayerColor", PlayerColor);
-    //     _renderer.SetPropertyBlock(_propertyBlock);
-    // }
+    private void Update()
+    {
+        _cameraZoomAmount = _cameraSystem.CurrentZoomLevel;
+        
+        // TODO: Implement automatic-scaling of units
+    }
 }

@@ -28,6 +28,8 @@ public class CameraSystem : MonoBehaviour
     public float FollowOffsetMin = 30f;
     public float FollowOffsetMax = 400f;
 
+    public float CurrentZoomLevel { get; private set; }
+
     // Private Fields
     
     private float _standardMoveSpeed;
@@ -56,6 +58,8 @@ public class CameraSystem : MonoBehaviour
         _fastDragPanSpeed = _standardDragPanSpeed;
         _fastZoomAmount = ZoomAmount;
     }
+
+    private void Start() => InputManager.Instance.CameraSystem = this;
 
     private void Update()
     {
@@ -190,6 +194,8 @@ public class CameraSystem : MonoBehaviour
         RotateSpeed = _fastRotateSpeed * Mathf.Clamp01(angledAmount * 7.5f);
         DragPanSpeed = _fastDragPanSpeed * Mathf.Clamp01(angledAmount * 10f);
         ZoomAmount = _fastZoomAmount * angledAmount * 2f;
+
+        CurrentZoomLevel = angledAmount;
     }
 
     private void CalculateCameraMovement(Vector3 inputDirection)

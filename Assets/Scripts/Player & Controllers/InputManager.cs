@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public class InputManager : InputReader
 {
@@ -11,9 +12,10 @@ public class InputManager : InputReader
 
     public static InputManager Instance => _instance;
 
-    public Player Player;
+    [HideInInspector] public CameraSystem CameraSystem;
+    [HideInInspector] public Player Player;
 
-    #region Initializing
+#region Initializing
 
     protected override void Awake()
     {
@@ -31,14 +33,11 @@ public class InputManager : InputReader
         InitializeAllPlayerControllers();
     }
 
-    private void Start()
-    {
-        ActivatePlayerController(_inGamePlayerController);
-    }
+    private void Start() => ActivatePlayerController(_inGamePlayerController);
 
-    #endregion
+#endregion
 
-    #region External Called Logic
+#region External Called Logic
 
     private void ChangePlayerController(GameManager.GameState newGameState)
     {
@@ -70,14 +69,11 @@ public class InputManager : InputReader
         _gameManager.OnChangedGameState += ChangePlayerController;
     }
 
-    #endregion
+#endregion
 
-    #region Extracted Logic Methods
+#region Extracted Logic Methods
 
-    private void InitializeAllPlayerControllers()
-    {
-        _inGamePlayerController = Player.gameObject.AddComponent<InGamePlayerController>();
-    }
+    private void InitializeAllPlayerControllers() => _inGamePlayerController = Player.gameObject.AddComponent<InGamePlayerController>();
 
     private void ActivatePlayerController<T>(T playerController)
     {
@@ -92,7 +88,7 @@ public class InputManager : InputReader
             _inGamePlayerController.enabled = false;
     }
 
-    #endregion
+#endregion
 
     private void OnDestroy()
     {

@@ -23,7 +23,13 @@ public class Unit : MonoBehaviour
     public AnimationCurve decelerationCurve;
 
     [Space(5)]
+    [Header("Spotting System")]
+    [HideInInspector] public USpottingSystem USpottingSystem;
+    public Unit SpottingUnit;
+    public bool IsSpotted;
+    public bool IsVisible;
     
+    [Space(10)]
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
     private Color selectionSpriteColor;
@@ -31,10 +37,6 @@ public class Unit : MonoBehaviour
     public bool IsAttacking; // Could be removed in future
     public int UnitPlayerID;
 
-    [Space(10)]
-    [HideInInspector] public USpottingSystem USpottingSystem;
-    public Unit SpottingUnit;
-    public bool IsSpotted;
 
 #region Initializing
 

@@ -35,4 +35,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9814831bcd159a54fb3ed90ec02246ae, type: 2}
   - {fileID: 11400000, guid: 00ee208a97ef26b44ab51021b10fc8af, type: 2}
   SpottingRange: 250
+  Chip: 1
   CurrentUnitCommand: 0
