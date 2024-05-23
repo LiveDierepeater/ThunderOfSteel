@@ -27,7 +27,7 @@ MonoBehaviour:
   StoppingDistance: 10
   FleeSpeed: 10
   SpeedBonusOnRoad: 1
-  Armor: 3
+  Armor: 4
   MaxHealth: 400
   weaponryPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
   UnitWeaponry:

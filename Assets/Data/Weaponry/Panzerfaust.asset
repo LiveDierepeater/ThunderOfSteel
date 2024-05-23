@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponName: Panzerfaust
   Damage_Infantry: -1
-  Damage_Truck: 750
+  Damage_Truck: 3750
   Damage_Building: -1
-  Damage_Armor_Level_01: 125
-  Damage_Armor_Level_02: 63
-  Damage_Armor_Level_03: 50
-  Damage_Armor_Level_04: 30
-  Damage_Armor_Level_05: 20
+  Damage_Armor_Level_01: 625
+  Damage_Armor_Level_02: 315
+  Damage_Armor_Level_03: 250
+  Damage_Armor_Level_04: 150
+  Damage_Armor_Level_05: 100
   Damage_Air: -1
   ShellType: 1
   AttackRange: 150

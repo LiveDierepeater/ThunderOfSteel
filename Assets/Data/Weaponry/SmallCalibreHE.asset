@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: SmallCalibreHE
   m_EditorClassIdentifier: 
   WeaponName: Small cal. HE shell
-  Damage_Infantry: 30
-  Damage_Truck: 30
-  Damage_Building: 30
-  Damage_Armor_Level_01: 6
-  Damage_Armor_Level_02: 3
-  Damage_Armor_Level_03: 2
-  Damage_Armor_Level_04: 1
-  Damage_Armor_Level_05: 0
+  Damage_Infantry: 45
+  Damage_Truck: 45
+  Damage_Building: 45
+  Damage_Armor_Level_01: -1
+  Damage_Armor_Level_02: -1
+  Damage_Armor_Level_03: -1
+  Damage_Armor_Level_04: -1
+  Damage_Armor_Level_05: -1
   Damage_Air: -1
   ShellType: 2
   AttackRange: 250

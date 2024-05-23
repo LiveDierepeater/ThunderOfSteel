@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Light Grenade
   m_EditorClassIdentifier: 
   WeaponName: Light Grenade
-  Damage_Infantry: 17
-  Damage_Truck: 17
-  Damage_Building: 17
-  Damage_Armor_Level_01: 3
-  Damage_Armor_Level_02: 2
-  Damage_Armor_Level_03: 1
+  Damage_Infantry: 85
+  Damage_Truck: 85
+  Damage_Building: 85
+  Damage_Armor_Level_01: 15
+  Damage_Armor_Level_02: 10
+  Damage_Armor_Level_03: 5
   Damage_Armor_Level_04: 0
   Damage_Armor_Level_05: 0
   Damage_Air: -1

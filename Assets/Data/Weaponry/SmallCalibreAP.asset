@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponName: Small cal. AP shell
   Damage_Infantry: -1
-  Damage_Truck: 75
+  Damage_Truck: 113
   Damage_Building: -1
-  Damage_Armor_Level_01: 15
-  Damage_Armor_Level_02: 9
-  Damage_Armor_Level_03: 6
-  Damage_Armor_Level_04: 4
-  Damage_Armor_Level_05: 3
+  Damage_Armor_Level_01: 23
+  Damage_Armor_Level_02: 12
+  Damage_Armor_Level_03: 9
+  Damage_Armor_Level_04: 6
+  Damage_Armor_Level_05: 4
   Damage_Air: -1
   ShellType: 1
   AttackRange: 250

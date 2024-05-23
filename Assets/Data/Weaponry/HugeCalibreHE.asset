@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: HugeCalibreHE
   m_EditorClassIdentifier: 
   WeaponName: Huge cal. HE shell
-  Damage_Infantry: 36
-  Damage_Truck: 36
-  Damage_Building: 36
-  Damage_Armor_Level_01: 7
-  Damage_Armor_Level_02: 4
-  Damage_Armor_Level_03: 2
-  Damage_Armor_Level_04: 1
-  Damage_Armor_Level_05: 0
+  Damage_Infantry: 252
+  Damage_Truck: 252
+  Damage_Building: 252
+  Damage_Armor_Level_01: -1
+  Damage_Armor_Level_02: -1
+  Damage_Armor_Level_03: -1
+  Damage_Armor_Level_04: -1
+  Damage_Armor_Level_05: -1
   Damage_Air: -1
   ShellType: 2
   AttackRange: 500

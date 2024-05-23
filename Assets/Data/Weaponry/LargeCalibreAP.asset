@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponName: Large cal. AP shell
   Damage_Infantry: -1
-  Damage_Truck: 400
+  Damage_Truck: 2100
   Damage_Building: -1
-  Damage_Armor_Level_01: 100
-  Damage_Armor_Level_02: 50
-  Damage_Armor_Level_03: 25
-  Damage_Armor_Level_04: 20
-  Damage_Armor_Level_05: 12
+  Damage_Armor_Level_01: 700
+  Damage_Armor_Level_02: 350
+  Damage_Armor_Level_03: 157
+  Damage_Armor_Level_04: 140
+  Damage_Armor_Level_05: 84
   Damage_Air: -1
   ShellType: 1
   AttackRange: 500

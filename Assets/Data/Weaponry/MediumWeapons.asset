@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: MediumWeapons
   m_EditorClassIdentifier: 
   WeaponName: Med. Weapons
-  Damage_Infantry: 40
-  Damage_Truck: 40
+  Damage_Infantry: 60
+  Damage_Truck: 60
   Damage_Building: -1
   Damage_Armor_Level_01: -1
   Damage_Armor_Level_02: -1
