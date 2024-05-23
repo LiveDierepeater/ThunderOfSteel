@@ -30,6 +30,6 @@ public class UnitWeaponry : ScriptableObject
     public float CoolDown;
 
     [Space(10)]
-    
+    public GameObject MuzzleFlash_Prefab;
     public float ProjectileSpeed;
 }

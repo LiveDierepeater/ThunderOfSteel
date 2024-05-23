@@ -38,6 +38,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
     // Cashing Fields
     public int localPlayerID;
     private int[] localArmorDamage;
+    private Transform _oldMuzzleFlash;
 
 #endregion
 
@@ -231,6 +232,10 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 break;
             }
         }
+
+        Invoke(nameof(DestroyMuzzleFlash), 0.5f);
+        
+        _oldMuzzleFlash = Instantiate(_weaponryData.MuzzleFlash_Prefab, Unit.ShellSpawnLocation.position, Unit.ShellSpawnLocation.rotation).transform;
     }
 
     private void InitializeProjectile(Projectile projectileInstance, Unit target)
@@ -239,7 +244,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
         projectileInstance.Target = target;
     }
 
-#region Cooldown Management
+    private void DestroyMuzzleFlash() => Destroy(_oldMuzzleFlash.gameObject);
+
+    #region Cooldown Management
 
     private void NewCoolDown()
     {

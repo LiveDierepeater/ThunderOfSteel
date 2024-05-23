@@ -25,4 +25,5 @@ MonoBehaviour:
   ShellType: 1
   AttackRange: 250
   CoolDown: 1.5
+  MuzzleFlash_Prefab: {fileID: 889751533429092569, guid: 5dd0467e2d009f7499085564fc730172, type: 3}
   ProjectileSpeed: 150
