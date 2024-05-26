@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public Color AllyColor = Color.green;
     public Color EnemyColor = Color.red;
 
+    public GameObject AttackCircle;
     public Material GhostMaterial;
 
     // ReSharper disable once NotAccessedField.Local

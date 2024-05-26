@@ -157,6 +157,13 @@ public class InGamePlayerController : MonoBehaviour
 
                 renderer1.materials = mats;
             }
+
+            var attackCircle = Instantiate(InputManager.Instance.Player.AttackCircle, selectedUnitGameObject.transform);
+            var maxAttackRange = SelectionManager.Instance.SelectedUnits.ToArray()[0].UnitData.Events.OnGetMaxAttackRange.Invoke();
+            var newCircleSize = maxAttackRange * 0.2f * Vector3.one / selectedUnitGameObject.transform.localScale.x;
+
+            attackCircle.transform.position += Vector3.up;
+            attackCircle.transform.localScale = newCircleSize;
         }
         
         else if (SelectionManager.Instance.SelectedUnits.Count > 0 && selectedUnitGameObject is not null)

@@ -23,7 +23,7 @@ public class USpottingSystem : UnitSystem
 
     private void InitializeSpottingRange()
     {
-        _spottingRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke() * 0.5f;
+        _spottingRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke() * 0.75f;
         
         if (_spottingRange < 150f)
             _spottingRange = 150f;
