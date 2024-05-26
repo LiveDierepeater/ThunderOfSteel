@@ -62,6 +62,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4514277300004227922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2090276276790024954
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4149305972673317692}
+  m_Layer: 6
+  m_Name: Mesh
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4149305972673317692
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090276276790024954}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6472877111338788793}
+  m_Father: {fileID: 4514277300004227922}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2268533633909880419
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,7 +141,7 @@ MonoBehaviour:
   FactionData: {fileID: 11400000, guid: ad5ede565466af44486043fc769c9464, type: 2}
   MaskTexture: {fileID: 0}
   PlayerColor: {r: 0, g: 0, b: 0, a: 0}
-  _mesh: {fileID: 6472877111338788793}
+  _mesh: {fileID: 4149305972673317692}
   _meshSlot: {fileID: 3560732300632971531}
   _renderer: {fileID: 6088604261744331568}
 --- !u!1 &4413719412424871657
@@ -230,7 +262,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3663702374638775734}
-  - {fileID: 6472877111338788793}
+  - {fileID: 4149305972673317692}
   - {fileID: 3560732300632971531}
   - {fileID: 8929792434997414852}
   - {fileID: 4914620771771134047}
@@ -473,7 +505,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 4514277300004227922}
+    m_TransformParent: {fileID: 4149305972673317692}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalScale.x
@@ -489,11 +521,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalPosition.z
@@ -505,7 +537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_LocalRotation.y
@@ -533,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bae463f386221c043a4350393987df71, type: 3}
       propertyPath: m_Name
-      value: Mesh
+      value: SM_M26_Pershing_Eagle_7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

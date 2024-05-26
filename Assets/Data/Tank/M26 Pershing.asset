@@ -15,6 +15,7 @@ MonoBehaviour:
   InstanceID: 0
   PlayerID: 0
   UnitName: M26 Pershing Eagle 7
+  UnitMesh: {fileID: 919132149155446097, guid: bae463f386221c043a4350393987df71, type: 3}
   Faction: 0
   Class: Heavy Tank
   WarMode: 2

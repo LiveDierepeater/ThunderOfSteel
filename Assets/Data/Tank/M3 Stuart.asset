@@ -15,6 +15,7 @@ MonoBehaviour:
   InstanceID: 0
   PlayerID: 0
   UnitName: M3 Stuart
+  UnitMesh: {fileID: 919132149155446097, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
   Faction: 0
   Class: Light Tank
   WarMode: 0

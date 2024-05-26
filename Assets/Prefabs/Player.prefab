@@ -10,12 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5644276558038505125}
   - component: {fileID: 4352455178620362091}
-  - component: {fileID: 5928461985278094249}
-  - component: {fileID: -9001398926536864921}
-  - component: {fileID: -6569221009992916770}
-  - component: {fileID: -4216079103845760140}
-  - component: {fileID: -2595450376560753730}
-  - component: {fileID: -3886526096010330051}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -51,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80b5c3a8f76c5474cbd4ead7e669329d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitDataList: {fileID: 11400000, guid: 74dc36ce99dbe984b81470556ef4ac97, type: 2}
   unitsLayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -69,115 +64,9 @@ MonoBehaviour:
   PlayerColor: {r: 0, g: 0, b: 1, a: 1}
   AllyColor: {r: 0, g: 0.5882353, b: 0, a: 1}
   EnemyColor: {r: 1, g: 0, b: 0, a: 1}
+  GhostMaterial: {fileID: 2100000, guid: 3150c084dd51b3443baec847613444de, type: 2}
   PlayerID: 0
---- !u!114 &5928461985278094249
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822254931218151121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b6a1bc9a6d8aa48a02ac3756bf5df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraSystem: {fileID: 0}
-  moveToSpritePrefab: {fileID: 0}
-  selectionBox: {fileID: 0}
-  dragDelay: 0.1
-  _unitWidth: 10
-  _unitSpacing: 20
---- !u!114 &-9001398926536864921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822254931218151121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b6a1bc9a6d8aa48a02ac3756bf5df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraSystem: {fileID: 0}
-  moveToSpritePrefab: {fileID: 0}
-  selectionBox: {fileID: 0}
-  dragDelay: 0.1
-  _unitWidth: 10
-  _unitSpacing: 20
---- !u!114 &-6569221009992916770
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822254931218151121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b6a1bc9a6d8aa48a02ac3756bf5df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraSystem: {fileID: 0}
-  moveToSpritePrefab: {fileID: 0}
-  selectionBox: {fileID: 0}
-  dragDelay: 0.1
-  _unitWidth: 10
-  _unitSpacing: 20
---- !u!114 &-4216079103845760140
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822254931218151121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b6a1bc9a6d8aa48a02ac3756bf5df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraSystem: {fileID: 0}
-  moveToSpritePrefab: {fileID: 0}
-  selectionBox: {fileID: 0}
-  dragDelay: 0.1
-  _unitWidth: 10
-  _unitSpacing: 20
---- !u!114 &-2595450376560753730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822254931218151121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b6a1bc9a6d8aa48a02ac3756bf5df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraSystem: {fileID: 0}
-  moveToSpritePrefab: {fileID: 0}
-  selectionBox: {fileID: 0}
-  dragDelay: 0.1
-  _unitWidth: 10
-  _unitSpacing: 20
---- !u!114 &-3886526096010330051
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1822254931218151121}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b6a1bc9a6d8aa48a02ac3756bf5df2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CameraSystem: {fileID: 0}
-  moveToSpritePrefab: {fileID: 0}
-  selectionBox: {fileID: 0}
-  dragDelay: 0.1
-  _unitWidth: 10
-  _unitSpacing: 20
+  StickySelection: 0
 --- !u!1 &8379190462176672582
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,7 +95,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8379190462176672582}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0000011434103, y: 0.92387956, z: -0.38268343, w: -0.000002760437}
+  m_LocalRotation: {x: -0.0000011247861, y: 0.92387956, z: -0.38268343, w: -0.0000027154745}
   m_LocalPosition: {x: -799.9937, y: 1060.66, z: 2460.6602}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

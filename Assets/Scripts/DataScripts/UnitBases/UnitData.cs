@@ -7,6 +7,7 @@ public class UnitData : ScriptableObject
     public int InstanceID;
     public int PlayerID;
     public string UnitName;
+    public GameObject UnitMesh;
     
     public enum Factions
     {

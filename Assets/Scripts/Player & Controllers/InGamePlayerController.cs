@@ -1,9 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InGamePlayerController : MonoBehaviour
 {
-    public CameraSystem CameraSystem;
     public GameObject moveToSpritePrefab;
     
     private new Camera camera;
@@ -17,6 +17,8 @@ public class InGamePlayerController : MonoBehaviour
 
     [SerializeField, Range(0, 10)] private int _unitWidth = 10;
     [SerializeField] private float _unitSpacing = 20f;
+
+    [SerializeField] private GameObject selectedUnitGameObject;
 
 #region Internal Fields
 
@@ -45,6 +47,7 @@ public class InGamePlayerController : MonoBehaviour
     {
         HandleSelectionInputs();
         HandleMovementInputs();
+        HandleUnitGhost();
     }
 
 #endregion
@@ -127,8 +130,53 @@ public class InGamePlayerController : MonoBehaviour
                         unitCount++;
                     }
                 }
+                
+                // Deselect Units
+                if ( ! InputManager.Instance.Player.StickySelection)
+                    SelectionManager.Instance.DeselectAll();
             }
         }
+    }
+
+    private void HandleUnitGhost()
+    {
+        if (Input.GetMouseButtonUp(0) && SelectionManager.Instance.SelectedUnits.Count > 0)
+        {
+            selectedUnitGameObject ??= Instantiate(SelectionManager.Instance.SelectedUnits.ToArray()[0].UnitData.UnitMesh);
+            selectedUnitGameObject.transform.localScale *= 2f;
+            
+            var renderers = selectedUnitGameObject.GetComponentsInChildren<Renderer>();
+            foreach (var renderer1 in renderers)
+            {
+                var mats = renderer1.materials;
+
+                for (int i = 0; i < mats.Length; i++)
+                {
+                    mats[i] = InputManager.Instance.Player.GhostMaterial;
+                }
+
+                renderer1.materials = mats;
+            }
+        }
+        
+        else if (SelectionManager.Instance.SelectedUnits.Count > 0 && selectedUnitGameObject is not null)
+            SetSelectionGhostPosition();
+        
+        else if (SelectionManager.Instance.SelectedUnits.Count == 0)
+            if (selectedUnitGameObject is not null)
+                DestroyUnitGhost();
+    }
+
+    private void SetSelectionGhostPosition()
+    {
+        if (Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit, Mathf.Infinity, _terrainLayerMask))
+            selectedUnitGameObject.transform.position = hit.point;
+    }
+
+    private void DestroyUnitGhost()
+    {
+        Destroy(selectedUnitGameObject);
+        selectedUnitGameObject = null;
     }
 
 #endregion

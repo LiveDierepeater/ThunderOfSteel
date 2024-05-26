@@ -38,7 +38,6 @@ public class Unit : MonoBehaviour
     public bool IsAttacking; // Could be removed in future
     public int UnitPlayerID;
 
-
 #region Initializing
 
     private void Awake()
