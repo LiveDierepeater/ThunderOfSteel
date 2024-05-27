@@ -214,7 +214,9 @@ public class WeaponryHandler : UnitSystem
             if ( ! weaponry.CanWeaponryDamageTargetUnit(weaponry._targetUnit)) continue;
             
             // Continue for, if weaponry is not an AP Type weaponry, so the AP Type weaponry has priority, EXCEPT the unit has the specific order to attack the target, which gets attacked by this non-AP-Shell-Type weaponry
-            if (weaponry.WeaponryData.ShellType != UnitWeaponry.Shells.APShell && IsAnAPWeaponryActive && Unit.TargetUnit == weaponry._targetUnit) continue;
+            if (weaponry.WeaponryData.ShellType != UnitWeaponry.Shells.APShell && IsAnAPWeaponryActive)
+                if (Unit.TargetUnit != weaponry._targetUnit)
+                    continue;
             
             switch (weaponry.WeaponryData.WeaponryBounds)
             {
