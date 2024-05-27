@@ -300,10 +300,8 @@ public class Weaponry : UnitSystem, IAttackBehavior
         var directionToTarget = (_targetUnit.transform.position - tr.position).normalized;
         
         if (Vector3.Dot(tr.forward, directionToTarget) >= 0.985f)
-        {
-            print(Vector3.Dot(tr.forward, directionToTarget));
             return true;
-        }
+        
         return false;
     }
 
