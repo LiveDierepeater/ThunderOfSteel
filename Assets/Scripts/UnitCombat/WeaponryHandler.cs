@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponryHandler : UnitSystem
@@ -8,9 +7,12 @@ public class WeaponryHandler : UnitSystem
     private Weaponry[] _freeWeapons = new Weaponry[5];
     private Weaponry[] _hullWeapons = new Weaponry[5];
     private Weaponry[] _turretWeapons = new Weaponry[5];
-    private List<Weaponry> inactiveWeapons = new();
+    private List<Weaponry> _inactiveWeapons = new();
+    private List<Weaponry> _activeWeapons = new();
 
     private UnitData.Type _unitType;
+
+    private bool IsAnAPWeaponryActive;
     
     private void Start()
     {
@@ -101,7 +103,16 @@ public class WeaponryHandler : UnitSystem
     private void HandleTick()
     {
         // DEBUG -> Updating Weaponry's 'localPlayerID'
+        // TODO: Set this in Start maybe
         foreach (var weaponry in _weapons) weaponry.localPlayerID = Unit.UnitPlayerID;
+        
+        foreach (var weaponry in _weapons) if (weaponry._targetUnit is not null) _activeWeapons.Add(weaponry);
+
+        foreach (var activeWeapon in _activeWeapons)
+        {
+            if (activeWeapon.WeaponryData.ShellType == UnitWeaponry.Shells.APShell) IsAnAPWeaponryActive = true;
+            else IsAnAPWeaponryActive = false;
+        }
         
         UpdateTargets();
     }
@@ -110,14 +121,14 @@ public class WeaponryHandler : UnitSystem
     {
         // Find inactive Weapons which can search for a new target
         // Cashes 'inactiveWeapons.Count'
-        inactiveWeapons = GetWeaponsSearchingForTarget();
-        int inactiveWeaponsCount = inactiveWeapons.Count;
+        _inactiveWeapons = GetWeaponsSearchingForTarget();
+        int inactiveWeaponsCount = _inactiveWeapons.Count;
         
         // Return, if there are no inactive weapons
         if (inactiveWeaponsCount == 0) return;
         
         // Cashes nearbyEnemies
-        var nearbyUnits = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsFromDifferentTeams(transform.position, inactiveWeapons[0].localPlayerID);
+        var nearbyUnits = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsFromDifferentTeams(transform.position, _inactiveWeapons[0].localPlayerID);
         var closestEnemies = new Unit[inactiveWeaponsCount];
         var closestDistanceSqrt = new float[inactiveWeaponsCount];
         
@@ -143,9 +154,9 @@ public class WeaponryHandler : UnitSystem
             }
             
             // Goes through every weapon in 'inactiveWeapons'
-            for (var index = 0; index < inactiveWeapons.Count; index++)
+            for (var index = 0; index < _inactiveWeapons.Count; index++)
             {
-                var inactiveWeapon = inactiveWeapons[index];
+                var inactiveWeapon = _inactiveWeapons[index];
                 
                 // Continues for, if current 'inactiveWeapon' cannot damage 'nearbyUnit'
                 if ( ! inactiveWeapon.CanWeaponryDamageTargetUnit(nearbyUnit)) continue;
@@ -170,7 +181,7 @@ public class WeaponryHandler : UnitSystem
             
             // Sets the enemy targetUnit for the current Weaponry
             // Adds the current Weaponry to the BattleManager.cs
-            inactiveWeapons[index].SetTarget(closestEnemies[index]);
+            _inactiveWeapons[index].SetTarget(closestEnemies[index]);
         }
     }
 
@@ -179,7 +190,7 @@ public class WeaponryHandler : UnitSystem
     private void HandleWeaponryRotation()
     {
         // Rotate Turret to default rotation, when weapons are not fighting
-        if (inactiveWeapons.Count == _weapons.Length)
+        if (_inactiveWeapons.Count == _weapons.Length)
         {
             // Return, if Unit tries to attack an enemy unit
             if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack) return;
@@ -188,21 +199,22 @@ public class WeaponryHandler : UnitSystem
             if (Unit.Turret.rotation.eulerAngles == Vector3.zero) return;
             
             // Rotate Turret
-            foreach (var weaponry in _weapons)
-                if (weaponry.WeaponryData.WeaponryBounds == UnitWeaponry.Bounds.Turret)
-                    RotateTurretToDefault();
+            RotateTurretToDefault();
             
             // Return, if evey weapon is inactive
             return;
         }
         
-        foreach (var weaponry in _weapons)
+        foreach (var weaponry in _activeWeapons)
         {
             // Continue for, if weaponry has no target
             if (weaponry._targetUnit is null) continue;
             
             // Continue for, if weaponry cannot damage 'weaponry._targetUnit'
-            if (!weaponry.CanWeaponryDamageTargetUnit(weaponry._targetUnit)) continue;
+            if ( ! weaponry.CanWeaponryDamageTargetUnit(weaponry._targetUnit)) continue;
+            
+            // Continue for, if weaponry is not an AP Type weaponry, so the AP Type weaponry has priority, EXCEPT the unit has the specific order to attack the target, which gets attacked by this non-AP-Shell-Type weaponry
+            if (weaponry.WeaponryData.ShellType != UnitWeaponry.Shells.APShell && IsAnAPWeaponryActive && Unit.TargetUnit == weaponry._targetUnit) continue;
             
             switch (weaponry.WeaponryData.WeaponryBounds)
             {
@@ -233,7 +245,7 @@ public class WeaponryHandler : UnitSystem
 
     private void RotateWeaponryBoundsTransform(Weaponry weaponry, Transform tr)
     {
-        float degreesPerSecond = Unit.UnitData.TurnSpeed * 0.25f * Time.deltaTime;
+        float degreesPerSecond = Unit.UnitData.TurnSpeed * 0.1f * Time.deltaTime;
         Vector3 direction = weaponry._targetUnit.transform.position - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         tr.rotation = Quaternion.RotateTowards(tr.rotation, targetRotation, degreesPerSecond);

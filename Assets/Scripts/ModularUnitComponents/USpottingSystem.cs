@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class USpottingSystem : UnitSystem
 {
-    private float _spottingRange;
+    public float SpottingRange { get; private set; }
     private LayerMask _unitsLayer;
     private LayerMask _obstacleLayer;
 
@@ -23,12 +23,12 @@ public class USpottingSystem : UnitSystem
 
     private void InitializeSpottingRange()
     {
-        _spottingRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke() * 0.75f;
+        SpottingRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke() * 0.75f;
         
-        if (_spottingRange < 150f)
-            _spottingRange = 150f;
+        if (SpottingRange < 150f)
+            SpottingRange = 150f;
         
-        Unit.UnitData.SpottingRange = _spottingRange;
+        Unit.UnitData.SpottingRange = SpottingRange;
     }
 
     private void HandleUnitDeath()
@@ -66,7 +66,7 @@ public class USpottingSystem : UnitSystem
 
     private void SpotEnemyUnitsInRange()
     {
-        var colliderArray = Physics.OverlapSphere(transform.position, _spottingRange, _unitsLayer);
+        var colliderArray = Physics.OverlapSphere(transform.position, SpottingRange, _unitsLayer);
         
         foreach (var collider1 in colliderArray)
         { 
@@ -100,7 +100,7 @@ public class USpottingSystem : UnitSystem
         if (forestThickness < 0)
             return false;
         
-        if (spottingUnit.UnitData.SpottingRange - forestThickness >
+        if (spottingUnit.USpottingSystem.SpottingRange - forestThickness >
             Vector3.Distance(spottingUnit.transform.position, targetUnit.transform.position))
             return true;
         return false;
@@ -169,5 +169,11 @@ public class USpottingSystem : UnitSystem
     {
         Unit.IsSpotted = false;
         Unit.SpottingUnit = null;
+    }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, SpottingRange);
     }
 }

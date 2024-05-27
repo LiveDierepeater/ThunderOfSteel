@@ -173,6 +173,13 @@ public class Weaponry : UnitSystem, IAttackBehavior
             }
             else if (distanceToTarget <= MaxAttackRange && ! _targetUnit.IsSpotted)
             {
+                // Return, if weaponry's target is not the Unit's Attack-Target
+                if (_targetUnit != Unit.TargetUnit)
+                {
+                    SetTarget(null);
+                    return;
+                }
+                
                 Unit.UnitData.Events.OnCommandToAttack?.Invoke(_targetUnit);
                 Unit.IsAttacking = false; // DEBUG
             }
