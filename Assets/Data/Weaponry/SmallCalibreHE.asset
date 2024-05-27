@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SmallCalibreHE
   m_EditorClassIdentifier: 
   WeaponName: Small cal. HE shell
+  WeaponryBounds: 2
   Damage_Infantry: 45
   Damage_Truck: 45
   Damage_Building: 45

@@ -343,7 +343,7 @@ public class TankMovement : UnitSystem, IMovementBehavior
 
     private bool IsUnitCloserToDestinationThanStoppingDistance(Vector3 targetPosition) => Vector3.Distance(transform.position, targetPosition) < _agent.stoppingDistance * 2;
 
-    private bool IsUnitStanding() => _currentAgentSpeed < 0.25f;
+    public bool IsUnitStanding() => _currentAgentSpeed < 0.25f;
 
     private int GetUnitsCurrentArea()
     {

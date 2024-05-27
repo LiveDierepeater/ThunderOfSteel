@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: LargeCalibreAP
   m_EditorClassIdentifier: 
   WeaponName: Large cal. AP shell
+  WeaponryBounds: 2
   Damage_Infantry: -1
   Damage_Truck: 2100
   Damage_Building: -1

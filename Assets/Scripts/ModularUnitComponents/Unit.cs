@@ -13,13 +13,17 @@ public class Unit : MonoBehaviour
     [Header("Data")]
     [ExposedScriptableObject]
     public UnitData UnitData;
+    public Transform Turret;
+    public Transform ShellSpawnLocation;
+    public Unit TargetUnit;
     [HideInInspector] public Transform Mesh;
     [HideInInspector] public SphereCollider Collider;
-    public Color PlayerColor;
-    public Unit TargetUnit;
+    [HideInInspector] public Color PlayerColor;
     [Space(5)]
     
     [Header("Movement Curves")]
+    [HideInInspector] public TankMovement TankMovement;
+    [HideInInspector] public InfantryMovement InfantryMovement;
     public AnimationCurve accelerationCurve;
     public AnimationCurve decelerationCurve;
 
@@ -28,13 +32,11 @@ public class Unit : MonoBehaviour
     [HideInInspector] public USpottingSystem USpottingSystem;
     public Unit SpottingUnit;
     public bool IsSpotted;
-    public bool IsVisible;
     
     [Space(10)]
     [Header("Debug")]
     [SerializeField] private SpriteRenderer selectionSprite;
     private Color selectionSpriteColor;
-    public Transform ShellSpawnLocation;
     public bool IsAttacking; // Could be removed in future
     public int UnitPlayerID;
 
@@ -55,21 +57,21 @@ public class Unit : MonoBehaviour
         switch (UnitData.UnitType)
         {
             case UnitData.Type.Infantry:
-                gameObject.AddComponent<InfantryMovement>();
+                InfantryMovement = gameObject.AddComponent<InfantryMovement>();
                 gameObject.AddComponent<UHealth>();
                 USpottingSystem = gameObject.AddComponent<USpottingSystem>();
                 CreateWeaponry();
                 break;
             
             case UnitData.Type.Tank:
-                gameObject.AddComponent<TankMovement>();
+                TankMovement = gameObject.AddComponent<TankMovement>();
                 gameObject.AddComponent<UHealth>();
                 USpottingSystem = gameObject.AddComponent<USpottingSystem>();
                 CreateWeaponry();
                 break;
             
             case UnitData.Type.Truck:
-                gameObject.AddComponent<InfantryMovement>();
+                InfantryMovement = gameObject.AddComponent<InfantryMovement>();
                 gameObject.AddComponent<UHealth>();
                 break;
             
@@ -78,7 +80,6 @@ public class Unit : MonoBehaviour
                 break;
         }
         
-        ShellSpawnLocation = transform.Find("ShellSpawnLocation");
         Mesh = transform.Find("Mesh");
         Collider = GetComponent<SphereCollider>();
     }

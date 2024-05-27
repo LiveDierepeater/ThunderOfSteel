@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MediumWeapons
   m_EditorClassIdentifier: 
   WeaponName: Med. Weapons
+  WeaponryBounds: 1
   Damage_Infantry: 60
   Damage_Truck: 60
   Damage_Building: -1

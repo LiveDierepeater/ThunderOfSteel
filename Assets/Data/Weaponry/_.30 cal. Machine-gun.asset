@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: _.30 cal. Machine-gun
   m_EditorClassIdentifier: 
   WeaponName: .30 cal. Machine-gun
+  WeaponryBounds: 1
   Damage_Infantry: 11
   Damage_Truck: 11
   Damage_Building: -1

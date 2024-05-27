@@ -1,13 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponryHandler : UnitSystem
 {
     private Weaponry[] _weapons = new Weaponry[5];
+    private Weaponry[] _freeWeapons = new Weaponry[5];
+    private Weaponry[] _hullWeapons = new Weaponry[5];
+    private Weaponry[] _turretWeapons = new Weaponry[5];
     private List<Weaponry> inactiveWeapons = new();
 
+    private UnitData.Type _unitType;
+    
     private void Start()
     {
+        _unitType = Unit.UnitData.UnitType;
+        
         InitializeWeaponryArray();
         
         TickManager.Instance.TickSystem.OnTick += HandleTick;
@@ -22,17 +30,44 @@ public class WeaponryHandler : UnitSystem
     private void InitializeWeaponryArray()
     {
         int i = 0;
+
+        int f = 0;
+        int h = 0;
+        int t = 0;
+        
         // Find all Weaponry objects as children of this object
         foreach (Transform child in transform)
         {
             var weaponry = child.GetComponent<Weaponry>();
             if (weaponry != null)
             {
+                switch (weaponry.WeaponryData.WeaponryBounds)
+                {
+                    case UnitWeaponry.Bounds.Free:
+                        _freeWeapons[f] = weaponry;
+                        f++;
+                        break;
+                    
+                    case UnitWeaponry.Bounds.Hull:
+                        _hullWeapons[h] = weaponry;
+                        h++;
+                        break;
+                    
+                    case UnitWeaponry.Bounds.Turret:
+                        _turretWeapons[t] = weaponry;
+                        t++;
+                        break;
+                }
+                
                 _weapons[i] = weaponry;
                 i++;
             }
         }
+        
         System.Array.Resize(ref _weapons, i);
+        System.Array.Resize(ref _freeWeapons, f);
+        System.Array.Resize(ref _hullWeapons, h);
+        System.Array.Resize(ref _turretWeapons, t);
     }
 
     private void HandleUnitDeath()
@@ -98,6 +133,7 @@ public class WeaponryHandler : UnitSystem
             // Continues for, if 'nearbyUnit' cannot get attacked by his team member
             if (Unit.UnitData.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true) continue;
             
+            // Continues for, if 'nearbyUnit' cannot get attacked because a building is blocking the vision
             //1<<LayerMask.NameToLayer("Buildings")
             if (Physics.Raycast(transform.position, nearbyUnit.transform.position - transform.position,
                     Vector3.Distance(transform.position, nearbyUnit.transform.position),
@@ -138,6 +174,79 @@ public class WeaponryHandler : UnitSystem
         }
     }
 
+    private void Update() => HandleWeaponryRotation();
+
+    private void HandleWeaponryRotation()
+    {
+        // Rotate Turret to default rotation, when weapons are not fighting
+        if (inactiveWeapons.Count == _weapons.Length)
+        {
+            // Return, if Unit tries to attack an enemy unit
+            if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack) return;
+            
+            // Return, if Turret is already looking straight
+            if (Unit.Turret.rotation.eulerAngles == Vector3.zero) return;
+            
+            // Rotate Turret
+            foreach (var weaponry in _weapons)
+                if (weaponry.WeaponryData.WeaponryBounds == UnitWeaponry.Bounds.Turret)
+                    RotateTurretToDefault();
+            
+            // Return, if evey weapon is inactive
+            return;
+        }
+        
+        foreach (var weaponry in _weapons)
+        {
+            // Continue for, if weaponry has no target
+            if (weaponry._targetUnit is null) continue;
+            
+            // Continue for, if weaponry cannot damage 'weaponry._targetUnit'
+            if (!weaponry.CanWeaponryDamageTargetUnit(weaponry._targetUnit)) continue;
+            
+            switch (weaponry.WeaponryData.WeaponryBounds)
+            {
+                // Continue for, if weaponry's bounds are free
+                case UnitWeaponry.Bounds.Free:
+                    continue;
+                
+                case UnitWeaponry.Bounds.Hull:
+                {
+                    // If Unit Type is Tank
+                    if (_unitType == UnitData.Type.Tank)
+                    {
+                        // Return, if Unit is not standing
+                        if (!Unit.TankMovement.IsUnitStanding()) continue;
+
+                        RotateWeaponryBoundsTransform(weaponry, transform);
+                    }
+                    break;
+                }
+                case UnitWeaponry.Bounds.Turret:
+                    // If Unit Type is Tank
+                    if (_unitType == UnitData.Type.Tank)
+                        RotateWeaponryBoundsTransform(weaponry, Unit.Turret);
+                    break;
+            }
+        }
+    }
+
+    private void RotateWeaponryBoundsTransform(Weaponry weaponry, Transform tr)
+    {
+        float degreesPerSecond = Unit.UnitData.TurnSpeed * 0.25f * Time.deltaTime;
+        Vector3 direction = weaponry._targetUnit.transform.position - transform.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        tr.rotation = Quaternion.RotateTowards(tr.rotation, targetRotation, degreesPerSecond);
+    }
+
+    private void RotateTurretToDefault()
+    {
+        float degreesPerSecond = Unit.UnitData.TurnSpeed * 0.1f * Time.deltaTime;
+        Vector3 direction = transform.forward;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Unit.Turret.rotation = Quaternion.RotateTowards(Unit.Turret.rotation, targetRotation, degreesPerSecond);
+    }
+
     private List<Weaponry> GetWeaponsSearchingForTarget()
     {
         var searchingWeapons = new List<Weaponry>();
@@ -173,8 +282,8 @@ public class WeaponryHandler : UnitSystem
         else
             Unit.UnitData.Events.OnCheckForEnemyUnit += null;
     }
-    
+
     private bool CheckForPlayerUnit(int unitPlayerID) => unitPlayerID == InputManager.Instance.Player.GetInstanceID();
-    
+
     private bool CheckForAllyUnit(int unitPlayerID) => unitPlayerID == UnitManager.ALLY_ID;
 }

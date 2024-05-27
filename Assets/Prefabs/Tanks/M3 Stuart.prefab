@@ -24,12 +24,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 590021410947076903}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 2.5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.03739996, y: 0.29131043, z: 2.3370001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4514277300004227922}
+  m_Father: {fileID: 7058246701433125743}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1761620057085975632
 GameObject:
@@ -229,7 +229,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 3663702374638775734}
   - {fileID: 4959741557964320651}
   - {fileID: 8211971665357965280}
   - {fileID: 8929792434997414852}
@@ -287,9 +286,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitData: {fileID: 11400000, guid: fbdb3499c9aa1cd44b1679696a40bf79, type: 2}
   Mesh: {fileID: 0}
+  Turret: {fileID: 7058246701433125743}
+  ShellSpawnLocation: {fileID: 3663702374638775734}
   Collider: {fileID: 0}
   PlayerColor: {r: 0, g: 0, b: 0, a: 0}
   TargetUnit: {fileID: 0}
+  TankMovement: {fileID: 0}
+  InfantryMovement: {fileID: 0}
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -361,7 +364,6 @@ MonoBehaviour:
   IsSpotted: 0
   IsVisible: 0
   selectionSprite: {fileID: 7923525982345129079}
-  ShellSpawnLocation: {fileID: 0}
   IsAttacking: 0
   UnitPlayerID: 0
 --- !u!114 &2626519408584917554
@@ -553,11 +555,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -5648087848685404208, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3663702374638775734}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
 --- !u!4 &6333365651857793876 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
+  m_PrefabInstance: {fileID: 5795600540844524735}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7058246701433125743 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5648087848685404208, guid: ccdcf596d3300b94f8026d46217032ea, type: 3}
   m_PrefabInstance: {fileID: 5795600540844524735}
   m_PrefabAsset: {fileID: 0}

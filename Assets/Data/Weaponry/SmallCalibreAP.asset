@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SmallCalibreAP
   m_EditorClassIdentifier: 
   WeaponName: Small cal. AP shell
+  WeaponryBounds: 2
   Damage_Infantry: -1
   Damage_Truck: 113
   Damage_Building: -1

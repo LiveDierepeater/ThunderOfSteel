@@ -255,7 +255,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UnitData: {fileID: 11400000, guid: 4fbcad05a7064594d87b83c659dc35c7, type: 2}
   Mesh: {fileID: 0}
+  Turret: {fileID: 68322204213340433}
+  ShellSpawnLocation: {fileID: 3791596673371533652}
   Collider: {fileID: 0}
+  PlayerColor: {r: 0, g: 0, b: 0, a: 0}
+  TargetUnit: {fileID: 0}
+  TankMovement: {fileID: 0}
+  InfantryMovement: {fileID: 0}
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -322,13 +328,13 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  selectionSprite: {fileID: 804835849124565450}
-  ShellSpawnLocation: {fileID: 0}
-  IsAttacking: 0
-  UnitPlayerID: 0
   USpottingSystem: {fileID: 0}
   SpottingUnit: {fileID: 0}
   IsSpotted: 0
+  IsVisible: 0
+  selectionSprite: {fileID: 804835849124565450}
+  IsAttacking: 0
+  UnitPlayerID: 0
 --- !u!114 &5316016410058570438
 MonoBehaviour:
   m_ObjectHideFlags: 0

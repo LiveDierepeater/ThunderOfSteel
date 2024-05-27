@@ -10,6 +10,13 @@ public class UnitWeaponry : ScriptableObject
         APShell,
         HEShell
     }
+    public enum Bounds
+    {
+        Free,
+        Hull,
+        Turret
+    }
+    public Bounds WeaponryBounds;
 
     [Header("Armor Damage")]
     

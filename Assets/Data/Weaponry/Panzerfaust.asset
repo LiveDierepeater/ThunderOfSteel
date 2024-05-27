@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Panzerfaust
   m_EditorClassIdentifier: 
   WeaponName: Panzerfaust
+  WeaponryBounds: 1
   Damage_Infantry: -1
   Damage_Truck: 3750
   Damage_Building: -1

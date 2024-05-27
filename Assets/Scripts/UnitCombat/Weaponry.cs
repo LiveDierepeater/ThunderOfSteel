@@ -1,9 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Weaponry : UnitSystem, IAttackBehavior
 {
     public bool CanAttack => true; // Logic for being ready to Attack
+    
+    [FormerlySerializedAs("_weaponryData")] public UnitWeaponry WeaponryData;
+    private UnitWeaponry.Bounds _unitBounds;
 
     public float MaxAttackRange { get; private set; }
 
@@ -18,8 +22,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
 #region Internal Fields
 
     // Private Fields
-    private UnitWeaponry _weaponryData;
-
     private int _damage_Infantry;
     private int _damage_Truck;
     private int _damage_Building;
@@ -51,6 +53,8 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
         localPlayerID = Unit.UnitData.PlayerID;
         localArmorDamage = _armorDamage;
+
+        _unitBounds = WeaponryData.WeaponryBounds;
     }
 
     public void OnDisable()
@@ -67,17 +71,17 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private void InitializeWeaponry()
     {
-        _damage_Infantry = _weaponryData.Damage_Infantry;
-        _damage_Truck = _weaponryData.Damage_Truck;
-        _damage_Building = _weaponryData.Damage_Building;
-        _damage_Armor_Level_01 = _weaponryData.Damage_Armor_Level_01;
-        _damage_Armor_Level_02 = _weaponryData.Damage_Armor_Level_02;
-        _damage_Armor_Level_03 = _weaponryData.Damage_Armor_Level_03;
-        _damage_Armor_Level_04 = _weaponryData.Damage_Armor_Level_04;
-        _damage_Armor_Level_05 = _weaponryData.Damage_Armor_Level_05;
-        _damage_Air = _weaponryData.Damage_Air;
-        MaxAttackRange = _weaponryData.AttackRange;
-        _coolDown = _weaponryData.CoolDown;
+        _damage_Infantry = WeaponryData.Damage_Infantry;
+        _damage_Truck = WeaponryData.Damage_Truck;
+        _damage_Building = WeaponryData.Damage_Building;
+        _damage_Armor_Level_01 = WeaponryData.Damage_Armor_Level_01;
+        _damage_Armor_Level_02 = WeaponryData.Damage_Armor_Level_02;
+        _damage_Armor_Level_03 = WeaponryData.Damage_Armor_Level_03;
+        _damage_Armor_Level_04 = WeaponryData.Damage_Armor_Level_04;
+        _damage_Armor_Level_05 = WeaponryData.Damage_Armor_Level_05;
+        _damage_Air = WeaponryData.Damage_Air;
+        MaxAttackRange = WeaponryData.AttackRange;
+        _coolDown = WeaponryData.CoolDown;
 
         // Set '_armorDamage'
         _armorDamage[0] = _damage_Infantry;
@@ -129,7 +133,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     public void SetWeaponryData(UnitWeaponry weaponryData)
     {
-        _weaponryData = weaponryData;
+        WeaponryData = weaponryData;
         InitializeWeaponry();
     }
 
@@ -151,7 +155,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
         if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack)
         {
-            if (_weaponryData.AttackRange < Vector3.Distance(transform.position, _targetUnit.transform.position))
+            if (WeaponryData.AttackRange < Vector3.Distance(transform.position, _targetUnit.transform.position))
             {
                 SetTarget(null);
                 return;
@@ -188,7 +192,10 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public void Attack(Unit targetUnit)
     {
         if (IsWeaponsCoolDownActive()) return;
-
+        
+        // Return, if weaponry is not looking at target
+        if ( ! IsWeaponryLookingAtTarget()) return;
+        
         FireWeaponry(targetUnit);
         NewCoolDown();
         
@@ -200,7 +207,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
     {
         Projectile projectileInstance;
 
-        switch (_weaponryData.ShellType)
+        switch (WeaponryData.ShellType)
         {
             case UnitWeaponry.Shells.Artillery:
             {
@@ -235,12 +242,12 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
         Invoke(nameof(DestroyMuzzleFlash), 0.5f);
         
-        _oldMuzzleFlash = Instantiate(_weaponryData.MuzzleFlash_Prefab, Unit.ShellSpawnLocation.position, Unit.ShellSpawnLocation.rotation).transform;
+        _oldMuzzleFlash = Instantiate(WeaponryData.MuzzleFlash_Prefab, Unit.ShellSpawnLocation.position, Unit.ShellSpawnLocation.rotation).transform;
     }
 
     private void InitializeProjectile(Projectile projectileInstance, Unit target)
     {
-        projectileInstance.InitialSpeed = _weaponryData.ProjectileSpeed;
+        projectileInstance.InitialSpeed = WeaponryData.ProjectileSpeed;
         projectileInstance.Target = target;
     }
 
@@ -276,6 +283,22 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private bool IsWeaponsCoolDownActive() => CooldownManager.Instance.IsCooldownActive(GetInstanceID());
 
     public bool CanWeaponryDamageTargetUnit(Unit targetUnit) => localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
+
+    private bool IsWeaponryLookingAtTarget()
+    {
+        Transform tr = transform;
+        
+        if (_unitBounds == UnitWeaponry.Bounds.Turret) tr = Unit.Turret;
+
+        var directionToTarget = (_targetUnit.transform.position - tr.position).normalized;
+        
+        if (Vector3.Dot(tr.forward, directionToTarget) >= 0.985f)
+        {
+            print(Vector3.Dot(tr.forward, directionToTarget));
+            return true;
+        }
+        return false;
+    }
 
 #endregion
 }

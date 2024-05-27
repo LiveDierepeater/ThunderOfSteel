@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: HugeCalibreHE
   m_EditorClassIdentifier: 
   WeaponName: Huge cal. HE shell
+  WeaponryBounds: 2
   Damage_Infantry: 252
   Damage_Truck: 252
   Damage_Building: 252
