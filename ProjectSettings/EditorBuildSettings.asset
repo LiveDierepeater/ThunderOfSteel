@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Campaign_Mission_01/Campaign_Mission_01.unity
+    guid: 3938a5d4c4c7a0f4e932b5d15172e0e0
   m_configObjects: {}
