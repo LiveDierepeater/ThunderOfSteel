@@ -76,7 +76,7 @@ public class UnitData : ScriptableObject
 
     [Header("Combat")]
     public Weaponry weaponryPrefab;
-    [ExposedScriptableObject]
+    //[ExposedScriptableObject]
     public UnitWeaponry[] UnitWeaponry;
 
     [Header("Spotting")]

@@ -11,7 +11,7 @@ public class Unit : MonoBehaviour
     private bool IsUnitDead { get; set; }
     
     [Header("Data")]
-    [ExposedScriptableObject]
+    //[ExposedScriptableObject]
     public UnitData UnitData;
     public Transform Turret;
     public Transform ShellSpawnLocation;
