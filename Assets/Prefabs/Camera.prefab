@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _cinemachineVirtualCamera: {fileID: 3531135400944032307}
+  _RoomSphere: {fileID: 0}
   MoveSpeed: 300
   RotateSpeed: 100
   DragPanSpeed: 0.8
@@ -142,7 +143,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 1
-  m_FollowOffset: {x: 0, y: 1060.66, z: -1060.66}
+  m_FollowOffset: {x: 0, y: 300, z: -310}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
