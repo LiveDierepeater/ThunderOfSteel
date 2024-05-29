@@ -4,18 +4,7 @@ public class SelectionManager
 {
     private static SelectionManager _instance;
 
-    public static SelectionManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new SelectionManager();
-            }
-
-            return _instance;
-        }
-    }
+    public static SelectionManager Instance => _instance ??= new SelectionManager();
 
     public readonly HashSet<Unit> SelectedUnits = new HashSet<Unit>();
     public readonly List<Unit> AvailableUnits = new List<Unit>();

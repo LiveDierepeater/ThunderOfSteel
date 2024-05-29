@@ -12,8 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e5d5bc2e0b21d541a62c932c0d4036b, type: 3}
   m_Name: M26 Pershing
   m_EditorClassIdentifier: 
-  InstanceID: 0
-  PlayerID: 0
   UnitName: M26 Pershing Eagle 7
   UnitMesh: {fileID: 919132149155446097, guid: bae463f386221c043a4350393987df71, type: 3}
   Faction: 0
@@ -35,6 +33,3 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f44cd4d0f609f0a46903ec2572ff59f3, type: 2}
   - {fileID: 11400000, guid: 9814831bcd159a54fb3ed90ec02246ae, type: 2}
   - {fileID: 11400000, guid: 00ee208a97ef26b44ab51021b10fc8af, type: 2}
-  SpottingRange: 250
-  Chip: 1
-  CurrentUnitCommand: 0

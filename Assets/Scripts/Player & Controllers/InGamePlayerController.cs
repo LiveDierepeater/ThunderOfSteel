@@ -90,7 +90,7 @@ public class InGamePlayerController : MonoBehaviour
                         foreach (Unit unit in SelectionManager.Instance.SelectedUnits)
                         {
                             // Continues for, if 'unitToAttack' cannot get attacked by his team member
-                            if (unit.UnitData.Events.OnCheckForEnemyUnit?.Invoke(unitToAttack.UnitPlayerID) == true) continue;
+                            if (unit.Events.OnCheckForEnemyUnit?.Invoke(unitToAttack.UnitPlayerID) == true) continue;
                             
                             unit.CommandToAttack(unitToAttack);
                         }
@@ -109,7 +109,6 @@ public class InGamePlayerController : MonoBehaviour
                         unit.RemoveTarget();
                         unit.CommandToDestination(formationPositions[unitCount]);
                         unitCount++;
-                        //SpawnMoveToSprite(formationPositions[i]);
                     }
                 }
                 // Check, if clicked on Woods
@@ -159,7 +158,7 @@ public class InGamePlayerController : MonoBehaviour
             }
 
             var attackCircle = Instantiate(InputManager.Instance.Player.AttackCircle, selectedUnitGameObject.transform);
-            var maxAttackRange = SelectionManager.Instance.SelectedUnits.ToArray()[0].UnitData.Events.OnGetMaxAttackRange.Invoke();
+            var maxAttackRange = SelectionManager.Instance.SelectedUnits.ToArray()[0].Events.OnGetMaxAttackRange.Invoke();
             var newCircleSize = maxAttackRange * 0.2f * Vector3.one / selectedUnitGameObject.transform.localScale.x;
 
             attackCircle.transform.position += Vector3.up;
@@ -364,6 +363,7 @@ public class InGamePlayerController : MonoBehaviour
 
 #endregion
 
+    // ReSharper disable once UnusedMember.Local
     private void SpawnMoveToSprite(Vector3 destination)
     {
         GameObject newMoveToSprite = Instantiate(moveToSpritePrefab, destination, Quaternion.identity);

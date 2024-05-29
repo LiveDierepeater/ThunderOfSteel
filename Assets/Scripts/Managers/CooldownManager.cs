@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CooldownManager : MonoBehaviour
@@ -8,6 +9,8 @@ public class CooldownManager : MonoBehaviour
     public static CooldownManager Instance { get; private set; }
 
     private readonly Queue<int> _keysToRemove = new Queue<int>();
+
+    public TMP_Text _text;
     
     private void Awake()
     {
@@ -40,6 +43,8 @@ public class CooldownManager : MonoBehaviour
         {
             _coolDowns.Remove(_keysToRemove.Dequeue());
         }
+
+        //_text.text = _coolDowns.Count.ToString();
     }
 
     public void StartCooldown(int identifier, Weaponry weaponry)

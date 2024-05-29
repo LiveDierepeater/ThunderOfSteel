@@ -5,8 +5,18 @@ using Random = UnityEngine.Random;
 
 public class Unit : MonoBehaviour
 {
+    public UnitEvents Events;
     public event Action OnInitializeChip;
     public event Action OnUnitDeath;
+    
+    [Header("Communication")]
+    public UnitCommands CurrentUnitCommand;
+    public enum UnitCommands
+    {
+        Idle,
+        Move,
+        Attack
+    }
     
     private bool IsUnitDead { get; set; }
     
@@ -44,16 +54,14 @@ public class Unit : MonoBehaviour
 
     private void Awake()
     {
-        SelectionManager.Instance.AvailableUnits.Add(this);
-
+        // Initialize the Events struct
+        Events = new UnitEvents();
+        
         InitializeUnit();
     }
 
     private void InitializeUnit()
     {
-        UnitData = Instantiate(UnitData);
-        UnitData.InstanceID = Mathf.Abs(GetInstanceID()) * 1000 + 1;
-        
         switch (UnitData.UnitType)
         {
             case UnitData.Type.Infantry:
@@ -89,14 +97,15 @@ public class Unit : MonoBehaviour
         foreach (var weaponryData in UnitData.UnitWeaponry)
         {
             Weaponry newWeaponry = Instantiate(UnitData.weaponryPrefab, transform);
-            newWeaponry.SetWeaponryData(weaponryData);
+            newWeaponry.InitializeWeaponry(weaponryData);
         }
     }
 
     private void Start()
     {
-        UnitData.PlayerID = InputManager.Instance.Player.GetInstanceID();
-        UnitPlayerID = UnitData.PlayerID;
+        UnitPlayerID = InputManager.Instance.Player.GetInstanceID();
+        
+        SelectionManager.Instance.AvailableUnits.Add(this);
         UnitManager.Instance.AddUnit(this, UnitPlayerID);
         
         InitializeSpritePlayerColor();
@@ -107,7 +116,7 @@ public class Unit : MonoBehaviour
 
     private void InitializeSpritePlayerColor()
     {
-        if (UnitData.PlayerID == InputManager.Instance.Player.GetInstanceID())
+        if (UnitPlayerID == InputManager.Instance.Player.GetInstanceID())
         {
             selectionSpriteColor = InputManager.Instance.Player.PlayerColor;
             selectionSprite.color = selectionSpriteColor;
@@ -130,14 +139,14 @@ public class Unit : MonoBehaviour
     private void UnitDeathInitialization()
     {
         // Unit Death Setup
-        UnitData.Events.OnUnitDeath += SetUnitDead;
+        Events.OnUnitDeath += SetUnitDead;
         TickManager.Instance.TickSystem.OnTickEnd += DestroyUnit;
     }
 
     private void OnDestroy()
     {
         UnitManager.Instance.RemoveUnit(this, UnitPlayerID);
-        UnitData.Events.OnUnitDeath -= SetUnitDead;
+        Events.OnUnitDeath -= SetUnitDead;
         TickManager.Instance.TickSystem.OnTickEnd -= DestroyUnit;
     }
 
@@ -151,37 +160,37 @@ public class Unit : MonoBehaviour
 
     public void CommandToDestination(Vector3 newDestination)
     {
-        UnitData.Events.OnCommandToDestination?.Invoke(newDestination);
+        Events.OnCommandToDestination?.Invoke(newDestination);
         TargetUnit = null;
-        UnitData.CurrentUnitCommand = UnitData.UnitCommands.Move;
+        CurrentUnitCommand = UnitCommands.Move;
     }
 
     public void CommandToAttack(Unit newUnitTarget)
     {
-        UnitData.CurrentUnitCommand = UnitData.UnitCommands.Attack;
+        CurrentUnitCommand = UnitCommands.Attack;
         TargetUnit = newUnitTarget;
-        TargetUnit.UnitData.Events.OnUnitDeath += RemoveTarget;
-        UnitData.Events.OnNewTargetUnit?.Invoke(newUnitTarget);
+        TargetUnit.Events.OnUnitDeath += RemoveTarget;
+        Events.OnNewTargetUnit?.Invoke(newUnitTarget);
     }
 
     public void RemoveTarget()
     {
-        UnitData.Events.OnNewTargetUnit?.Invoke(null);
+        Events.OnNewTargetUnit?.Invoke(null);
         
         if (TargetUnit is not null)
         {
-            TargetUnit.UnitData.Events.OnUnitDeath -= RemoveTarget;
+            TargetUnit.Events.OnUnitDeath -= RemoveTarget;
             TargetUnit = null;
         }
         
-        UnitData.CurrentUnitCommand = UnitData.UnitCommands.Idle;
+        CurrentUnitCommand = UnitCommands.Idle;
     }
 
     private void SetUnitDead() => IsUnitDead = true;
 
     private void DestroyUnit()
     {
-        if (!IsUnitDead) return;
+        if ( ! IsUnitDead) return;
         
         OnUnitDeath?.Invoke();
         Mesh.gameObject.SetActive(false);
@@ -202,6 +211,9 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
+        if (gameObject.name == "M26 Pershing")
+            CooldownManager.Instance._text.text = "Target: " + TargetUnit + "   |   SpottingUnit: " + SpottingUnit + "  |   IsSpotted: " + IsSpotted;
+        
         if (Input.GetKeyDown(KeyCode.K) && selectionSprite.color == Color.white) RandomizePlayerID();
     }
 
@@ -213,8 +225,7 @@ public class Unit : MonoBehaviour
             
         int newPlayerID = Random.Range(0, 999999);
         UnitPlayerID = newPlayerID;
-        UnitData.PlayerID = newPlayerID;
-            
+        
         SpatialHashManager.Instance.SpatialHash.AddObjectWithHashKey(this, currentHashKey);
     }
 

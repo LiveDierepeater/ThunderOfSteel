@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class USpottingSystem : UnitSystem
 {
-    public float SpottingRange { get; private set; }
+    private float SpottingRange { get; set; }
     private LayerMask _unitsLayer;
     private LayerMask _obstacleLayer;
 
@@ -18,25 +18,23 @@ public class USpottingSystem : UnitSystem
         
         _obstacleLayer = InputManager.Instance.Player.RaycastLayerMask;
         _unitsLayer = InputManager.Instance.Player.unitsLayerMask;
-        Unit.UnitData.Events.OnHandleUnitDeathForSpotting += HandleUnitDeath;
+        Unit.Events.OnHandleUnitDeathForSpotting += HandleUnitDeath;
     }
 
     private void InitializeSpottingRange()
     {
-        SpottingRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke() * 0.75f;
+        SpottingRange = Unit.Events.OnGetMaxAttackRange.Invoke() * 0.75f;
         
         if (SpottingRange < 150f)
             SpottingRange = 150f;
-        
-        Unit.UnitData.SpottingRange = SpottingRange;
     }
 
     private void HandleUnitDeath()
     {
         OnSpotterUnitDeath?.Invoke();
-        Unit.UnitData.Events.OnUnitDeath?.Invoke();
+        Unit.Events.OnUnitDeath?.Invoke();
         TickManager.Instance.TickSystem.OnTickBegin -= HandleTick;
-        Unit.UnitData.Events.OnHandleUnitDeathForSpotting -= HandleUnitDeath;
+        Unit.Events.OnHandleUnitDeathForSpotting -= HandleUnitDeath;
     }
 
     private void HandleTick()
@@ -73,11 +71,17 @@ public class USpottingSystem : UnitSystem
             if (collider1.TryGetComponent(out Unit targetUnit))
             {
                 // Return, if 'targetUnit' is this Unit
-                if (targetUnit.UnitData.InstanceID == Unit.UnitData.InstanceID) continue;
+                if (targetUnit == Unit) continue;
                 
                 // Return, if 'targetUnit' is in same team
                 if (targetUnit.UnitPlayerID == Unit.UnitPlayerID) continue;
                 
+                // Return, if this unit is a unit from player and the 'targetUnit' is a unit from an ally
+                if (Unit.UnitPlayerID == InputManager.Instance.Player.GetInstanceID() && targetUnit.UnitPlayerID == UnitManager.ALLY_ID) continue;
+                
+                // Return, if this unit is an ally and the 'targetUnit' is a unit from player
+                if (Unit.UnitPlayerID == UnitManager.ALLY_ID && targetUnit.UnitPlayerID == InputManager.Instance.Player.GetInstanceID()) continue;
+
                 // Return, if 'targetUnit' is already spotted
                 if (targetUnit.IsSpotted) continue;
                 

@@ -16,7 +16,7 @@ public class UHealth : UnitSystem
     }
     private HealthState _unitHealthState;
 
-    #region Initializing
+#region Initializing
 
     protected override void Awake()
     {
@@ -30,13 +30,10 @@ public class UHealth : UnitSystem
         _currentHealth = Unit.UnitData.MaxHealth;
         _unitHealthState = HealthState.Operational;
 
-        Unit.UnitData.Events.OnAttack += TakeDamage;
+        Unit.Events.OnAttack += TakeDamage;
     }
 
-    private void OnDisable()
-    {
-        Unit.UnitData.Events.OnAttack -= TakeDamage;
-    }
+    private void OnDisable() => Unit.Events.OnAttack -= TakeDamage;
 
 #endregion
 
@@ -63,7 +60,7 @@ public class UHealth : UnitSystem
         if (_unitHealthState != HealthState.Operational) return;
         
         _unitHealthState = HealthState.Flee;
-        Unit.UnitData.Events.OnUnitFlee?.Invoke(projectilesOriginPosition);
+        Unit.Events.OnUnitFlee?.Invoke(projectilesOriginPosition);
     }
 
     private void UnsubscribeUnit()
@@ -80,7 +77,7 @@ public class UHealth : UnitSystem
         SelectionManager.Instance.RemoveAvailableUnit(Unit);
         
         // Calls Event to USpottingSystem
-        Unit.UnitData.Events.OnHandleUnitDeathForSpotting?.Invoke();
+        Unit.Events.OnHandleUnitDeathForSpotting?.Invoke();
         
         OnDisable();
     }
@@ -93,7 +90,7 @@ public class UHealth : UnitSystem
         if (_currentHealth >= _maxHealth * 0.3f && _unitHealthState == HealthState.Flee)
         {
             _unitHealthState = HealthState.Operational;
-            Unit.UnitData.Events.OnUnitOperational?.Invoke();
+            Unit.Events.OnUnitOperational?.Invoke();
         }
         
         // Return, if Health are not fully healed

@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Unit", menuName = "Data/Unit")]
 public class UnitData : ScriptableObject
 {
-    [Header("Base")]
-    public int InstanceID;
-    public int PlayerID;
     public string UnitName;
     public GameObject UnitMesh;
     
@@ -78,25 +75,4 @@ public class UnitData : ScriptableObject
     public Weaponry weaponryPrefab;
     //[ExposedScriptableObject]
     public UnitWeaponry[] UnitWeaponry;
-
-    [Header("Spotting")]
-    public float SpottingRange;
-
-    public ChipType Chip;
-    public enum ChipType
-    {
-        Small,
-        Big
-    }
-    
-    [Header("Communication")]
-    public UnitCommands CurrentUnitCommand;
-    public enum UnitCommands
-    {
-        Idle,
-        Move,
-        Attack
-    }
-
-    public UnitEvents Events;
 }

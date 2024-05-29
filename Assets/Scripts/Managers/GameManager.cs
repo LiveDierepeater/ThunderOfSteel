@@ -13,21 +13,11 @@ public class GameManager : MonoBehaviour
     }
     public GameState State;
 
-    private void Awake()
-    {
-        State = GameState.InGame;
-    }
+    private void Awake() => State = GameState.InGame;
 
-    private void Start()
-    {
-        InputManager.Instance.SetGameManager(this);
-    }
+    private void Start() => InputManager.Instance.SetGameManager(this);
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L)) ChangeGameState(GameState.InGame);
-    }
-
+    // ReSharper disable once UnusedMember.Local
     private void ChangeGameState(GameState newState)
     {
         State = newState;

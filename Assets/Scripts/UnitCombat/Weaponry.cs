@@ -38,7 +38,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
     public float CurrentCoolDownTime { get; private set; }
     
     // Cashing Fields
-    public int localPlayerID;
     private int[] localArmorDamage;
     private Transform _oldMuzzleFlash;
 
@@ -49,28 +48,25 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.UnitData.Events.OnNewTargetUnit += SetTarget;
-
-        localPlayerID = Unit.UnitData.PlayerID;
-        localArmorDamage = _armorDamage;
-
-        _unitBounds = WeaponryData.WeaponryBounds;
+        Unit.Events.OnNewTargetUnit += SetTarget;
     }
 
     public void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnNewTargetUnit -= SetTarget;
+        Unit.Events.OnNewTargetUnit -= SetTarget;
     }
 
     public void OnEnableWeaponry()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.UnitData.Events.OnNewTargetUnit += SetTarget;
+        Unit.Events.OnNewTargetUnit += SetTarget;
     }
 
-    private void InitializeWeaponry()
+    public void InitializeWeaponry(UnitWeaponry weaponryData)
     {
+        WeaponryData = weaponryData;
+        
         _damage_Infantry = WeaponryData.Damage_Infantry;
         _damage_Truck = WeaponryData.Damage_Truck;
         _damage_Building = WeaponryData.Damage_Building;
@@ -82,7 +78,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         _damage_Air = WeaponryData.Damage_Air;
         MaxAttackRange = WeaponryData.AttackRange;
         _coolDown = WeaponryData.CoolDown;
-
+        
         // Set '_armorDamage'
         _armorDamage[0] = _damage_Infantry;
         _armorDamage[1] = _damage_Truck;
@@ -93,6 +89,10 @@ public class Weaponry : UnitSystem, IAttackBehavior
         _armorDamage[6] = _damage_Armor_Level_04;
         _armorDamage[7] = _damage_Armor_Level_05;
         _armorDamage[8] = _damage_Air;
+        
+        localArmorDamage = _armorDamage;
+        
+        _unitBounds = WeaponryData.WeaponryBounds;
     }
 
     private void OnValidate()
@@ -131,12 +131,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
         OnLoosingTarget?.Invoke();
     }
 
-    public void SetWeaponryData(UnitWeaponry weaponryData)
-    {
-        WeaponryData = weaponryData;
-        InitializeWeaponry();
-    }
-
     public void RemoveCooldownTime(float amount) => CurrentCoolDownTime -= amount;
 
 #endregion
@@ -152,10 +146,12 @@ public class Weaponry : UnitSystem, IAttackBehavior
             SetTarget(null);
             return;
         }
+        
+        var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
 
-        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack)
+        if (Unit.CurrentUnitCommand != Unit.UnitCommands.Attack)
         {
-            if (WeaponryData.AttackRange < Vector3.Distance(transform.position, _targetUnit.transform.position))
+            if (WeaponryData.AttackRange < distanceToTarget)
             {
                 SetTarget(null);
                 return;
@@ -164,8 +160,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
         
         if (CanAttack)
         {
-            var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
-
             // Target is in 'AttackRange'
             if (distanceToTarget <= MaxAttackRange && _targetUnit.IsSpotted)
             {
@@ -180,13 +174,13 @@ public class Weaponry : UnitSystem, IAttackBehavior
                     return;
                 }
                 
-                Unit.UnitData.Events.OnCommandToAttack?.Invoke(_targetUnit);
+                Unit.Events.OnCommandToAttack?.Invoke(_targetUnit);
                 Unit.IsAttacking = false; // DEBUG
             }
-            else if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack)
+            else if (Unit.CurrentUnitCommand == Unit.UnitCommands.Attack)
             {
                 // Move to target, till Unit is in 'AttackRange'
-                Unit.UnitData.Events.OnCommandToAttack?.Invoke(_targetUnit);
+                Unit.Events.OnCommandToAttack?.Invoke(_targetUnit);
                 Unit.IsAttacking = false; // DEBUG
             }
         }
@@ -220,7 +214,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
             {
                 projectileInstance = Instantiate(artilleryShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
                 
-                if (projectileInstance is ArtilleryShell artilleryShell) // TODO: Maybe get removed in future
+                if (projectileInstance is ArtilleryShell artilleryShell)
                     artilleryShell.MaxArcHeight = 15.0f; // Safely accessing the specific property
                 
                 InitializeProjectile(projectileInstance, target);
@@ -237,8 +231,8 @@ public class Weaponry : UnitSystem, IAttackBehavior
                     SetTarget(null);
                     return;
                 }
-                
                 projectileInstance = Instantiate(tankShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
+                
                 InitializeProjectile(projectileInstance, target);
                 projectileInstance.InitializeWeaponryEvents(this);
                 projectileInstance.InitializeArmorDamage(_armorDamage);
@@ -285,7 +279,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
     /// <param name="targetUnit"></param>
     /// <returns></returns>
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    private bool CanWeaponryAttackTarget(Unit targetUnit) => targetUnit.UnitData.PlayerID != localPlayerID && localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
+    private bool CanWeaponryAttackTarget(Unit targetUnit) => targetUnit.UnitPlayerID != Unit.UnitPlayerID && localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
 
     private bool IsWeaponsCoolDownActive() => CooldownManager.Instance.IsCooldownActive(GetInstanceID());
 
@@ -293,10 +287,10 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private bool IsWeaponryLookingAtTarget()
     {
-        Transform tr = transform;
+        Transform tr = Unit.transform;
         
         if (_unitBounds == UnitWeaponry.Bounds.Turret) tr = Unit.Turret;
-
+        
         var directionToTarget = (_targetUnit.transform.position - tr.position).normalized;
         
         if (Vector3.Dot(tr.forward, directionToTarget) >= 0.985f)

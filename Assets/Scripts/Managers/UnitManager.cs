@@ -19,14 +19,12 @@ public class UnitManager
     {
         if (unit.CompareTag("AI"))
         {
-            unit.UnitData.PlayerID = AI_ID;
             unit.UnitPlayerID = AI_ID;
             unitsPlayerID = AI_ID;
         }
 
         if (unit.CompareTag("Ally"))
         {
-            unit.UnitData.PlayerID = ALLY_ID;
             unit.UnitPlayerID = ALLY_ID;
             unitsPlayerID = ALLY_ID;
         }

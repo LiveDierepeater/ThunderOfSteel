@@ -21,10 +21,10 @@ public class WeaponryHandler : UnitSystem
         InitializeWeaponryArray();
         
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.UnitData.Events.OnUnitDeath += HandleUnitDeath;
-        Unit.UnitData.Events.OnUnitFlee += HandleUnitFlee;
-        Unit.UnitData.Events.OnUnitOperational += HandleUnitOperational;
-        Unit.UnitData.Events.OnGetMaxAttackRange += GetMaxAttackRange;
+        Unit.Events.OnUnitDeath += HandleUnitDeath;
+        Unit.Events.OnUnitFlee += HandleUnitFlee;
+        Unit.Events.OnUnitOperational += HandleUnitOperational;
+        Unit.Events.OnGetMaxAttackRange += GetMaxAttackRange;
 
         Invoke(nameof(InitializeOnCheckForEnemyUnit), 0.1f);
     }
@@ -75,10 +75,10 @@ public class WeaponryHandler : UnitSystem
     private void HandleUnitDeath()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
-        Unit.UnitData.Events.OnUnitFlee -= HandleUnitFlee;
-        Unit.UnitData.Events.OnUnitOperational -= HandleUnitOperational;
-        Unit.UnitData.Events.OnGetMaxAttackRange -= GetMaxAttackRange;
+        Unit.Events.OnUnitDeath -= HandleUnitDeath;
+        Unit.Events.OnUnitFlee -= HandleUnitFlee;
+        Unit.Events.OnUnitOperational -= HandleUnitOperational;
+        Unit.Events.OnGetMaxAttackRange -= GetMaxAttackRange;
     }
 
     private void HandleUnitFlee(Vector3 projectileOrigin)
@@ -102,10 +102,6 @@ public class WeaponryHandler : UnitSystem
 
     private void HandleTick()
     {
-        // DEBUG -> Updating Weaponry's 'localPlayerID'
-        // TODO: Set this in Start maybe
-        foreach (var weaponry in _weapons) weaponry.localPlayerID = Unit.UnitPlayerID;
-        
         foreach (var weaponry in _weapons) if (weaponry._targetUnit is not null) _activeWeapons.Add(weaponry);
 
         foreach (var activeWeapon in _activeWeapons)
@@ -128,7 +124,7 @@ public class WeaponryHandler : UnitSystem
         if (inactiveWeaponsCount == 0) return;
         
         // Cashes nearbyEnemies
-        var nearbyUnits = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsFromDifferentTeams(transform.position, _inactiveWeapons[0].localPlayerID);
+        var nearbyUnits = SpatialHashManager.Instance.SpatialHash.GetNearbyUnitsFromDifferentTeams(transform.position, Unit.UnitPlayerID);
         var closestEnemies = new Unit[inactiveWeaponsCount];
         var closestDistanceSqrt = new float[inactiveWeaponsCount];
         
@@ -142,7 +138,7 @@ public class WeaponryHandler : UnitSystem
             if ( ! nearbyUnit.IsSpotted) continue;
             
             // Continues for, if 'nearbyUnit' cannot get attacked by his team member
-            if (Unit.UnitData.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true) continue;
+            if (Unit.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true) continue;
             
             // Continues for, if 'nearbyUnit' cannot get attacked because a building is blocking the vision
             //1<<LayerMask.NameToLayer("Buildings")
@@ -193,7 +189,7 @@ public class WeaponryHandler : UnitSystem
         if (_inactiveWeapons.Count == _weapons.Length)
         {
             // Return, if Unit tries to attack an enemy unit
-            if (Unit.UnitData.CurrentUnitCommand == UnitData.UnitCommands.Attack) return;
+            if (Unit.CurrentUnitCommand == Unit.UnitCommands.Attack) return;
             
             // Return, if Turret is already looking straight
             if (Unit.Turret.rotation.eulerAngles == Vector3.zero) return;
@@ -288,13 +284,13 @@ public class WeaponryHandler : UnitSystem
     private void InitializeOnCheckForEnemyUnit()
     {
         if (CompareTag("Ally"))
-            Unit.UnitData.Events.OnCheckForEnemyUnit += CheckForPlayerUnit;
+            Unit.Events.OnCheckForEnemyUnit += CheckForPlayerUnit;
         
         else if (CompareTag("Untagged"))
-            Unit.UnitData.Events.OnCheckForEnemyUnit += CheckForAllyUnit;
+            Unit.Events.OnCheckForEnemyUnit += CheckForAllyUnit;
         
         else
-            Unit.UnitData.Events.OnCheckForEnemyUnit += null;
+            Unit.Events.OnCheckForEnemyUnit += null;
     }
 
     private bool CheckForPlayerUnit(int unitPlayerID) => unitPlayerID == InputManager.Instance.Player.GetInstanceID();

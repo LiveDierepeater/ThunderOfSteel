@@ -56,32 +56,31 @@ public class TankMovement : UnitSystem, IMovementBehavior
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.UnitData.Events.OnCommandToDestination += MoveToDestination;
-        Unit.UnitData.Events.OnCommandToAttack += MoveToAndAttackUnit;
-        Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
-        Unit.UnitData.Events.OnUnitDeath += HandleDeath;
-        Unit.UnitData.Events.OnUnitFlee += FleeToDestination;
-        Unit.UnitData.Events.OnUnitOperational += HandleUnitRegenerated;
+        Unit.Events.OnCommandToDestination += MoveToDestination;
+        Unit.Events.OnCommandToAttack += MoveToAndAttackUnit;
+        Unit.Events.OnUnitDeath += HandleDeath;
+        Unit.Events.OnUnitFlee += FleeToDestination;
+        Unit.Events.OnUnitOperational += HandleUnitRegenerated;
     }
 
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
-        Unit.UnitData.Events.OnCommandToAttack -= MoveToAndAttackUnit;
-        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
-        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
-        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
+        Unit.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.Events.OnCommandToAttack -= MoveToAndAttackUnit;
+        Unit.Events.OnUnitDeath -= HandleDeath;
+        Unit.Events.OnUnitFlee -= FleeToDestination;
+        Unit.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
     private void OnDestroy()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
-        Unit.UnitData.Events.OnCommandToAttack -= MoveToAndAttackUnit;
-        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
-        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
-        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
+        Unit.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.Events.OnCommandToAttack -= MoveToAndAttackUnit;
+        Unit.Events.OnUnitDeath -= HandleDeath;
+        Unit.Events.OnUnitFlee -= FleeToDestination;
+        Unit.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
     private void Initialize(UnitData data, AnimationCurve accelerationCurve, AnimationCurve decelerationCurve)
@@ -189,9 +188,9 @@ public class TankMovement : UnitSystem, IMovementBehavior
 
         var newDestination = Unit.TargetUnit.transform.position;
         
-        if (Unit.UnitData.CurrentUnitCommand != UnitData.UnitCommands.Attack) return;
+        if (Unit.CurrentUnitCommand != Unit.UnitCommands.Attack) return;
 
-        var maxAttackRange = Unit.UnitData.Events.OnGetMaxAttackRange.Invoke();
+        var maxAttackRange = Unit.Events.OnGetMaxAttackRange.Invoke();
 
         if ( ! (Vector3.Distance(transform.position, newDestination) <= maxAttackRange) || ! Unit.TargetUnit.IsSpotted) return;
         
@@ -224,11 +223,10 @@ public class TankMovement : UnitSystem, IMovementBehavior
     private void HandleDeath()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
-        Unit.UnitData.Events.OnCommandToAttack -= MoveToAndAttackUnit;
-        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
-        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
-        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
+        Unit.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.Events.OnCommandToAttack -= MoveToAndAttackUnit;
+        Unit.Events.OnUnitFlee -= FleeToDestination;
+        Unit.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
 #endregion

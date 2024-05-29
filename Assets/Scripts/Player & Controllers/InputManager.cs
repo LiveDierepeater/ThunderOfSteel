@@ -10,7 +10,11 @@ public class InputManager : InputReader
 
     private GameManager.GameState _gameState;
 
-    public static InputManager Instance => _instance;
+    public static InputManager Instance
+    {
+        get => _instance;
+        private set => _instance = value;
+    }
 
     [HideInInspector] public CameraSystem CameraSystem;
     [HideInInspector] public Player Player;
@@ -22,13 +26,15 @@ public class InputManager : InputReader
     protected override void Awake()
     {
         base.Awake();
+        
         if (_instance is not null)
         {
             Destroy(gameObject);
             return;
         }
-        
         _instance = this;
+        Instance = _instance;
+        
         DontDestroyOnLoad(gameObject.transform.root);
         
         Player = Instantiate(Player);
@@ -94,6 +100,6 @@ public class InputManager : InputReader
 
     private void OnDestroy()
     {
-        if(_instance == this) _instance = null;
+        if (_instance == this) _instance = null;
     }
 }

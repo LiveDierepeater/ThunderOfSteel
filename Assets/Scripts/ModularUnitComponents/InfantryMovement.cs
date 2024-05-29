@@ -56,10 +56,9 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     private void Start()
     {
         TickManager.Instance.TickSystem.OnTick += HandleTick;
-        Unit.UnitData.Events.OnCommandToDestination += MoveToDestination;
-        Unit.UnitData.Events.OnStopUnit += StopUnitAtPosition;
-        Unit.UnitData.Events.OnUnitFlee += FleeToDestination;
-        Unit.UnitData.Events.OnUnitOperational += HandleUnitRegenerated;
+        Unit.Events.OnCommandToDestination += MoveToDestination;
+        Unit.Events.OnUnitFlee += FleeToDestination;
+        Unit.Events.OnUnitOperational += HandleUnitRegenerated;
     }
 
     private void OnDisable() => UnsubscribeFromAllEvents();
@@ -260,10 +259,9 @@ public class InfantryMovement : UnitSystem, IMovementBehavior
     private void UnsubscribeFromAllEvents()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
-        Unit.UnitData.Events.OnCommandToDestination -= MoveToDestination;
-        Unit.UnitData.Events.OnStopUnit -= StopUnitAtPosition;
-        Unit.UnitData.Events.OnUnitFlee -= FleeToDestination;
-        Unit.UnitData.Events.OnUnitOperational -= HandleUnitRegenerated;
+        Unit.Events.OnCommandToDestination -= MoveToDestination;
+        Unit.Events.OnUnitFlee -= FleeToDestination;
+        Unit.Events.OnUnitOperational -= HandleUnitRegenerated;
     }
 
 #endregion

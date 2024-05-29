@@ -62,7 +62,7 @@ public class UVisibilityManager : UnitSystem
     {
         Unit.OnInitializeChip -= InitializeChip;
         InputManager.Instance.OnCameraUpdate -= HandleCameraUpdate;
-        Unit.UnitData.Events.OnUnitDeath -= HandleUnitDeath;
+        Unit.OnUnitDeath -= HandleUnitDeath;
     }
 
     private void HandleCameraUpdate(float currentZoomLevel)
