@@ -8,7 +8,7 @@ public class USpottingSystem : UnitSystem
     private LayerMask _unitsLayer;
     private LayerMask _obstacleLayer;
 
-    public Action OnSpotterUnitDeath;
+    private Action OnSpotterUnitDeath;
     
     private void Start()
     {
