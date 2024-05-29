@@ -14,7 +14,7 @@ public class USpottingSystem : UnitSystem
     {
         TickManager.Instance.TickSystem.OnTickBegin += HandleTick;
         
-        InitializeSpottingRange();
+        Invoke(nameof(InitializeSpottingRange), 0.1f);
         
         _obstacleLayer = InputManager.Instance.Player.RaycastLayerMask;
         _unitsLayer = InputManager.Instance.Player.unitsLayerMask;

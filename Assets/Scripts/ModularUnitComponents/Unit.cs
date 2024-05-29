@@ -211,9 +211,6 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        if (gameObject.name == "M26 Pershing")
-            CooldownManager.Instance._text.text = "Target: " + TargetUnit + "   |   SpottingUnit: " + SpottingUnit + "  |   IsSpotted: " + IsSpotted;
-        
         if (Input.GetKeyDown(KeyCode.K) && selectionSprite.color == Color.white) RandomizePlayerID();
     }
 
