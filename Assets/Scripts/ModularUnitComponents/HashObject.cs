@@ -25,6 +25,7 @@ public class HashObject : UnitSystem
     private void OnDisable()
     {
         TickManager.Instance.TickSystem.OnTick -= HandleTick;
+        Unit.Events.OnUnitDeath -= OnDisable;
         _currentHashKey = SpatialHashManager.Instance.SpatialHash.CalculateHashKey(transform.position);
         SpatialHashManager.Instance.SpatialHash.RemoveObjectWithHashKey(Unit, _lastHashKey);
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponryHandler : UnitSystem
@@ -13,21 +14,32 @@ public class WeaponryHandler : UnitSystem
     private UnitData.Type _unitType;
 
     private bool IsAnAPWeaponryActive;
-    
+
     private void Start()
     {
         _unitType = Unit.UnitData.UnitType;
         
+        
+        
+
+        Invoke(nameof(InitializeHandler), 0.05f);
+        Invoke(nameof(InitializeOnCheckForEnemyUnit), 0.1f);
+    }
+
+    private void InitializeHandler()
+    {
         InitializeWeaponryArray();
+        Unit.Events.OnGetMaxAttackRange += GetMaxAttackRange;
+        
+        print(Unit + "  | Length: " + _weapons.Length);
+        print(Unit + "  | Range: " + Unit.Events.OnGetMaxAttackRange.Invoke());
         
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.Events.OnUnitDeath += HandleUnitDeath;
         Unit.Events.OnUnitFlee += HandleUnitFlee;
         Unit.Events.OnUnitOperational += HandleUnitOperational;
-        Unit.Events.OnGetMaxAttackRange += GetMaxAttackRange;
-
-        Invoke(nameof(InitializeOnCheckForEnemyUnit), 0.1f);
     }
+    
 
     private void InitializeWeaponryArray()
     {
@@ -66,10 +78,10 @@ public class WeaponryHandler : UnitSystem
             }
         }
         
-        System.Array.Resize(ref _weapons, i);
-        System.Array.Resize(ref _freeWeapons, f);
-        System.Array.Resize(ref _hullWeapons, h);
-        System.Array.Resize(ref _turretWeapons, t);
+        Array.Resize(ref _weapons, i);
+        Array.Resize(ref _freeWeapons, f);
+        Array.Resize(ref _hullWeapons, h);
+        Array.Resize(ref _turretWeapons, t);
     }
 
     private void HandleUnitDeath()
@@ -289,11 +301,13 @@ public class WeaponryHandler : UnitSystem
         else if (CompareTag("Untagged"))
             Unit.Events.OnCheckForEnemyUnit += CheckForAllyUnit;
         
-        else
-            Unit.Events.OnCheckForEnemyUnit += null;
+        else if (CompareTag("AI"))
+            Unit.Events.OnCheckForEnemyUnit += CheckForAIUnit;
     }
 
     private bool CheckForPlayerUnit(int unitPlayerID) => unitPlayerID == InputManager.Instance.Player.GetInstanceID();
 
     private bool CheckForAllyUnit(int unitPlayerID) => unitPlayerID == UnitManager.ALLY_ID;
+
+    private bool CheckForAIUnit(int unitPlayerID) => unitPlayerID == UnitManager.AI_ID;
 }
