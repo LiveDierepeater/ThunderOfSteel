@@ -35,19 +35,13 @@ public class UHealth : UnitSystem
 
     private void OnDisable() => Unit.Events.OnAttack -= TakeDamage;
 
-    private void Update()
-    {
-        if (gameObject.name == "M26 Pershing")
-            CooldownManager.Instance._text.text = "Health: " + _currentHealth;
-    }
-
 #endregion
 
     private void TakeDamage(Vector3 projectilesOriginPosition , int amount)
     {
         _currentHealth -= amount;
         TickManager.Instance.TickSystem.OnTick -= RegenerateHealth;
-
+        
         if (_currentHealth <= _maxHealth * 0.3f) CallUnitToFlee(projectilesOriginPosition);
         
         if (_currentHealth <= 0)

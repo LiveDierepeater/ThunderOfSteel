@@ -31,9 +31,6 @@ public class WeaponryHandler : UnitSystem
         InitializeWeaponryArray();
         Unit.Events.OnGetMaxAttackRange += GetMaxAttackRange;
         
-        print(Unit + "  | Length: " + _weapons.Length);
-        print(Unit + "  | Range: " + Unit.Events.OnGetMaxAttackRange.Invoke());
-        
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.Events.OnUnitDeath += HandleUnitDeath;
         Unit.Events.OnUnitFlee += HandleUnitFlee;

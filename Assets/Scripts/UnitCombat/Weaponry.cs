@@ -59,6 +59,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     public void OnEnableWeaponry()
     {
+        print("OnEnable");
         TickManager.Instance.TickSystem.OnTick += HandleTick;
         Unit.Events.OnNewTargetUnit += SetTarget;
     }
@@ -112,10 +113,16 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private void HandleTick()
     {
         if (_targetUnit is not null)
-            if (_targetUnit.transform.gameObject.activeSelf) // Unit has target
-                MoveInRange();
-            else                                             // Unit is inactive (dead)
-                SetTarget(null);
+            MoveInRange();
+        
+        if (WeaponryData.ShellType == UnitWeaponry.Shells.APShell && Unit.gameObject.name == "M26 Pershing (1)")
+        {
+            print(_targetUnit);
+            if (_targetUnit == null)
+                CooldownManager.Instance._text.text = Unit + "'s target is: null";
+            else
+                CooldownManager.Instance._text.text = Unit + "'s target is: " + _targetUnit;
+        }
     }
 
 #endregion
@@ -126,6 +133,9 @@ public class Weaponry : UnitSystem, IAttackBehavior
     {
         // Informs BattleManager, if the target was not set to null
         if (target is not null) BattleManager.Instance.StartAttack(this, target);
+        
+        if (WeaponryData.ShellType == UnitWeaponry.Shells.APShell && Unit.gameObject.name == "M26 Pershing (1)")
+            print("target set: " + _targetUnit);
         
         _targetUnit = target;
         OnLoosingTarget?.Invoke();
@@ -140,19 +150,21 @@ public class Weaponry : UnitSystem, IAttackBehavior
     private void MoveInRange()
     {
         Unit.IsAttacking = false; // DEBUG
-
+        
         if ( ! CanWeaponryAttackTarget(_targetUnit))
         {
+            print("A");
             SetTarget(null);
             return;
         }
         
         var distanceToTarget = Vector3.Distance(transform.position, _targetUnit.transform.position);
-
+        
         if (Unit.CurrentUnitCommand != Unit.UnitCommands.Attack)
         {
             if (WeaponryData.AttackRange < distanceToTarget)
             {
+                print("B");
                 SetTarget(null);
                 return;
             }
@@ -170,6 +182,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 // Return, if weaponry's target is not the Unit's Attack-Target
                 if (_targetUnit != Unit.TargetUnit)
                 {
+                    print("C");
                     SetTarget(null);
                     return;
                 }
@@ -226,11 +239,12 @@ public class Weaponry : UnitSystem, IAttackBehavior
             case UnitWeaponry.Shells.APShell or UnitWeaponry.Shells.HEShell:
             {
                 // Returns, if '_targetUnit' is not spotted anymore and sets '_targetUnit' to null
-                if ( ! _targetUnit.IsSpotted)
-                {
-                    SetTarget(null);
-                    return;
-                }
+                // if ( ! _targetUnit.IsSpotted)
+                // {
+                //     print("D");
+                //     SetTarget(null);
+                //     return;
+                // }
                 projectileInstance = Instantiate(tankShellPrefab, Unit.ShellSpawnLocation.position, Quaternion.identity);
                 
                 InitializeProjectile(projectileInstance, target);
