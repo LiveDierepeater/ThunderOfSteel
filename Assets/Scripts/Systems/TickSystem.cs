@@ -24,9 +24,9 @@ public class TickSystem : MonoBehaviour
     {
         if (Time.time >= nextTick)
         {
+            OnTickEnd?.Invoke();
             OnTickBegin?.Invoke();
             OnTick?.Invoke();
-            OnTickEnd?.Invoke();
             
             nextTick = Time.time + TickRate;
             elapsedTicks++;

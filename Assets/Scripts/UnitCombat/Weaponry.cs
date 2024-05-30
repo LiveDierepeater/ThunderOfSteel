@@ -278,7 +278,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
     /// </summary>
     /// <param name="targetUnit"></param>
     /// <returns></returns>
-    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
     private bool CanWeaponryAttackTarget(Unit targetUnit) => targetUnit.UnitPlayerID != Unit.UnitPlayerID && localArmorDamage[(int)targetUnit.UnitData.Armor] >= 0;
 
     private bool IsWeaponsCoolDownActive() => CooldownManager.Instance.IsCooldownActive(GetInstanceID());
