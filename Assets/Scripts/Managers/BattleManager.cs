@@ -80,19 +80,39 @@ public class BattleManager : MonoBehaviour
         if (activeWeapons.ContainsValue(killedTarget))
         {
             foreach (var activeWeapon in activeWeapons.Keys)
-                if (activeWeapons.TryGetValue(activeWeapon, out _) == killedTarget)
+                if (activeWeapons.TryGetValue(activeWeapon, out Unit targetUnit) && targetUnit == killedTarget)
                     keysToRemove.Add(activeWeapon);
         }
         else return;
         
         // Removes all killing attackers
         // Sets the _targetUnit in Weaponry.cs to null
-        foreach (var weaponry in keysToRemove)
+        RemoveWeapons(keysToRemove);
+        
+        // Check and remove weapons that belong to the killedTarget unit
+        var weaponsToCheck = killedTarget.WeaponryHandler._weapons;
+        var weaponsToRemove = new List<Weaponry>();
+        
+        foreach (var weaponry in weaponsToCheck)
+        {
+            if (weaponry._targetUnit is null) continue;
+            
+            if (activeWeapons.ContainsKey(weaponry)) weaponsToRemove.Add(weaponry);
+        }
+        
+        RemoveWeapons(weaponsToRemove);
+        
+        // Clear the lists
+        keysToRemove.Clear();
+        weaponsToRemove.Clear();
+    }
+
+    private void RemoveWeapons(List<Weaponry> weaponsToRemove)
+    {
+        foreach (var weaponry in weaponsToRemove)
         {
             activeWeapons.Remove(weaponry);
             weaponry.SetTarget(null);
         }
-        
-        keysToRemove.Clear();
     }
 }

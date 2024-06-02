@@ -40,6 +40,7 @@ public class Unit : MonoBehaviour
     [Space(5)]
     [Header("Spotting System")]
     [HideInInspector] public USpottingSystem USpottingSystem;
+    [HideInInspector] public WeaponryHandler WeaponryHandler;
     public Unit SpottingUnit;
     public bool IsSpotted;
     
@@ -104,6 +105,7 @@ public class Unit : MonoBehaviour
     private void Start()
     {
         UnitPlayerID = InputManager.Instance.Player.GetInstanceID();
+        WeaponryHandler = GetComponent<WeaponryHandler>();
         
         SelectionManager.Instance.AvailableUnits.Add(this);
         UnitManager.Instance.AddUnit(this, UnitPlayerID);

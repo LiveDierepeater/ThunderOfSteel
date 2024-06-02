@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class WeaponryHandler : UnitSystem
 {
-    private Weaponry[] _weapons = new Weaponry[5];
+    public Weaponry[] _weapons = new Weaponry[5];
     private Weaponry[] _freeWeapons = new Weaponry[5];
     private Weaponry[] _hullWeapons = new Weaponry[5];
     private Weaponry[] _turretWeapons = new Weaponry[5];
     private List<Weaponry> _inactiveWeapons = new();
-    private List<Weaponry> _activeWeapons = new();
+    private readonly List<Weaponry> _activeWeapons = new();
 
     private UnitData.Type _unitType;
 
