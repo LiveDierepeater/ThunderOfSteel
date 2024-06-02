@@ -205,7 +205,7 @@ public class Unit : MonoBehaviour
 
     private IEnumerator KillUnit()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
         print(UnitData.UnitName + " is destroyed!");
     }

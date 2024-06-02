@@ -117,7 +117,7 @@ public class WeaponryHandler : UnitSystem
             if (activeWeapon.WeaponryData.ShellType == UnitWeaponry.Shells.APShell) IsAnAPWeaponryActive = true;
             else IsAnAPWeaponryActive = false;
         }
-        
+
         UpdateTargets();
     }
 
@@ -195,7 +195,7 @@ public class WeaponryHandler : UnitSystem
     private void Update()
     {
         HandleWeaponryRotation();
-
+        
         if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f)
             CooldownManager.Instance._text.text = "Inactive: " + _inactiveWeapons.Count + "/" + _weapons.Length + " | Target: " + _weapons[1]._targetUnit;
     }
@@ -260,6 +260,8 @@ public class WeaponryHandler : UnitSystem
 
     private void RotateWeaponryBoundsTransform(Weaponry weaponry, Transform tr)
     {
+        if (weaponry._targetUnit is null) return;
+        
         float degreesPerSecond = Unit.UnitData.TurnSpeed * 0.1f * Time.deltaTime;
         Vector3 direction = weaponry._targetUnit.transform.position - transform.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
