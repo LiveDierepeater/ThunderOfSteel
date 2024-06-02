@@ -7,7 +7,7 @@ public class Unit : MonoBehaviour
 {
     public UnitEvents Events;
     public event Action OnInitializeChip;
-    public event Action OnUnitDeath;
+    public event Action OnUnitDeathInternal;
     
     [Header("Communication")]
     public UnitCommands CurrentUnitCommand;
@@ -192,7 +192,7 @@ public class Unit : MonoBehaviour
     {
         if ( ! IsUnitDead) return;
         
-        OnUnitDeath?.Invoke();
+        OnUnitDeathInternal?.Invoke();
         Mesh.gameObject.SetActive(false);
         Collider.enabled = false;
         StartCoroutine(KillUnit());

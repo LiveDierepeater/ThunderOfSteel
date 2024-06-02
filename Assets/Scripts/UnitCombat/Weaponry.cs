@@ -135,7 +135,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (target is not null) BattleManager.Instance.StartAttack(this, target);
         
         if (WeaponryData.ShellType == UnitWeaponry.Shells.APShell && Unit.gameObject.name == "M26 Pershing (1)")
-            print("target set: " + _targetUnit);
+            print("target set: " + target);
         
         _targetUnit = target;
         OnLoosingTarget?.Invoke();
@@ -254,7 +254,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 break;
             }
         }
-
+        
         Invoke(nameof(DestroyMuzzleFlash), 0.5f);
         
         _oldMuzzleFlash = Instantiate(WeaponryData.MuzzleFlash_Prefab, Unit.ShellSpawnLocation.position, Unit.ShellSpawnLocation.rotation).transform;

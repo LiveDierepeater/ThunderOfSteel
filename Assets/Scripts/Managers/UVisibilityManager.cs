@@ -29,16 +29,16 @@ public class UVisibilityManager : UnitSystem
     {
         base.Awake();
         Unit.OnInitializeChip += InitializeChip;
-        Unit.OnUnitDeath += HandleUnitDeath;
+        Unit.OnUnitDeathInternal += HandleUnitDeathInternal;
     }
 
     private void InitializeChip()
     {
         _propertyBlock ??= new MaterialPropertyBlock();
-
+        
         MaskTexture = FactionData.FactionChipMasks[(int)Unit.UnitData.Faction];
         PlayerColor = Unit.PlayerColor;
-
+        
         // Set the initial values
         _renderer.GetPropertyBlock(_propertyBlock);
         _propertyBlock.SetTexture(MaskTex, MaskTexture);
@@ -58,11 +58,11 @@ public class UVisibilityManager : UnitSystem
 
     private void InitializeChipScale() => transform.root.localScale *= _standardScale;
 
-    private void HandleUnitDeath()
+    private void HandleUnitDeathInternal()
     {
         Unit.OnInitializeChip -= InitializeChip;
         InputManager.Instance.OnCameraUpdate -= HandleCameraUpdate;
-        Unit.OnUnitDeath -= HandleUnitDeath;
+        Unit.OnUnitDeathInternal -= HandleUnitDeathInternal;
     }
 
     private void HandleCameraUpdate(float currentZoomLevel)
