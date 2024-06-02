@@ -108,6 +108,8 @@ public class WeaponryHandler : UnitSystem
 
     private void HandleTick()
     {
+        if (Unit.UHealth.UnitHealthState == UHealth.HealthState.Flee) return;
+        
         foreach (var weaponry in _weapons) if (weaponry._targetUnit is not null) _activeWeapons.Add(weaponry);
 
         foreach (var activeWeapon in _activeWeapons)
@@ -186,16 +188,16 @@ public class WeaponryHandler : UnitSystem
             _inactiveWeapons[index].SetTarget(closestEnemies[index]);
         }
         
-        if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f && _inactiveWeapons.Contains(_weapons[1]))
-            CooldownManager.Instance._text.text = _weapons[1].WeaponryData.name + "'s new target: " + closestEnemies[1];
+        // if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f && _inactiveWeapons.Contains(_weapons[1]))
+        //     CooldownManager.Instance._text.text = _weapons[1].WeaponryData.name + "'s new target: " + closestEnemies[1];
     }
 
     private void Update()
     {
         HandleWeaponryRotation();
-        
-        //if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f)
-          //  CooldownManager.Instance._text.text = Unit + "'s weapons are: " + GetWeaponsSearchingForTarget().Count;
+
+        if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f)
+            CooldownManager.Instance._text.text = "Inactive: " + _inactiveWeapons.Count + "/" + _weapons.Length + " | Target: " + _weapons[1]._targetUnit;
     }
 
     private void HandleWeaponryRotation()
@@ -241,8 +243,8 @@ public class WeaponryHandler : UnitSystem
                     if (_unitType == UnitData.Type.Tank)
                     {
                         // Return, if Unit is not standing
-                        if (!Unit.TankMovement.IsUnitStanding()) continue;
-
+                        if ( ! Unit.TankMovement.IsUnitStanding()) continue;
+                        
                         RotateWeaponryBoundsTransform(weaponry, transform);
                     }
                     break;

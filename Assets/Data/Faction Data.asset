@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FactionChipMasks:
   - {fileID: 2800000, guid: c0060d30b78a4374cbcda2b5b1b3e7f8, type: 3}
+  - {fileID: 2800000, guid: 7350b81fc058a5b4fb46ab0ad6103972, type: 3}

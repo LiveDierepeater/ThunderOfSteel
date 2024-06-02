@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e5d5bc2e0b21d541a62c932c0d4036b, type: 3}
+  m_Name: Panzer III M
+  m_EditorClassIdentifier: 
+  UnitName: Panzer III M
+  UnitMesh: {fileID: 919132149155446097, guid: 6f61a1f886100004a8223b6ab2ecfb04, type: 3}
+  Faction: 1
+  Class: Medium Tank
+  WarMode: 1
+  UnitType: 1
+  Cost: 25
+  ProducedBy: 3
+  StandardSpeed: 35
+  TurnSpeed: 150
+  MaxAcceleration: 120
+  StoppingDistance: 10
+  FleeSpeed: 10
+  SpeedBonusOnRoad: 1
+  Armor: 4
+  MaxHealth: 400
+  weaponryPrefab: {fileID: 2033176989508835601, guid: 70d1793a58992f64da53a2ec6c9607c2, type: 3}
+  UnitWeaponry:
+  - {fileID: 11400000, guid: 4656a3219e4f33c4f8289a8209b0ca33, type: 2}
+  - {fileID: 11400000, guid: 408381f615570d84a85ed10dfce05aad, type: 2}
+  - {fileID: 11400000, guid: aa6a6091a33efbf4bb59651ac1ba457d, type: 2}

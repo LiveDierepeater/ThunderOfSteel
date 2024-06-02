@@ -41,6 +41,7 @@ public class Unit : MonoBehaviour
     [Header("Spotting System")]
     [HideInInspector] public USpottingSystem USpottingSystem;
     [HideInInspector] public WeaponryHandler WeaponryHandler;
+    [HideInInspector] public UHealth UHealth;
     public Unit SpottingUnit;
     public bool IsSpotted;
     
@@ -67,21 +68,21 @@ public class Unit : MonoBehaviour
         {
             case UnitData.Type.Infantry:
                 InfantryMovement = gameObject.AddComponent<InfantryMovement>();
-                gameObject.AddComponent<UHealth>();
+                UHealth =gameObject.AddComponent<UHealth>();
                 USpottingSystem = gameObject.AddComponent<USpottingSystem>();
                 CreateWeaponry();
                 break;
             
             case UnitData.Type.Tank:
                 TankMovement = gameObject.AddComponent<TankMovement>();
-                gameObject.AddComponent<UHealth>();
+                UHealth =gameObject.AddComponent<UHealth>();
                 USpottingSystem = gameObject.AddComponent<USpottingSystem>();
                 CreateWeaponry();
                 break;
             
             case UnitData.Type.Truck:
                 InfantryMovement = gameObject.AddComponent<InfantryMovement>();
-                gameObject.AddComponent<UHealth>();
+                UHealth =gameObject.AddComponent<UHealth>();
                 break;
             
             default:
@@ -204,7 +205,7 @@ public class Unit : MonoBehaviour
 
     private IEnumerator KillUnit()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.3f);
         Destroy(gameObject);
         print(UnitData.UnitName + " is destroyed!");
     }

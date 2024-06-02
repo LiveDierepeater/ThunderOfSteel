@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class UHealth : UnitSystem
 {
@@ -9,12 +10,12 @@ public class UHealth : UnitSystem
 
     private const int _RegenerateHealthAmount = 3;
 
-    private enum HealthState
+    public enum HealthState
     {
         Operational,
         Flee
     }
-    private HealthState _unitHealthState;
+    [FormerlySerializedAs("_unitHealthState")] public HealthState UnitHealthState;
 
 #region Initializing
 
@@ -28,7 +29,7 @@ public class UHealth : UnitSystem
     {
         _maxHealth = Unit.UnitData.MaxHealth;
         _currentHealth = Unit.UnitData.MaxHealth;
-        _unitHealthState = HealthState.Operational;
+        UnitHealthState = HealthState.Operational;
 
         Unit.Events.OnAttack += TakeDamage;
     }
@@ -57,9 +58,9 @@ public class UHealth : UnitSystem
     private void CallUnitToFlee(Vector3 projectilesOriginPosition)
     {
         // Return, if Unit is already fleeing
-        if (_unitHealthState != HealthState.Operational) return;
+        if (UnitHealthState != HealthState.Operational) return;
         
-        _unitHealthState = HealthState.Flee;
+        UnitHealthState = HealthState.Flee;
         Unit.Events.OnUnitFlee?.Invoke(projectilesOriginPosition);
     }
 
@@ -87,9 +88,9 @@ public class UHealth : UnitSystem
         // Add health-amount
         _currentHealth += _RegenerateHealthAmount;
 
-        if (_currentHealth >= _maxHealth * 0.3f && _unitHealthState == HealthState.Flee)
+        if (_currentHealth >= _maxHealth * 0.3f && UnitHealthState == HealthState.Flee)
         {
-            _unitHealthState = HealthState.Operational;
+            UnitHealthState = HealthState.Operational;
             Unit.Events.OnUnitOperational?.Invoke();
         }
         

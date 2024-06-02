@@ -8,6 +8,8 @@ public abstract class Projectile: MonoBehaviour
     
     private int[] _armorDamage = new int[9];
     private Vector3 originPosition;
+
+    private Weaponry _ownerWeaponry;
     
     protected virtual void Update()
     {
@@ -44,9 +46,17 @@ public abstract class Projectile: MonoBehaviour
 
     private void ApplyDamageToTarget() => Target.Events.OnAttack?.Invoke(originPosition, _armorDamage[(int)Target.UnitData.Armor]);
 
-    private void HandleTargetDeath() => Target = null;
+    private void HandleTargetDeath()
+    {
+        Target = null;
+        _ownerWeaponry.OnLoosingTarget -= HandleTargetDeath;
+    }
 
-    public void InitializeWeaponryEvents(Weaponry ownerWeaponry) => ownerWeaponry.OnLoosingTarget += HandleTargetDeath;
+    public void InitializeWeaponryEvents(Weaponry ownerWeaponry)
+    {
+        _ownerWeaponry = ownerWeaponry;
+        _ownerWeaponry.OnLoosingTarget += HandleTargetDeath;
+    }
 
     public void InitializeArmorDamage(int[] armorDamage) => _armorDamage = armorDamage;
 

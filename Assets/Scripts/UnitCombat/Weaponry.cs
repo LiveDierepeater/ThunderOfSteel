@@ -134,8 +134,8 @@ public class Weaponry : UnitSystem, IAttackBehavior
         // Informs BattleManager, if the target was not set to null
         if (target is not null) BattleManager.Instance.StartAttack(this, target);
         
-        if (WeaponryData.ShellType == UnitWeaponry.Shells.APShell && Unit.gameObject.name == "M26 Pershing (1)")
-            print("target set: " + target);
+        // if (WeaponryData.ShellType == UnitWeaponry.Shells.APShell && Unit.gameObject.name == "M26 Pershing (1)")
+        //     print("target set: " + target);
         
         _targetUnit = target;
         OnLoosingTarget?.Invoke();
@@ -153,7 +153,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
         
         if ( ! CanWeaponryAttackTarget(_targetUnit))
         {
-            print("A");
             SetTarget(null);
             return;
         }
@@ -164,7 +163,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
         {
             if (WeaponryData.AttackRange < distanceToTarget)
             {
-                print("B");
                 SetTarget(null);
                 return;
             }
@@ -182,7 +180,6 @@ public class Weaponry : UnitSystem, IAttackBehavior
                 // Return, if weaponry's target is not the Unit's Attack-Target
                 if (_targetUnit != Unit.TargetUnit)
                 {
-                    print("C");
                     SetTarget(null);
                     return;
                 }
