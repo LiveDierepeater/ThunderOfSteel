@@ -19,13 +19,10 @@ public class WeaponryHandler : UnitSystem
     {
         _unitType = Unit.UnitData.UnitType;
         
-        
-        
-
         Invoke(nameof(InitializeHandler), 0.05f);
         Invoke(nameof(InitializeOnCheckForEnemyUnit), 0.1f);
     }
-
+    
     private void InitializeHandler()
     {
         InitializeWeaponryArray();

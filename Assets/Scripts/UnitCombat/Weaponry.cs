@@ -115,7 +115,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (_targetUnit is not null)
             MoveInRange();
         
-        if (WeaponryData.ShellType == UnitWeaponry.Shells.APShell && Unit.gameObject.name == "M26 Pershing (1)")
+        if (WeaponryData.WeaponName == "Large cal. AP shell" && Unit.gameObject.name == "M26 Pershing (1)")
         {
             print(_targetUnit);
             if (_targetUnit == null)

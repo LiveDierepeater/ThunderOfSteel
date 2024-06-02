@@ -13,7 +13,11 @@ public class GameManager : MonoBehaviour
     }
     public GameState State;
 
-    private void Awake() => State = GameState.InGame;
+    private void Awake()
+    {
+        DontDestroyOnLoad(transform.root.gameObject);
+        State = GameState.InGame;
+    }
 
     private void Start() => InputManager.Instance.SetGameManager(this);
 
