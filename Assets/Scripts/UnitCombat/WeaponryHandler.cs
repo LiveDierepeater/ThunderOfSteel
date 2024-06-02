@@ -143,8 +143,8 @@ public class WeaponryHandler : UnitSystem
             // Continues for, if current 'nearbyUnt' is not spotted
             if ( ! nearbyUnit.IsSpotted) continue;
             
-            // Continues for, if 'nearbyUnit' cannot get attacked by his team member
-            if (Unit.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true) continue;
+            // Continues for, if 'nearbyUnit' cannot get attacked by his team member || himself
+            if (Unit.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true || Unit.UnitPlayerID == nearbyUnit.UnitPlayerID) continue;
             
             // Continues for, if 'nearbyUnit' cannot get attacked because a building is blocking the vision
             //1<<LayerMask.NameToLayer("Buildings")
@@ -156,7 +156,7 @@ public class WeaponryHandler : UnitSystem
             }
             
             // Goes through every weapon in 'inactiveWeapons'
-            for (var index = 0; index < _inactiveWeapons.Count; index++)
+            for (var index = 0; index < inactiveWeaponsCount; index++)
             {
                 var inactiveWeapon = _inactiveWeapons[index];
                 
@@ -185,9 +185,18 @@ public class WeaponryHandler : UnitSystem
             // Adds the current Weaponry to the BattleManager.cs
             _inactiveWeapons[index].SetTarget(closestEnemies[index]);
         }
+        
+        if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f && _inactiveWeapons.Contains(_weapons[1]))
+            CooldownManager.Instance._text.text = _weapons[1].WeaponryData.name + "'s new target: " + closestEnemies[1];
     }
 
-    private void Update() => HandleWeaponryRotation();
+    private void Update()
+    {
+        HandleWeaponryRotation();
+        
+        //if (Unit.gameObject.name == "M26 Pershing (1)" && Time.time > 3f)
+          //  CooldownManager.Instance._text.text = Unit + "'s weapons are: " + GetWeaponsSearchingForTarget().Count;
+    }
 
     private void HandleWeaponryRotation()
     {

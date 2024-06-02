@@ -115,14 +115,14 @@ public class Weaponry : UnitSystem, IAttackBehavior
         if (_targetUnit is not null)
             MoveInRange();
         
-        if (WeaponryData.WeaponName == "Large cal. AP shell" && Unit.gameObject.name == "M26 Pershing (1)")
-        {
-            print(_targetUnit);
-            if (_targetUnit == null)
-                CooldownManager.Instance._text.text = Unit + "'s target is: null";
-            else
-                CooldownManager.Instance._text.text = Unit + "'s target is: " + _targetUnit;
-        }
+        // if (WeaponryData.WeaponName == "Large cal. AP shell" && Unit.gameObject.name == "M26 Pershing (1)")
+        // {
+        //     print(_targetUnit);
+        //     if (_targetUnit == null)
+        //         CooldownManager.Instance._text.text = Unit + "'s target is: null";
+        //     else
+        //         CooldownManager.Instance._text.text = Unit + "'s target is: " + _targetUnit;
+        // }
     }
 
 #endregion
