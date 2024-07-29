@@ -19,7 +19,11 @@ public class GameManager : MonoBehaviour
         State = GameState.InGame;
     }
 
-    private void Start() => InputManager.Instance.SetGameManager(this);
+    private void Start()
+    {
+        InputManager.Instance.SetGameManager(this);
+        Debug.developerConsoleVisible = true;
+    }
 
     // ReSharper disable once UnusedMember.Local
     private void ChangeGameState(GameState newState)

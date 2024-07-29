@@ -112,7 +112,7 @@ public class Weaponry : UnitSystem, IAttackBehavior
 
     private void HandleTick()
     {
-        if (_targetUnit is not null)
+        if (_targetUnit != null)
             MoveInRange();
         
         // if (WeaponryData.WeaponName == "Large cal. AP shell" && Unit.gameObject.name == "M26 Pershing (1)")

@@ -110,14 +110,15 @@ public class WeaponryHandler : UnitSystem
     {
         if (Unit.UHealth.UnitHealthState == UHealth.HealthState.Flee) return;
         
+        _activeWeapons.Clear();
         foreach (var weaponry in _weapons) if (weaponry._targetUnit is not null) _activeWeapons.Add(weaponry);
-
+        
         foreach (var activeWeapon in _activeWeapons)
         {
             if (activeWeapon.WeaponryData.ShellType == UnitWeaponry.Shells.APShell) IsAnAPWeaponryActive = true;
             else IsAnAPWeaponryActive = false;
         }
-
+        
         UpdateTargets();
     }
 
@@ -143,7 +144,7 @@ public class WeaponryHandler : UnitSystem
         foreach (var nearbyUnit in nearbyUnits)
         {
             // Continues for, if current 'nearbyUnt' is not spotted
-            if ( ! nearbyUnit.IsSpotted) continue;
+            if ( ! nearbyUnit.IsSpotted || nearbyUnit == null) continue;
             
             // Continues for, if 'nearbyUnit' cannot get attacked by his team member || himself
             if (Unit.Events.OnCheckForEnemyUnit?.Invoke(nearbyUnit.UnitPlayerID) == true || Unit.UnitPlayerID == nearbyUnit.UnitPlayerID) continue;
@@ -260,7 +261,7 @@ public class WeaponryHandler : UnitSystem
 
     private void RotateWeaponryBoundsTransform(Weaponry weaponry, Transform tr)
     {
-        if (weaponry._targetUnit is null) return;
+        if (weaponry._targetUnit == null) return;
         
         float degreesPerSecond = Unit.UnitData.TurnSpeed * 0.1f * Time.deltaTime;
         Vector3 direction = weaponry._targetUnit.transform.position - transform.position;
