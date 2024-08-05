@@ -18,7 +18,7 @@ public class Unit : MonoBehaviour
         Attack
     }
     
-    private bool IsUnitDead { get; set; }
+    private bool isUnitDead { get; set; }
     
     [Header("Data")]
     //[ExposedScriptableObject]
@@ -36,7 +36,7 @@ public class Unit : MonoBehaviour
     [HideInInspector] public InfantryMovement InfantryMovement;
     public AnimationCurve accelerationCurve;
     public AnimationCurve decelerationCurve;
-
+    
     [Space(5)]
     [Header("Spotting System")]
     [HideInInspector] public USpottingSystem USpottingSystem;
@@ -189,11 +189,11 @@ public class Unit : MonoBehaviour
         CurrentUnitCommand = UnitCommands.Idle;
     }
 
-    private void SetUnitDead() => IsUnitDead = true;
+    private void SetUnitDead() => isUnitDead = true;
 
     private void DestroyUnit()
     {
-        if ( ! IsUnitDead) return;
+        if ( ! isUnitDead) return;
         
         OnUnitDeathInternal?.Invoke();
         Mesh.gameObject.SetActive(false);
