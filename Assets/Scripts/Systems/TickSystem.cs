@@ -13,12 +13,13 @@ public class TickSystem : MonoBehaviour
 
     public const float TickRate = 0.2f;
     
-    public int elapsedTicks { get; private set; }
+    // ReSharper disable once MemberCanBePrivate.Global
+    public int ElapsedTicks { get; private set; }
     private float nextTick;
 
     private void Awake() => TickManager.Instance.TickSystem = this;
 
-    void Update() => TickTimer();
+    private void Update() => TickTimer();
 
     private void TickTimer()
     {
@@ -29,7 +30,7 @@ public class TickSystem : MonoBehaviour
             OnTick?.Invoke();
             
             nextTick = Time.time + TickRate;
-            elapsedTicks++;
+            ElapsedTicks++;
         }
     }
 }
