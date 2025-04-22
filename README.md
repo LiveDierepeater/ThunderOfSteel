@@ -1,5 +1,5 @@
 =========================================
-Realistic Tank Movement & Tactical Gameplay
+Spatial Hashing & Unit Sight System
 =========================================
 
 This project implements realistic tank movement, unit targeting, and tactical gameplay 
